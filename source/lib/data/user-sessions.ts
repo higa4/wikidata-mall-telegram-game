@@ -1,5 +1,6 @@
 import randomItem from 'random-item'
 
+import {Person} from '../types/people'
 import {Shop} from '../types/shop'
 
 /* eslint @typescript-eslint/no-var-requires: warn */
@@ -9,6 +10,8 @@ const LocalSession = require('telegraf-session-local')
 type Dictionary<T> = {[key: string]: T}
 
 export interface Session {
+	applicants: Person[];
+	applicantTimestamp: number;
 	shops: Dictionary<Shop>;
 }
 

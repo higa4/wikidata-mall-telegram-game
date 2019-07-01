@@ -1,4 +1,5 @@
 menu:
+  applicant: Q54875338
   chat: Q287198
   language: Q315
   mall: Q11315
@@ -6,12 +7,19 @@ menu:
   shop: Q213441
   wikidataItem: Q16222597
 action:
+  employmentTermination: Q685744
   buy: Q1369832
   change: Q1150070
   close: Q5135520
   construction: Q385378
   search: Q36963
   upgrade: Q920419
+person:
+  hobby: Q47728
+  talent: Q1200995
+  talents:
+    selling: Q194189
+    purchasing: Q1369832
 other:
   assortment: Q1412931
   income: Q1527264
