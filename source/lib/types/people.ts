@@ -1,6 +1,7 @@
 export interface Person {
 	name: Name;
 	hobby: string;
+	retirementTimestamp: number;
 	talents: Talents;
 }
 

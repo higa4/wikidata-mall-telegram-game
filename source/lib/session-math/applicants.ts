@@ -13,12 +13,19 @@ export default function calcApplicants(session: Session, now: number): void {
 		session.applicantTimestamp = now
 	}
 
+	retireWaitingApplicants(session, now)
 	addWaitingApplicants(session, now)
+}
+
+function retireWaitingApplicants(session: Session, now: number): void {
+	session.applicants = session.applicants.filter(person => person.retirementTimestamp > now)
 }
 
 function addWaitingApplicants(session: Session, now: number): void {
 	const {applicantTimestamp, applicants} = session
+
 	const secondsBetweenApplicants = 60 // TODO: Skills
+	const retirementTimespan = 60 * 60 * 24 * 30 // 30 days
 
 	const secondsSinceLastApplicant = now - applicantTimestamp
 	const possibleApplicants = Math.floor(secondsSinceLastApplicant / secondsBetweenApplicants)
@@ -45,6 +52,7 @@ function addWaitingApplicants(session: Session, now: number): void {
 		session.applicants.push({
 			name,
 			hobby: randomItem(wdShops.allShops()),
+			retirementTimestamp: Math.ceil(now + (Math.random() * retirementTimespan)),
 			talents: randomTalents()
 		})
 	}

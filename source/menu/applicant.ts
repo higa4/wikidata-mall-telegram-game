@@ -24,18 +24,27 @@ function talentLine(ctx: any, t: TalentName, percentage: number): string {
 
 function menuText(ctx: any): string {
 	const {applicant} = fromCtx(ctx)
-	const {name, hobby, talents} = applicant
+	const {name, hobby, retirementTimestamp, talents} = applicant
 
 	let text = ''
 	text += `*${name.given}* ${name.family}`
 	text += '\n\n'
 
 	text += emoji.hobby
+	text += '*'
 	text += ctx.wd.r('person.hobby').label()
-	text += ': '
+	text += '*\n  '
 	text += ctx.wd.r(hobby).label()
-	text += '\n\n'
+	text += '\n'
 
+	text += emoji.retirement
+	text += '*'
+	text += ctx.wd.r('person.retirement').label()
+	text += '*\n  '
+	text += new Date(retirementTimestamp * 1000).toUTCString()
+	text += '\n'
+
+	text += '\n'
 	text += '*'
 	text += ctx.wd.r('person.talent').label()
 	text += '*'
