@@ -1,19 +1,10 @@
 import randomItem from 'random-item'
 
-import {Person} from '../types/people'
-import {Shop} from '../types/shop'
+import {Session} from '../types'
 
 /* eslint @typescript-eslint/no-var-requires: warn */
 /* eslint @typescript-eslint/no-require-imports: warn */
 const LocalSession = require('telegraf-session-local')
-
-type Dictionary<T> = {[key: string]: T}
-
-export interface Session {
-	applicants: Person[];
-	applicantTimestamp: number;
-	shops: Dictionary<Shop>;
-}
 
 interface SessionRawEntry {
 	user: number;
@@ -31,7 +22,7 @@ const localSession = new LocalSession({
 	getSessionKey: (ctx: any) => `${ctx.from.id}`
 })
 
-export function getRaw(): ReadonlyArray<SessionRawEntry> {
+export function getRaw(): readonly SessionRawEntry[] {
 	return localSession.DB
 		.get('sessions').value()
 		.map((o: {id: string; data: any}) => {

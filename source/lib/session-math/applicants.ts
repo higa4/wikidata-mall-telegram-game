@@ -1,9 +1,8 @@
 import gaussian from 'gaussian'
 import randomItem from 'random-item'
 
+import {Session} from '../types'
 import {Talents, TALENTS} from '../types/people'
-
-import {Session} from '../data/user-sessions'
 
 import * as wdName from '../wikidata/name'
 import * as wdShops from '../wikidata/shops'

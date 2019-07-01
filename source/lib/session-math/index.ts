@@ -1,4 +1,4 @@
-import {Session} from '../data/user-sessions'
+import {Session} from '../types'
 
 import applicants from './applicants'
 
