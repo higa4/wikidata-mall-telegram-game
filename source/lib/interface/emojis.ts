@@ -16,6 +16,7 @@ const emojis: Dictionary<string> = {
 	retirement: '👻',
 	selling: '📈',
 	shop: '🏪',
+	storage: '📦',
 	wikidataItem: 'ℹ️'
 }
 

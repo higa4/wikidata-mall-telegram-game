@@ -19,8 +19,9 @@ person:
   retirement: Q946865
   talent: Q1200995
   talents:
-    selling: Q194189
     purchasing: Q1369832
+    selling: Q194189
+    storage: Q9158768
 other:
   assortment: Q1412931
   income: Q1527264

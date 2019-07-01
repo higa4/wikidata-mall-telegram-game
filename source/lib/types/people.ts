@@ -13,7 +13,8 @@ export interface Name {
 export interface Talents {
 	purchasing: number;
 	selling: number;
+	storage: number;
 }
 
 export type TalentName = keyof Talents
-export const TALENTS: TalentName[] = ['purchasing', 'selling']
+export const TALENTS: TalentName[] = ['purchasing', 'selling', 'storage']
