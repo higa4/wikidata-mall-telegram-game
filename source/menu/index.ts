@@ -23,7 +23,7 @@ menu.setCommand('start')
 menu.submenu(buttonText(emoji.shop, 'menu.shop'), 'shops', shops)
 
 menu.simpleButton(buttonText(emoji.mall, 'menu.mall'), 'mall', {
-	doFunc: ctx => ctx.answerCbQuery('soon…')
+	doFunc: async ctx => ctx.answerCbQuery('soon…')
 })
 
 menu.submenu(buttonText(emoji.language, 'menu.language'), 'lang', languages)

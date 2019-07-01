@@ -13,7 +13,7 @@ export async function preload(store: WikidataEntityStore): Promise<void> {
 	console.time('wikidata-sets')
 	await Promise.all(
 		Object.keys(queries)
-			.map(key => loadQNumbersOfKey(key))
+			.map(async key => loadQNumbersOfKey(key))
 	)
 
 	const qNumbers = Object.values(entities).flat()

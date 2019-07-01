@@ -29,7 +29,7 @@ const menu = new TelegrafInlineMenu(menuText, {
 })
 
 function userShops(ctx: any): string[] {
-	return Object.keys(ctx.session.shops || {})
+	return Object.keys(ctx.session.shops || {})
 }
 
 menu.selectSubmenu('shop', userShops, shopMenu, {
