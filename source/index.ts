@@ -8,12 +8,14 @@ import WikidataEntityStore from 'wikidata-entity-store'
 import {preload} from './lib/wikidata'
 import * as userSessions from './lib/data/user-sessions'
 import menu from './menu'
+import sessionMathMiddleware from './lib/session-math'
 
 const tokenFilePath = process.env.NODE_ENV === 'production' ? process.env.npm_package_config_tokenpath as string : 'token.txt'
 const token = readFileSync(tokenFilePath, 'utf8').trim()
 const bot = new Telegraf(token)
 
 bot.use(userSessions.middleware())
+bot.use(sessionMathMiddleware())
 
 const i18n = new TelegrafI18n({
 	directory: 'locales',
