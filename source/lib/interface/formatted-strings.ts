@@ -31,3 +31,7 @@ export function infoHeader(wdr: WikidataEntityReader, options: InfoHeaderOptions
 
 	return text
 }
+
+export function labeledNumber(wdr: WikidataEntityReader, num: number, currency: string): string {
+	return `${wdr.label()}: ${num}${currency}`
+}

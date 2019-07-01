@@ -3,7 +3,7 @@ import WikidataEntityReader from 'wikidata-entity-reader'
 
 import {Shop} from '../lib/types/shop'
 
-import {infoHeader} from '../lib/interface/info-header'
+import {infoHeader} from '../lib/interface/formatted-strings'
 import emoji from '../lib/interface/emojis'
 
 function fromCtx(ctx: any): {shopType: string; shop: Shop; productId: string} {

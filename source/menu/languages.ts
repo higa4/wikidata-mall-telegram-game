@@ -1,6 +1,6 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
-import {infoHeader} from '../lib/interface/info-header'
+import {infoHeader} from '../lib/interface/formatted-strings'
 import emoji from '../lib/interface/emojis'
 
 /* eslint @typescript-eslint/no-var-requires: warn */

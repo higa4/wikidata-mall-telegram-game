@@ -1,25 +1,40 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
+import {Session} from '../lib/types'
 import {Shop} from '../lib/types/shop'
 
 import {randomUnusedEntry} from '../lib/js-helper/array'
 
 import * as wdShops from '../lib/wikidata/shops'
 
+import {buildCost} from '../lib/math/shop'
+
 import {buttonText} from '../lib/interface/button'
-import {infoHeader} from '../lib/interface/info-header'
+import {infoHeader, labeledNumber} from '../lib/interface/formatted-strings'
 import emoji from '../lib/interface/emojis'
 
 import shopMenu from './shop'
 
-const MAX_SHOPS = 10
+function buildCostFromCtx(ctx: any): number {
+	return buildCost(userShops(ctx).length)
+}
 
 function menuText(ctx: any): string {
 	let text = ''
 	text += infoHeader(ctx.wd.r('menu.shop'))
 	text += '\n\n'
 
-	text += 'content'
+	text += labeledNumber(ctx.wd.r('other.money'), ctx.session.money, emoji.currency)
+	text += '\n\n'
+
+	const cost = buildCostFromCtx(ctx)
+
+	text += emoji.construction
+	text += '*'
+	text += ctx.wd.r('action.construction').label()
+	text += '*'
+	text += '\n'
+	text += labeledNumber(ctx.wd.r('other.cost'), cost, emoji.currency)
 
 	return text
 }
@@ -38,10 +53,14 @@ menu.selectSubmenu('shop', userShops, shopMenu, {
 })
 
 menu.button(buttonText(emoji.construction, 'action.construction'), 'build', {
-	hide: ctx => userShops(ctx).length >= MAX_SHOPS,
+	hide: (ctx: any) => buildCostFromCtx(ctx) > ctx.session.money,
 	doFunc: (ctx: any) => {
-		if (!ctx.session.shops) {
-			ctx.session.shops = {}
+		const session = ctx.session as Session
+		const cost = buildCost(Object.keys(session.shops).length)
+
+		if (session.money < cost) {
+			// Fishy
+			return
 		}
 
 		const newShopId = randomUnusedEntry(wdShops.allShops(), userShops(ctx))
@@ -49,6 +68,7 @@ menu.button(buttonText(emoji.construction, 'action.construction'), 'build', {
 			products: {}
 		}
 
+		session.money -= cost
 		ctx.session.shops[newShopId] = newShop
 	}
 })

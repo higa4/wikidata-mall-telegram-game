@@ -2,7 +2,7 @@ import TelegrafInlineMenu from 'telegraf-inline-menu'
 
 import {Name} from '../lib/types/people'
 
-import {infoHeader} from '../lib/interface/info-header'
+import {infoHeader} from '../lib/interface/formatted-strings'
 import emojis from '../lib/interface/emojis'
 
 import applicantMenu from './applicant'

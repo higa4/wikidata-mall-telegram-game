@@ -16,8 +16,13 @@ export default function middleware(): (ctx: any, next: any) => void {
 
 function init(session: Session): void {
 	const {
+		money,
 		shops
 	} = session
+
+	if (!isFinite(money)) {
+		session.money = 5
+	}
 
 	if (!shops) {
 		session.shops = {}
