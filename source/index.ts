@@ -5,9 +5,8 @@ import TelegrafI18n from 'telegraf-i18n'
 import TelegrafWikibase from 'telegraf-wikibase'
 import WikidataEntityStore from 'wikidata-entity-store'
 
+import {preload} from './lib/wikidata'
 import * as userSessions from './lib/data/user-sessions'
-import * as wdSets from './lib/wikidata/sets'
-import * as wdShops from './lib/wikidata/shops'
 import menu from './menu'
 
 const tokenFilePath = process.env.NODE_ENV === 'production' ? process.env.npm_package_config_tokenpath as string : 'token.txt'
@@ -33,27 +32,7 @@ bot.use(new TelegrafWikibase(wdEntityStore, {
 	contextKey: 'wd'
 }).middleware())
 
-preload()
-async function preload(): Promise<void> {
-	console.time('preload wikidata entity store')
-
-	await preloadSpecific('middleware', () => wdEntityStore.addResourceKeyYaml(
-		readFileSync('wikidata-items.yaml', 'utf8')
-	))
-	await preloadSpecific('sets', () => wdSets.preload(wdEntityStore))
-	await preloadSpecific('shops', () => wdShops.preload(wdEntityStore))
-
-	console.timeEnd('preload wikidata entity store')
-}
-
-async function preloadSpecific(title: string, loadFunc: () => Promise<void>): Promise<void> {
-	try {
-		await loadFunc()
-		console.timeLog('preload wikidata entity store', title)
-	} catch (e) {
-		console.error('preload wikidata entity store failed', title, e)
-	}
-}
+preload(wdEntityStore)
 
 bot.use(menu.init({
 	backButtonText: (ctx: any) => `🔙 ${ctx.i18n.t('menu.back')}`,
