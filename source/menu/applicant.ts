@@ -3,8 +3,9 @@ import WikidataEntityReader from 'wikidata-entity-reader'
 
 import {Person, TalentName} from '../lib/types/people'
 
-import emoji from '../lib/interface/emojis'
+import {bonusPercentString} from '../lib/interface/formatted-strings'
 import {buttonText, menuPhoto} from '../lib/interface/menu'
+import emoji from '../lib/interface/emojis'
 
 function fromCtx(ctx: any): {applicantId: number; applicant: Person} {
 	const applicantId = Number(ctx.match[1])
@@ -12,14 +13,9 @@ function fromCtx(ctx: any): {applicantId: number; applicant: Person} {
 	return {applicantId, applicant}
 }
 
-function percentageString(percent: number): string {
-	const plusMinusHundred = (percent - 1) * 100
-	return `${plusMinusHundred > 0 ? '+' : ''}${plusMinusHundred.toFixed(1)}%`
-}
-
 function talentLine(ctx: any, t: TalentName, percentage: number): string {
 	const reader = ctx.wd.r(`person.talents.${t}`) as WikidataEntityReader
-	return `${emoji[t]} ${reader.label()}: ${percentageString(percentage)}`
+	return `${emoji[t]} ${reader.label()}: ${bonusPercentString(percentage)}`
 }
 
 function menuText(ctx: any): string {

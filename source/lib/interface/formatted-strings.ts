@@ -32,6 +32,11 @@ export function infoHeader(wdr: WikidataEntityReader, options: InfoHeaderOptions
 	return text
 }
 
+export function bonusPercentString(percent: number): string {
+	const plusMinusHundred = (percent - 1) * 100
+	return `${plusMinusHundred > 0 ? '+' : ''}${plusMinusHundred.toFixed(1)}%`
+}
+
 export function labeledNumber(wdr: WikidataEntityReader, num: number, unit = ''): string {
 	return `${wdr.label()}: ${formattedInt(num)}${unit}`
 }
