@@ -4,6 +4,7 @@ import WikidataEntityReader from 'wikidata-entity-reader'
 import {Shop} from '../lib/types/shop'
 
 import {infoHeader} from '../lib/interface/formatted-strings'
+import {menuPhoto} from '../lib/interface/menu'
 import emoji from '../lib/interface/emojis'
 
 function fromCtx(ctx: any): {shopType: string; shop: Shop; productId: string} {
@@ -28,7 +29,7 @@ function menuText(ctx: any): string {
 }
 
 const menu = new TelegrafInlineMenu(menuText, {
-	photo: (ctx: any) => ctx.wd.r(fromCtx(ctx).productId).images(800)[0]
+	photo: menuPhoto(ctx => fromCtx(ctx).productId)
 })
 
 menu.urlButton(

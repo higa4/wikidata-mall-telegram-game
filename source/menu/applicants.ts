@@ -3,6 +3,7 @@ import TelegrafInlineMenu from 'telegraf-inline-menu'
 import {Name} from '../lib/types/people'
 
 import {infoHeader} from '../lib/interface/formatted-strings'
+import {menuPhoto} from '../lib/interface/menu'
 import emojis from '../lib/interface/emojis'
 
 import applicantMenu from './applicant'
@@ -18,7 +19,7 @@ function menuText(ctx: any): string {
 }
 
 const menu = new TelegrafInlineMenu(menuText, {
-	photo: (ctx: any) => ctx.wd.r('menu.applicant').images(800)[0]
+	photo: menuPhoto('menu.applicant')
 })
 
 function userShops(ctx: any): string[] {

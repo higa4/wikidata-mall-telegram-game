@@ -4,7 +4,7 @@ import WikidataEntityReader from 'wikidata-entity-reader'
 import {Person, TalentName} from '../lib/types/people'
 
 import emoji from '../lib/interface/emojis'
-import {buttonText} from '../lib/interface/button'
+import {buttonText, menuPhoto} from '../lib/interface/menu'
 
 function fromCtx(ctx: any): {applicantId: number; applicant: Person} {
 	const applicantId = Number(ctx.match[1])
@@ -58,7 +58,7 @@ function menuText(ctx: any): string {
 }
 
 const menu = new TelegrafInlineMenu(menuText, {
-	photo: (ctx: any) => ctx.wd.r(fromCtx(ctx).applicant.hobby).images(800)[0]
+	photo: menuPhoto(ctx => fromCtx(ctx).applicant.hobby)
 })
 
 menu.urlButton(

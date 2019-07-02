@@ -1,6 +1,6 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
-import {buttonText} from '../lib/interface/button'
+import {buttonText} from '../lib/interface/menu'
 import {infoHeader, labeledNumber} from '../lib/interface/formatted-strings'
 import emoji from '../lib/interface/emojis'
 

@@ -10,7 +10,7 @@ import {buildCost, productCost} from '../lib/math/shop'
 
 import * as wdShop from '../lib/wikidata/shops'
 
-import {buttonText} from '../lib/interface/button'
+import {buttonText, menuPhoto} from '../lib/interface/menu'
 import {infoHeader, labeledNumber} from '../lib/interface/formatted-strings'
 import emoji from '../lib/interface/emojis'
 
@@ -57,7 +57,7 @@ function menuText(ctx: any): string {
 }
 
 const menu = new TelegrafInlineMenu(menuText, {
-	photo: (ctx: any) => ctx.wd.r(fromCtx(ctx).shopType).images(800)[0]
+	photo: menuPhoto(ctx => fromCtx(ctx).shopType)
 })
 
 function userProducts(ctx: any): string[] {
