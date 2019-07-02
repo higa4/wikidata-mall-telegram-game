@@ -3,5 +3,5 @@ export function buildCost(existingShops: number): number {
 }
 
 export function productCost(existingShops: number, existingProducts: number): number {
-	return buildCost(existingShops) * existingProducts
+	return buildCost(existingShops - 1) * existingProducts
 }
