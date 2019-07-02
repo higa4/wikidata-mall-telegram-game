@@ -1,8 +1,9 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 import WikidataEntityReader from 'wikidata-entity-reader'
 
-import {Shop, Product} from '../lib/types/shop'
 import {Session} from '../lib/types'
+import {Shop, Product} from '../lib/types/shop'
+import {TALENTS} from '../lib/types/people'
 
 import {randomUnusedEntry} from '../lib/js-helper/array'
 
@@ -11,7 +12,7 @@ import {buildCost, productCost} from '../lib/math/shop'
 import * as wdShop from '../lib/wikidata/shops'
 
 import {buttonText, menuPhoto} from '../lib/interface/menu'
-import {infoHeader, labeledFloat} from '../lib/interface/formatted-strings'
+import {infoHeader, labeledFloat, labeledInt} from '../lib/interface/formatted-strings'
 import emoji from '../lib/interface/emojis'
 
 import productMenu from './product'
@@ -30,6 +31,22 @@ function addProductCostFromSession(session: Session, shop: Shop): number {
 	return productCost(session.shops.length, shop.products.length)
 }
 
+function productLine(ctx: any, shop: Shop, product: Product): string {
+	let text = ''
+	text += labeledInt(ctx.wd.r(product.id), product.itemsInStore, emoji.storage)
+
+	const hobbyPersonal = TALENTS
+		.filter(t => product.personal[t])
+		.filter(t => product.personal[t]!.hobby === shop.id)
+		.map(() => emoji.hobby)
+
+	if (hobbyPersonal.length > 0) {
+		text += ' ' + hobbyPersonal.join('')
+	}
+
+	return text
+}
+
 function menuText(ctx: any): string {
 	const shop = fromCtx(ctx)
 	const reader = ctx.wd.r(shop.id) as WikidataEntityReader
@@ -43,13 +60,20 @@ function menuText(ctx: any): string {
 	text += labeledFloat(ctx.wd.r('other.money'), session.money, emoji.currency)
 	text += '\n\n'
 
+	text += '*'
+	text += ctx.wd.r('other.assortment').label()
+	text += '*'
+	text += '\n'
+
+	text += shop.products
+		.map(product => productLine(ctx, shop, product))
+		.map(o => `  ${o}`)
+		.join('\n')
+	text += '\n'
+
 	const cost = addProductCostFromSession(session, shop)
 	if (userProducts(ctx).length < 5) {
 		text += emoji.add
-		text += '*'
-		text += ctx.wd.r('other.assortment').label()
-		text += '*'
-		text += '\n'
 		text += labeledFloat(ctx.wd.r('other.cost'), cost, emoji.currency)
 	}
 
