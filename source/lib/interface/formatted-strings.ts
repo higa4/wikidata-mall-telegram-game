@@ -49,7 +49,7 @@ const LETTERS = ['', 'k', 'M', 'G', 'T', 'P', 'E']
 
 function formattedNumber(num: number, isInt: boolean): string {
 	const exp = Math.floor(Math.log10(Math.abs(num)))
-	const sciExp = Math.floor(exp / 3) * 3
+	const sciExp = Math.max(0, Math.floor(exp / 3) * 3)
 	const sciNum = 10 ** sciExp
 
 	if (sciNum === 0) {
