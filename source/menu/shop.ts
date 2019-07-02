@@ -90,6 +90,8 @@ menu.button(buttonText(emoji.add, 'other.assortment'), 'addProduct', {
 
 		const pickedProduct: Product = {
 			id: pickedProductId,
+			itemsInStore: 0,
+			itemTimestamp: now,
 			personal: {}
 		}
 

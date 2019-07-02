@@ -2,6 +2,8 @@ import {Person} from './people'
 
 export interface Product {
 	id: string;
+	itemsInStore: number;
+	itemTimestamp: number;
 	personal: Personal;
 }
 

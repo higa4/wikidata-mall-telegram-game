@@ -4,6 +4,8 @@ import WikidataEntityReader from 'wikidata-entity-reader'
 import {Session} from '../lib/types'
 import {Shop, Product} from '../lib/types/shop'
 
+import {storageCapacity} from '../lib/math/product'
+
 import {infoHeader, labeledNumber} from '../lib/interface/formatted-strings'
 import {menuPhoto} from '../lib/interface/menu'
 import emoji from '../lib/interface/emojis'
@@ -26,6 +28,9 @@ function menuText(ctx: any): string {
 	let text = ''
 	text += infoHeader(reader)
 	text += '\n\n'
+
+	text += labeledNumber(ctx.wd.r('product.storage'), product.itemsInStore) + '\n'
+	text += labeledNumber(ctx.wd.r('product.storageCapacity'), storageCapacity(product)) + '\n'
 
 	return text
 }

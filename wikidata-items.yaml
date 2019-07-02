@@ -22,6 +22,9 @@ person:
     purchasing: Q1369832
     selling: Q194189
     storage: Q9158768
+product:
+  storage: Q9158768
+  storageCapacity: Q21551014
 other:
   assortment: Q1412931
   cost: Q240673
