@@ -1,12 +1,22 @@
-import {Product} from '../types/shop'
+import {Product, Shop} from '../types/shop'
 import {TalentName} from '../types/people'
 
-export function storageCapacity(product: Product): number {
-	const personal = personalBonus(product, 'storage')
+export function purchasingCost(shop: Shop, product: Product): number {
+	const personal = personalBonus(shop, product, 'purchasing')
+	return 1 / personal
+}
+
+export function sellingCost(shop: Shop, product: Product): number {
+	const personal = personalBonus(shop, product, 'selling')
+	return personal
+}
+
+export function storageCapacity(shop: Shop, product: Product): number {
+	const personal = personalBonus(shop, product, 'storage')
 	return Math.round(100 * personal)
 }
 
-function personalBonus(product: Product, talent: TalentName): number {
+export function personalBonus(shop: Shop, product: Product, talent: TalentName): number {
 	const person = product.personal[talent]
 	if (!person) {
 		return 1
@@ -14,7 +24,7 @@ function personalBonus(product: Product, talent: TalentName): number {
 
 	const talentFactor = person.talents[talent]
 
-	const isHobby = product.id === person.hobby
+	const isHobby = shop.id === person.hobby
 	const hobbyFactor = isHobby ? 5 : 1
 
 	return talentFactor * hobbyFactor
