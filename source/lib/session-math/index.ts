@@ -25,6 +25,6 @@ function init(session: Session): void {
 	}
 
 	if (!shops) {
-		session.shops = {}
+		session.shops = []
 	}
 }

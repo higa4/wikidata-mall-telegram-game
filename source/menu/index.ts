@@ -32,7 +32,7 @@ function applicantEmoji(ctx: any): string {
 }
 
 menu.submenu(buttonText(applicantEmoji, 'menu.applicant'), 'applicants', applicants, {
-	hide: (ctx: any) => Object.keys(ctx.session.shops).length === 0
+	hide: (ctx: any) => ctx.session.shops.length === 0
 })
 
 menu.submenu(buttonText(emoji.language, 'menu.language'), 'lang', languages)

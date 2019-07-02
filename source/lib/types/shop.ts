@@ -1,8 +1,17 @@
-type Dictionary<T> = {[key: string]: T}
+import {Person} from './people'
 
 export interface Product {
+	id: string;
+	personal: Personal;
+}
+
+interface Personal {
+	purchasing?: Person;
+	selling?: Person;
+	storage?: Person;
 }
 
 export interface Shop {
-	products: Dictionary<Product>;
+	id: string;
+	products: Product[];
 }

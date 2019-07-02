@@ -16,23 +16,23 @@ import emoji from '../lib/interface/emojis'
 
 import productMenu from './product'
 
-function fromCtx(ctx: any): {shopType: string; shop: Shop} {
+function fromCtx(ctx: any): Shop {
+	const session = ctx.session as Session
 	const shopType = ctx.match[1]
-	const shop: Shop = ctx.session.shops[shopType]
-	return {shopType, shop}
+	return session.shops.filter(o => o.id === shopType)[0]
 }
 
 function addProductCostFromCtx(ctx: any): number {
-	return addProductCostFromSession(ctx.session, fromCtx(ctx).shop)
+	return addProductCostFromSession(ctx.session, fromCtx(ctx))
 }
 
 function addProductCostFromSession(session: Session, shop: Shop): number {
-	return productCost(Object.keys(session.shops).length, Object.keys(shop.products).length)
+	return productCost(session.shops.length, shop.products.length)
 }
 
 function menuText(ctx: any): string {
-	const {shopType, shop} = fromCtx(ctx)
-	const reader = ctx.wd.r(shopType) as WikidataEntityReader
+	const shop = fromCtx(ctx)
+	const reader = ctx.wd.r(shop.id) as WikidataEntityReader
 
 	const session = ctx.session as Session
 
@@ -57,12 +57,12 @@ function menuText(ctx: any): string {
 }
 
 const menu = new TelegrafInlineMenu(menuText, {
-	photo: menuPhoto(ctx => fromCtx(ctx).shopType)
+	photo: menuPhoto(ctx => fromCtx(ctx).id)
 })
 
 function userProducts(ctx: any): string[] {
-	const {shop} = fromCtx(ctx)
-	return Object.keys(shop.products)
+	const shop = fromCtx(ctx)
+	return shop.products.map(o => o.id)
 }
 
 menu.selectSubmenu('product', userProducts, productMenu, {
@@ -73,8 +73,9 @@ menu.selectSubmenu('product', userProducts, productMenu, {
 menu.button(buttonText(emoji.add, 'other.assortment'), 'addProduct', {
 	hide: (ctx: any) => userProducts(ctx).length >= 5 || addProductCostFromCtx(ctx) > ctx.session.money,
 	doFunc: (ctx: any) => {
-		const {shopType, shop} = fromCtx(ctx)
+		const shop = fromCtx(ctx)
 		const session = ctx.session as Session
+		const now = Math.floor(Date.now() / 1000)
 
 		const cost = addProductCostFromSession(session, shop)
 		if (session.money < cost) {
@@ -83,32 +84,36 @@ menu.button(buttonText(emoji.add, 'other.assortment'), 'addProduct', {
 		}
 
 		const pickedProductId = randomUnusedEntry(
-			wdShop.products(shopType) || [],
+			wdShop.products(shop.id) || [],
 			userProducts(ctx)
 		)
 
-		const pickedProduct: Product = {}
+		const pickedProduct: Product = {
+			id: pickedProductId,
+			personal: {}
+		}
 
 		session.money -= cost
-		shop.products[pickedProductId] = pickedProduct
+		shop.products.push(pickedProduct)
 	}
 })
 
 menu.button(buttonText(emoji.close, 'action.close'), 'remove', {
 	setParentMenuAfter: true,
 	doFunc: (ctx: any) => {
-		const {shopType} = fromCtx(ctx)
+		const shop = fromCtx(ctx)
 		const session = ctx.session as Session
-		delete session.shops[shopType]
 
-		const existingShops = Object.keys(session.shops).length
+		session.shops = session.shops.filter(o => o.id !== shop.id)
+
+		const existingShops = session.shops.length
 		ctx.session.money += Math.ceil(buildCost(existingShops) / 2)
 	}
 })
 
 menu.urlButton(
 	(ctx: any) => `${emoji.wikidataItem} ${ctx.wd.r('menu.wikidataItem').label()}`,
-	(ctx: any) => ctx.wd.r(fromCtx(ctx).shopType).url()
+	(ctx: any) => ctx.wd.r(fromCtx(ctx).id).url()
 )
 
 export default menu

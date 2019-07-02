@@ -44,7 +44,8 @@ const menu = new TelegrafInlineMenu(menuText, {
 })
 
 function userShops(ctx: any): string[] {
-	return Object.keys(ctx.session.shops || {})
+	const session = ctx.session as Session
+	return session.shops.map(o => o.id)
 }
 
 menu.selectSubmenu('shop', userShops, shopMenu, {
@@ -56,7 +57,7 @@ menu.button(buttonText(emoji.construction, 'action.construction'), 'build', {
 	hide: (ctx: any) => buildCostFromCtx(ctx) > ctx.session.money,
 	doFunc: (ctx: any) => {
 		const session = ctx.session as Session
-		const cost = buildCost(Object.keys(session.shops).length)
+		const cost = buildCost(session.shops.length)
 
 		if (session.money < cost) {
 			// Fishy
@@ -65,11 +66,12 @@ menu.button(buttonText(emoji.construction, 'action.construction'), 'build', {
 
 		const newShopId = randomUnusedEntry(wdShops.allShops(), userShops(ctx))
 		const newShop: Shop = {
-			products: {}
+			id: newShopId,
+			products: []
 		}
 
 		session.money -= cost
-		ctx.session.shops[newShopId] = newShop
+		ctx.session.shops.push(newShop)
 	}
 })
 
