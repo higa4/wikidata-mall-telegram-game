@@ -1,10 +1,10 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
-import WikidataEntityReader from 'wikidata-entity-reader'
 
-import {Person, TalentName} from '../lib/types/people'
+import {Person} from '../lib/types/people'
+import {Session} from '../lib/types'
 
-import {bonusPercentString} from '../lib/interface/formatted-strings'
 import {buttonText, menuPhoto} from '../lib/interface/menu'
+import {personMarkdown} from '../lib/interface/person'
 import emoji from '../lib/interface/emojis'
 
 function fromCtx(ctx: any): {applicantId: number; applicant: Person} {
@@ -13,44 +13,9 @@ function fromCtx(ctx: any): {applicantId: number; applicant: Person} {
 	return {applicantId, applicant}
 }
 
-function talentLine(ctx: any, t: TalentName, percentage: number): string {
-	const reader = ctx.wd.r(`person.talents.${t}`) as WikidataEntityReader
-	return `${emoji[t]} ${reader.label()}: ${bonusPercentString(percentage)}`
-}
-
 function menuText(ctx: any): string {
 	const {applicant} = fromCtx(ctx)
-	const {name, hobby, retirementTimestamp, talents} = applicant
-
-	let text = ''
-	text += `*${name.given}* ${name.family}`
-	text += '\n\n'
-
-	text += emoji.hobby
-	text += '*'
-	text += ctx.wd.r('person.hobby').label()
-	text += '*\n  '
-	text += ctx.wd.r(hobby).label()
-	text += '\n'
-
-	text += emoji.retirement
-	text += '*'
-	text += ctx.wd.r('person.retirement').label()
-	text += '*\n  '
-	text += new Date(retirementTimestamp * 1000).toUTCString()
-	text += '\n'
-
-	text += '\n'
-	text += '*'
-	text += ctx.wd.r('person.talent').label()
-	text += '*'
-	text += '\n'
-
-	text += (Object.keys(talents) as TalentName[])
-		.map(t => talentLine(ctx, t, talents[t]))
-		.join('\n')
-
-	return text
+	return personMarkdown(ctx, applicant)
 }
 
 const menu = new TelegrafInlineMenu(menuText, {
