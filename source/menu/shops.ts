@@ -20,11 +20,13 @@ function buildCostFromCtx(ctx: any): number {
 }
 
 function menuText(ctx: any): string {
+	const session = ctx.session as Session
+
 	let text = ''
 	text += infoHeader(ctx.wd.r('menu.shop'))
 	text += '\n\n'
 
-	text += labeledFloat(ctx.wd.r('other.money'), ctx.session.money, emoji.currency)
+	text += labeledFloat(ctx.wd.r('other.money'), session.money, emoji.currency)
 	text += '\n\n'
 
 	const cost = buildCostFromCtx(ctx)
@@ -71,7 +73,7 @@ menu.button(buttonText(emoji.construction, 'action.construction'), 'build', {
 		}
 
 		session.money -= cost
-		ctx.session.shops.push(newShop)
+		session.shops.push(newShop)
 	}
 })
 

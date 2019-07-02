@@ -133,7 +133,7 @@ menu.button(buttonText(emoji.close, 'action.close'), 'remove', {
 		session.shops = session.shops.filter(o => o.id !== shop.id)
 
 		const existingShops = session.shops.length
-		ctx.session.money += Math.ceil(buildCost(existingShops) / 2)
+		session.money += Math.ceil(buildCost(existingShops) / 2)
 	}
 })
 

@@ -9,7 +9,8 @@ import emoji from '../lib/interface/emojis'
 
 function fromCtx(ctx: any): {applicantId: number; applicant: Person} {
 	const applicantId = Number(ctx.match[1])
-	const applicant: Person = ctx.session.applicants[applicantId]
+	const session = ctx.session as Session
+	const applicant: Person = session.applicants[applicantId]
 	return {applicantId, applicant}
 }
 
@@ -31,7 +32,8 @@ menu.button(buttonText(emoji.employmentTermination, 'action.employmentTerminatio
 	setParentMenuAfter: true,
 	doFunc: (ctx: any) => {
 		const {applicantId} = fromCtx(ctx)
-		ctx.session.applicants.splice(applicantId, 1)
+		const session = ctx.session as Session
+		session.applicants.splice(applicantId, 1)
 	}
 })
 

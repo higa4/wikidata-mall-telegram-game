@@ -1,6 +1,6 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
-import {Name} from '../lib/types/people'
+import {Session} from '../lib/types'
 
 import {infoHeader} from '../lib/interface/formatted-strings'
 import {menuPhoto} from '../lib/interface/menu'
@@ -29,7 +29,8 @@ function userShops(ctx: any): string[] {
 menu.selectSubmenu('a', userShops, applicantMenu, {
 	columns: 2,
 	textFunc: (ctx: any, key) => {
-		const name = ctx.session.applicants[key].name as Name
+		const session = ctx.session as Session
+		const {name} = session.applicants[Number(key)]
 		return `${name.given} ${name.family}`
 	}
 })

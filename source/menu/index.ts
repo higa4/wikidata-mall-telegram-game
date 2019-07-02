@@ -1,5 +1,7 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
+import {Session} from '../lib/types'
+
 import {buttonText} from '../lib/interface/menu'
 import {infoHeader, labeledFloat} from '../lib/interface/formatted-strings'
 import emoji from '../lib/interface/emojis'
@@ -9,11 +11,13 @@ import languages from './languages'
 import shops from './shops'
 
 function menuText(ctx: any): string {
+	const session = ctx.session as Session
+
 	let text = ''
 	text += infoHeader(ctx.wd.r('menu.menu'))
 	text += '\n\n'
 
-	text += labeledFloat(ctx.wd.r('other.money'), ctx.session.money, emoji.currency)
+	text += labeledFloat(ctx.wd.r('other.money'), session.money, emoji.currency)
 
 	return text
 }
@@ -28,7 +32,8 @@ menu.simpleButton(buttonText(emoji.mall, 'menu.mall'), 'mall', {
 })
 
 function applicantEmoji(ctx: any): string {
-	return ctx.session.applicants.length > 0 ? emoji.applicantsAvailable : emoji.applicantsEmpty
+	const session = ctx.session as Session
+	return session.applicants.length > 0 ? emoji.applicantsAvailable : emoji.applicantsEmpty
 }
 
 menu.submenu(buttonText(applicantEmoji, 'menu.applicant'), 'applicants', applicants, {
