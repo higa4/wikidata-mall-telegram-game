@@ -1,7 +1,7 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
 import {buttonText} from '../lib/interface/menu'
-import {infoHeader, labeledNumber} from '../lib/interface/formatted-strings'
+import {infoHeader, labeledFloat} from '../lib/interface/formatted-strings'
 import emoji from '../lib/interface/emojis'
 
 import applicants from './applicants'
@@ -13,7 +13,7 @@ function menuText(ctx: any): string {
 	text += infoHeader(ctx.wd.r('menu.menu'))
 	text += '\n\n'
 
-	text += labeledNumber(ctx.wd.r('other.money'), ctx.session.money, emoji.currency)
+	text += labeledFloat(ctx.wd.r('other.money'), ctx.session.money, emoji.currency)
 
 	return text
 }

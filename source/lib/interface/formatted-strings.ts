@@ -37,13 +37,17 @@ export function bonusPercentString(percent: number): string {
 	return `${plusMinusHundred > 0 ? '+' : ''}${plusMinusHundred.toFixed(1)}%`
 }
 
-export function labeledNumber(wdr: WikidataEntityReader, num: number, unit = ''): string {
-	return `${wdr.label()}: ${formattedInt(num)}${unit}`
+export function labeledFloat(wdr: WikidataEntityReader, num: number, unit = ''): string {
+	return `${wdr.label()}: ${formattedNumber(num, false)}${unit}`
+}
+
+export function labeledInt(wdr: WikidataEntityReader, num: number, unit = ''): string {
+	return `${wdr.label()}: ${formattedNumber(num, true)}${unit}`
 }
 
 const LETTERS = ['', 'k', 'M', 'G', 'T', 'P', 'E']
 
-export function formattedInt(num: number): string {
+function formattedNumber(num: number, isInt: boolean): string {
 	const exp = Math.floor(Math.log10(Math.abs(num)))
 	const sciExp = Math.floor(exp / 3) * 3
 	const sciNum = 10 ** sciExp
@@ -54,7 +58,7 @@ export function formattedInt(num: number): string {
 
 	const relevantNumPart = num / sciNum
 
-	const fractionDigits = sciExp > 2 ? 2 : 0
+	const fractionDigits = isInt && sciExp < 2 ? 0 : 2
 	const numberString = relevantNumPart.toFixed(fractionDigits)
 
 	const letterString = LETTERS[sciExp / 3]

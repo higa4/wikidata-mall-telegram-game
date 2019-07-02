@@ -6,7 +6,7 @@ import {Shop, Product} from '../lib/types/shop'
 
 import {storageCapacity} from '../lib/math/product'
 
-import {infoHeader, labeledNumber} from '../lib/interface/formatted-strings'
+import {infoHeader, labeledInt} from '../lib/interface/formatted-strings'
 import {menuPhoto} from '../lib/interface/menu'
 import emoji from '../lib/interface/emojis'
 
@@ -29,8 +29,10 @@ function menuText(ctx: any): string {
 	text += infoHeader(reader)
 	text += '\n\n'
 
-	text += labeledNumber(ctx.wd.r('product.storage'), product.itemsInStore) + '\n'
-	text += labeledNumber(ctx.wd.r('product.storageCapacity'), storageCapacity(product)) + '\n'
+	text += labeledInt(ctx.wd.r('product.storage'), product.itemsInStore)
+	text += '\n'
+	text += labeledInt(ctx.wd.r('product.storageCapacity'), storageCapacity(product))
+	text += '\n'
 
 	return text
 }

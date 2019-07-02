@@ -10,7 +10,7 @@ import * as wdShops from '../lib/wikidata/shops'
 import {buildCost} from '../lib/math/shop'
 
 import {buttonText, menuPhoto} from '../lib/interface/menu'
-import {infoHeader, labeledNumber} from '../lib/interface/formatted-strings'
+import {infoHeader, labeledFloat} from '../lib/interface/formatted-strings'
 import emoji from '../lib/interface/emojis'
 
 import shopMenu from './shop'
@@ -24,7 +24,7 @@ function menuText(ctx: any): string {
 	text += infoHeader(ctx.wd.r('menu.shop'))
 	text += '\n\n'
 
-	text += labeledNumber(ctx.wd.r('other.money'), ctx.session.money, emoji.currency)
+	text += labeledFloat(ctx.wd.r('other.money'), ctx.session.money, emoji.currency)
 	text += '\n\n'
 
 	const cost = buildCostFromCtx(ctx)
@@ -34,7 +34,7 @@ function menuText(ctx: any): string {
 	text += ctx.wd.r('action.construction').label()
 	text += '*'
 	text += '\n'
-	text += labeledNumber(ctx.wd.r('other.cost'), cost, emoji.currency)
+	text += labeledFloat(ctx.wd.r('other.cost'), cost, emoji.currency)
 
 	return text
 }

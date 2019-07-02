@@ -3,7 +3,7 @@ import {TalentName} from '../types/people'
 
 export function storageCapacity(product: Product): number {
 	const personal = personalBonus(product, 'storage')
-	return 100 * personal
+	return Math.round(100 * personal)
 }
 
 function personalBonus(product: Product, talent: TalentName): number {
