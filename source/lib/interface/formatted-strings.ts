@@ -32,8 +32,8 @@ export function infoHeader(wdr: WikidataEntityReader, options: InfoHeaderOptions
 	return text
 }
 
-export function labeledNumber(wdr: WikidataEntityReader, num: number, currency: string): string {
-	return `${wdr.label()}: ${formattedInt(num)}${currency}`
+export function labeledNumber(wdr: WikidataEntityReader, num: number, unit = ''): string {
+	return `${wdr.label()}: ${formattedInt(num)}${unit}`
 }
 
 const LETTERS = ['', 'k', 'M', 'G', 'T', 'P', 'E']
