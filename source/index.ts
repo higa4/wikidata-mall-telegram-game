@@ -14,6 +14,21 @@ const tokenFilePath = process.env.NODE_ENV === 'production' ? process.env.npm_pa
 const token = readFileSync(tokenFilePath, 'utf8').trim()
 const bot = new Telegraf(token)
 
+if (process.env.NODE_ENV !== 'production') {
+	bot.use(async (ctx, next) => {
+		const updateId = ctx.update.update_id.toString(36)
+		const content = (ctx.callbackQuery && ctx.callbackQuery.data) || (ctx.message && ctx.message.text)
+		const identifier = `${updateId} ${ctx.updateType} ${ctx.from!.first_name} ${content && content.length} ${content}`
+
+		console.time(identifier)
+		if (next) {
+			await next()
+		}
+
+		console.timeEnd(identifier)
+	})
+}
+
 bot.use(userSessions.middleware())
 bot.use(sessionMathMiddleware())
 
