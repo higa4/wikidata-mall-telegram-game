@@ -8,7 +8,7 @@ import {TalentName} from '../lib/types/people'
 import {storageCapacity, personalBonus, sellingCost, purchasingCost} from '../lib/math/product'
 
 import {infoHeader, bonusPercentString, labeledInt, labeledFloat} from '../lib/interface/formatted-strings'
-import {menuPhoto} from '../lib/interface/menu'
+import {menuPhoto, buttonText} from '../lib/interface/menu'
 import emoji from '../lib/interface/emojis'
 
 function fromCtx(ctx: any): {shop: Shop; product: Product} {
@@ -40,6 +40,11 @@ function menuText(ctx: any): string {
 
 	console.log('product', product)
 
+	const capacity = storageCapacity(shop, product)
+	const freeCapacity = capacity - product.itemsInStore
+	const purchaseCostPerItem = purchasingCost(shop, product)
+	const sellingCostPerItem = sellingCost(shop, product)
+
 	let text = ''
 	text += infoHeader(reader)
 	text += '\n\n'
@@ -47,7 +52,7 @@ function menuText(ctx: any): string {
 	text += emoji.storage
 	text += labeledInt(ctx.wd.r('product.storage'), product.itemsInStore)
 	text += '\n'
-	text += labeledInt(ctx.wd.r('product.storageCapacity'), storageCapacity(shop, product))
+	text += labeledInt(ctx.wd.r('product.storageCapacity'), capacity)
 	text += bonusPerson(shop, product, 'storage')
 	text += '\n'
 
@@ -59,26 +64,65 @@ function menuText(ctx: any): string {
 	text += '\n'
 
 	text += emoji.purchasing
-	text += labeledFloat(ctx.wd.r('person.talents.purchasing'), purchasingCost(shop, product), emoji.currency)
+	text += labeledFloat(ctx.wd.r('person.talents.purchasing'), purchaseCostPerItem, emoji.currency)
 	text += bonusPerson(shop, product, 'purchasing')
 	text += '\n'
 
 	text += emoji.selling
-	text += labeledFloat(ctx.wd.r('person.talents.selling'), sellingCost(shop, product), emoji.currency)
+	text += labeledFloat(ctx.wd.r('person.talents.selling'), sellingCostPerItem, emoji.currency)
 	text += bonusPerson(shop, product, 'selling')
 	text += '\n'
 
 	text += emoji.income
 	text += ctx.wd.r('other.income').label()
 	text += ': '
-	text += bonusPercentString(sellingCost(shop, product) / purchasingCost(shop, product))
+	text += bonusPercentString(sellingCostPerItem / purchaseCostPerItem)
 	text += '\n'
+
+	if (freeCapacity > 0) {
+		text += '\n'
+		text += emoji.purchasing
+		text += '*'
+		text += ctx.wd.r('person.talents.purchasing').label()
+		text += '*'
+		text += '\n'
+		text += labeledFloat(ctx.wd.r('other.cost'), purchaseCostPerItem * freeCapacity, emoji.currency)
+		text += '\n'
+	}
 
 	return text
 }
 
 const menu = new TelegrafInlineMenu(menuText, {
 	photo: menuPhoto(ctx => fromCtx(ctx).product.id)
+})
+
+menu.button(buttonText(emoji.purchasing, 'person.talents.purchasing'), 'fill', {
+	hide: ctx => {
+		const {shop, product} = fromCtx(ctx)
+		const capacity = storageCapacity(shop, product)
+		return product.itemsInStore >= capacity
+	},
+	doFunc: (ctx: any) => {
+		const session = ctx.session as Session
+		const now = Date.now() / 1000
+
+		const {shop, product} = fromCtx(ctx)
+		const capacity = storageCapacity(shop, product)
+		const freeCapacity = capacity - product.itemsInStore
+
+		const costPerItem = purchasingCost(shop, product)
+		const moneyOfItemsAvailable = Math.floor(session.money / costPerItem)
+
+		const buyItems = Math.min(freeCapacity, moneyOfItemsAvailable)
+		if (buyItems < 1) {
+			return
+		}
+
+		session.money -= buyItems * costPerItem
+		product.itemsInStore += buyItems
+		product.itemTimestamp = now
+	}
 })
 
 menu.urlButton(
