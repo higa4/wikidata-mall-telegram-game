@@ -1,6 +1,7 @@
 import {Session} from '../types'
 
 import applicants from './applicants'
+import personal from './personal'
 
 export default function middleware(): (ctx: any, next: any) => void {
 	return (ctx, next) => {
@@ -9,6 +10,7 @@ export default function middleware(): (ctx: any, next: any) => void {
 
 		init(session)
 		applicants(session, now)
+		personal(session, now)
 
 		return next()
 	}
