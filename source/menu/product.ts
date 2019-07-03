@@ -11,6 +11,8 @@ import {infoHeader, bonusPercentString, labeledInt, labeledFloat} from '../lib/i
 import {menuPhoto, buttonText} from '../lib/interface/menu'
 import emoji from '../lib/interface/emojis'
 
+import employeeMenu from './product-employees'
+
 function fromCtx(ctx: any): {shop: Shop; product: Product} {
 	const shopType = ctx.match[1]
 	const productId = ctx.match[2]
@@ -37,8 +39,6 @@ function bonusPerson(shop: Shop, product: Product, talent: TalentName): string {
 function menuText(ctx: any): string {
 	const {product, shop} = fromCtx(ctx)
 	const reader = ctx.wd.r(product.id) as WikidataEntityReader
-
-	console.log('product', product)
 
 	const capacity = storageCapacity(shop, product)
 	const freeCapacity = capacity - product.itemsInStore
@@ -124,6 +124,8 @@ menu.button(buttonText(emoji.purchasing, 'person.talents.purchasing'), 'fill', {
 		product.itemTimestamp = now
 	}
 })
+
+menu.submenu(buttonText(emoji.person, 'menu.employee'), 'e', employeeMenu)
 
 menu.urlButton(
 	(ctx: any) => `${emoji.wikidataItem} ${ctx.wd.r('menu.wikidataItem').label()}`,

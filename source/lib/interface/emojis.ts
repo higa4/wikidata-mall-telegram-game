@@ -13,6 +13,7 @@ const emojis: Dictionary<string> = {
 	income: '📈',
 	language: '🏳️‍🌈',
 	mall: '🏬',
+	noPerson: '🕳',
 	person: '👤',
 	purchasing: '🛒',
 	retirement: '👻',

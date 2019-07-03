@@ -1,17 +1,18 @@
 menu:
   applicant: Q54875338
   chat: Q287198
+  employee: Q703534
   language: Q315
   mall: Q11315
   menu: Q846925
   shop: Q213441
   wikidataItem: Q16222597
 action:
-  employmentTermination: Q685744
   buy: Q1369832
   change: Q1150070
   close: Q5135520
   construction: Q385378
+  employmentTermination: Q685744
   search: Q36963
   upgrade: Q920419
 person:
