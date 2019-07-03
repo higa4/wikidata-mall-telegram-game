@@ -74,7 +74,7 @@ function menuText(ctx: any): string {
 	text += '*'
 	text += ctx.wd.r('other.cost').label()
 	text += '*'
-	text += ' / 1'
+	text += ' (1)'
 	text += '\n'
 
 	text += emoji.purchasing
