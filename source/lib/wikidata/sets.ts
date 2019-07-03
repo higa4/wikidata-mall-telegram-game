@@ -5,6 +5,13 @@ import {sparqlQuerySimplifiedMinified} from 'wikidata-sdk-got'
 type Dictionary<T> = {[key: string]: T}
 
 const queries: Dictionary<string> = {
+	attractions: `SELECT DISTINCT ?item WHERE {
+?item wdt:P31*/wdt:P279* wd:Q570116.
+?item rdfs:label ?label.
+?item wdt:P18 ?image.
+?item wdt:P2048 ?height.
+FILTER((LANG(?label)) = "en")
+}`
 }
 
 const entities: Dictionary<string[]> = {}
