@@ -38,6 +38,7 @@ function bonusPerson(shop: Shop, product: Product, talent: TalentName): string {
 
 function menuText(ctx: any): string {
 	const {product, shop} = fromCtx(ctx)
+	const session = ctx.session as Session
 	const reader = ctx.wd.r(product.id) as WikidataEntityReader
 
 	const capacity = storageCapacity(shop, product)
@@ -47,6 +48,9 @@ function menuText(ctx: any): string {
 
 	let text = ''
 	text += infoHeader(reader)
+	text += '\n\n'
+
+	text += labeledFloat(ctx.wd.r('other.money'), session.money, emoji.currency)
 	text += '\n\n'
 
 	text += emoji.storage
