@@ -99,6 +99,7 @@ function menuText(ctx: any): string {
 		text += '*'
 		text += ctx.wd.r('person.talents.purchasing').label()
 		text += '*'
+		text += ` (${freeCapacity})`
 		text += '\n'
 		text += labeledFloat(ctx.wd.r('other.cost'), purchaseCostPerItem * freeCapacity, emoji.currency)
 		text += '\n'
