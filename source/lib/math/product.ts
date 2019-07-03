@@ -3,7 +3,7 @@ import {TalentName} from '../types/people'
 
 export function purchasingCost(shop: Shop, product: Product): number {
 	const personal = personalBonus(shop, product, 'purchasing')
-	return productBasePrice(product) / personal
+	return productBasePrice(product) * (0.95 / personal)
 }
 
 export function sellingCost(shop: Shop, product: Product): number {
