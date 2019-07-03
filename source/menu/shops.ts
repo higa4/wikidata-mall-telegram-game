@@ -50,7 +50,7 @@ function userShops(ctx: any): string[] {
 	return session.shops.map(o => o.id)
 }
 
-menu.selectSubmenu('shop', userShops, shopMenu, {
+menu.selectSubmenu('s', userShops, shopMenu, {
 	columns: 2,
 	textFunc: (ctx: any, key) => ctx.wd.r(key).label()
 })

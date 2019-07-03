@@ -89,7 +89,7 @@ function userProducts(ctx: any): string[] {
 	return shop.products.map(o => o.id)
 }
 
-menu.selectSubmenu('product', userProducts, productMenu, {
+menu.selectSubmenu('p', userProducts, productMenu, {
 	columns: 2,
 	textFunc: (ctx: any, key) => ctx.wd.r(key).label()
 })
