@@ -109,7 +109,7 @@ menu.button(buttonText(emoji.purchasing, 'person.talents.purchasing'), 'fill', {
 	},
 	doFunc: (ctx: any) => {
 		const session = ctx.session as Session
-		const now = Date.now() / 1000
+		const now = Math.floor(Date.now() / 1000)
 
 		const {shop, product} = fromCtx(ctx)
 		const capacity = storageCapacity(shop, product)
