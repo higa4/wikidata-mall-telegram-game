@@ -36,6 +36,16 @@ function bonusPerson(shop: Shop, product: Product, talent: TalentName): string {
 	return `\n  ${bonusPercentString(bonus)} ${isHobby ? emoji.hobby + ' ' : ''}${namePart}`
 }
 
+function itemsPurchasable(session: Session, shop: Shop, product: Product): number {
+	const capacity = storageCapacity(shop, product)
+	const freeCapacity = capacity - product.itemsInStore
+
+	const cost = purchasingCost(shop, product)
+	const moneyAvailableForAmount = Math.floor(session.money / cost)
+
+	return Math.max(0, Math.min(freeCapacity, moneyAvailableForAmount))
+}
+
 function menuText(ctx: any): string {
 	const {product, shop} = fromCtx(ctx)
 	const session = ctx.session as Session
@@ -102,27 +112,22 @@ const menu = new TelegrafInlineMenu(menuText, {
 })
 
 menu.button(buttonText(emoji.purchasing, 'person.talents.purchasing'), 'fill', {
-	hide: ctx => {
+	hide: (ctx: any) => {
+		const session = ctx.session as Session
 		const {shop, product} = fromCtx(ctx)
-		const capacity = storageCapacity(shop, product)
-		return product.itemsInStore >= capacity
+		return itemsPurchasable(session, shop, product) < 1
 	},
 	doFunc: (ctx: any) => {
 		const session = ctx.session as Session
 		const now = Math.floor(Date.now() / 1000)
-
 		const {shop, product} = fromCtx(ctx)
-		const capacity = storageCapacity(shop, product)
-		const freeCapacity = capacity - product.itemsInStore
 
-		const costPerItem = purchasingCost(shop, product)
-		const moneyOfItemsAvailable = Math.floor(session.money / costPerItem)
-
-		const buyItems = Math.min(freeCapacity, moneyOfItemsAvailable)
+		const buyItems = itemsPurchasable(session, shop, product)
 		if (buyItems < 1) {
 			return
 		}
 
+		const costPerItem = purchasingCost(shop, product)
 		session.money -= buyItems * costPerItem
 		product.itemsInStore += buyItems
 		product.itemTimestamp = now
