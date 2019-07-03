@@ -25,7 +25,7 @@ function init(session: Session): void {
 	} = session
 
 	if (!isFinite(money)) {
-		session.money = 5
+		session.money = 300
 	}
 
 	if (!shops) {

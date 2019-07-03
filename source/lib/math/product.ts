@@ -3,12 +3,12 @@ import {TalentName} from '../types/people'
 
 export function purchasingCost(shop: Shop, product: Product): number {
 	const personal = personalBonus(shop, product, 'purchasing')
-	return 1 / personal
+	return 8 / personal
 }
 
 export function sellingCost(shop: Shop, product: Product): number {
 	const personal = personalBonus(shop, product, 'selling')
-	return personal
+	return 8 * personal
 }
 
 export function storageCapacity(shop: Shop, product: Product): number {
