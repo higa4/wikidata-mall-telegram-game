@@ -9,61 +9,44 @@ import {infoHeader} from '../lib/interface/formatted-strings'
 import {personMarkdown} from '../lib/interface/person'
 import emojis from '../lib/interface/emojis'
 
-import confirmEmployee from './product-employee-confirm-applicant'
-
-function fromCtx(ctx: any): {shop: Shop; product: Product; talent: TalentName; person?: Person} {
+function fromCtx(ctx: any): {shop: Shop; product: Product; talent: TalentName; applicantId: number; applicant: Person} {
 	const shopType = ctx.match[1]
 	const productId = ctx.match[2]
 	const talent = ctx.match[3] as TalentName
+	const applicantId = Number(ctx.match[4])
 
 	const session = ctx.session as Session
 	const shop = session.shops.filter(o => o.id === shopType)[0]
 	const product = shop.products.filter(o => o.id === productId)[0]
-	const person = product.personal[talent]
+	const applicant = session.applicants[applicantId]
 
-	return {shop, product, talent, person}
+	return {shop, product, talent, applicantId, applicant}
 }
 
 function menuText(ctx: any): string {
-	const {talent, person} = fromCtx(ctx)
+	const {talent, applicant} = fromCtx(ctx)
 
 	let text = ''
 	text += infoHeader(ctx.wd.r(`person.talents.${talent}`))
 	text += '\n\n'
 
-	if (person) {
-		text += personMarkdown(ctx, person)
-	} else {
-		text += emojis.noPerson
-	}
+	text += personMarkdown(ctx, applicant)
 
 	return text
 }
 
 const menu = new TelegrafInlineMenu(menuText)
 
-menu.button(buttonText(emojis.employmentTermination, 'action.employmentTermination'), 'remove', {
-	hide: ctx => !fromCtx(ctx).person,
+menu.button(buttonText(emojis.recruitment, 'action.recruitment'), 'remove', {
+	setParentMenuAfter: true,
 	doFunc: (ctx: any) => {
-		const {product, talent} = fromCtx(ctx)
-		delete product.personal[talent]
-	}
-})
-
-function availableApplicants(ctx: any): string[] {
-	if (fromCtx(ctx).person) {
-		return []
-	}
-
-	return Object.keys(ctx.session.applicants)
-}
-
-menu.selectSubmenu('a', availableApplicants, confirmEmployee, {
-	columns: 2,
-	textFunc: (ctx: any, key) => {
+		const now = Date.now() / 1000
+		const {product, talent, applicantId, applicant} = fromCtx(ctx)
 		const session = ctx.session as Session
-		const {name} = session.applicants[Number(key)]
-		return `${name.given} ${name.family}`
+
+		product.personal[talent] = applicant
+		session.applicants.splice(applicantId, 1)
+		session.applicantTimestamp = now
 	}
 })
 
