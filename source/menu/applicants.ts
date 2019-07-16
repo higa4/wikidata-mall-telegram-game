@@ -22,11 +22,11 @@ const menu = new TelegrafInlineMenu(menuText, {
 	photo: menuPhoto('menu.applicant')
 })
 
-function userShops(ctx: any): string[] {
+function availableApplicants(ctx: any): string[] {
 	return Object.keys(ctx.session.applicants)
 }
 
-menu.selectSubmenu('a', userShops, applicantMenu, {
+menu.selectSubmenu('a', availableApplicants, applicantMenu, {
 	columns: 2,
 	textFunc: (ctx: any, key) => {
 		const session = ctx.session as Session
