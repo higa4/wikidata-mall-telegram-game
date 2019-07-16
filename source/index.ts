@@ -1,4 +1,4 @@
-import {readFileSync} from 'fs'
+import {existsSync, readFileSync} from 'fs'
 
 import Telegraf from 'telegraf'
 import TelegrafI18n from 'telegraf-i18n'
@@ -10,7 +10,7 @@ import * as userSessions from './lib/data/user-sessions'
 import menu from './menu'
 import sessionMathMiddleware from './lib/session-math'
 
-const tokenFilePath = process.env.NODE_ENV === 'production' ? process.env.npm_package_config_tokenpath as string : 'token.txt'
+const tokenFilePath = existsSync('/run/secrets') ? '/run/secrets/bot-token.txt' : 'bot-token.txt'
 const token = readFileSync(tokenFilePath, 'utf8').trim()
 const bot = new Telegraf(token)
 
