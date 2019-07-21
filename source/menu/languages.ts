@@ -8,6 +8,7 @@ import emoji from '../lib/interface/emojis'
 const localeEmoji = require('locale-emoji')
 
 const menu = new TelegrafInlineMenu(ctx => languageMenuText(ctx))
+menu.setCommand(['language', 'settings'])
 
 function flagString(languageCode: string, useFallbackFlag = false): string {
 	const flag = localeEmoji(languageCode)
