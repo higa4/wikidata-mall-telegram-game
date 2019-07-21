@@ -42,6 +42,6 @@ menu.submenu(buttonText(applicantEmoji, 'menu.applicant'), 'applicants', applica
 
 menu.submenu(buttonText(emoji.language, 'menu.language'), 'lang', languages)
 
-menu.urlButton(buttonText(emoji.chat, 'menu.chat'), 'https://t.me/Bs1thApril')
+menu.urlButton(buttonText(emoji.chat, 'menu.chat'), 'https://t.me/WikidataMallChat')
 
 export default menu
