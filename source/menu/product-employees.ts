@@ -1,7 +1,7 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
 import {Session} from '../lib/types'
-import {Shop, Product} from '../lib/types/shop'
+import {Shop} from '../lib/types/shop'
 import {TALENTS, TalentName} from '../lib/types/people'
 
 import {buttonText} from '../lib/interface/menu'
@@ -10,17 +10,15 @@ import emojis from '../lib/interface/emojis'
 
 import employee from './product-employee'
 
-function fromCtx(ctx: any): {shop: Shop; product: Product} {
+function fromCtx(ctx: any): {shop: Shop} {
 	const shopType = ctx.match[1]
-	const productId = ctx.match[2]
 	const session = ctx.session as Session
 	const shop = session.shops.filter(o => o.id === shopType)[0]
-	const product = shop.products.filter(o => o.id === productId)[0]
-	return {shop, product}
+	return {shop}
 }
 
-function talentLine(ctx: any, shop: Shop, product: Product, talent: TalentName): string {
-	const person = product.personal[talent]
+function talentLine(ctx: any, shop: Shop, talent: TalentName): string {
+	const person = shop.personal[talent]
 
 	let text = ''
 	text += '*'
@@ -43,13 +41,13 @@ function talentLine(ctx: any, shop: Shop, product: Product, talent: TalentName):
 }
 
 function menuText(ctx: any): string {
-	const {shop, product} = fromCtx(ctx)
+	const {shop} = fromCtx(ctx)
 	let text = ''
 	text += infoHeader(ctx.wd.r('menu.employee'))
 	text += '\n\n'
 
 	text +=	TALENTS
-		.map(o => talentLine(ctx, shop, product, o))
+		.map(o => talentLine(ctx, shop, o))
 		.join('\n')
 
 	return text

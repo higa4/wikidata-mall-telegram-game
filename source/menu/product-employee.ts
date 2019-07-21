@@ -1,7 +1,7 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
 import {Session} from '../lib/types'
-import {Shop, Product} from '../lib/types/shop'
+import {Shop} from '../lib/types/shop'
 import {TalentName, Person} from '../lib/types/people'
 
 import {buttonText} from '../lib/interface/menu'
@@ -11,17 +11,15 @@ import emojis from '../lib/interface/emojis'
 
 import confirmEmployee from './product-employee-confirm-applicant'
 
-function fromCtx(ctx: any): {shop: Shop; product: Product; talent: TalentName; person?: Person} {
+function fromCtx(ctx: any): {shop: Shop; talent: TalentName; person?: Person} {
 	const shopType = ctx.match[1]
-	const productId = ctx.match[2]
-	const talent = ctx.match[3] as TalentName
+	const talent = ctx.match[2] as TalentName
 
 	const session = ctx.session as Session
 	const shop = session.shops.filter(o => o.id === shopType)[0]
-	const product = shop.products.filter(o => o.id === productId)[0]
-	const person = product.personal[talent]
+	const person = shop.personal[talent]
 
-	return {shop, product, talent, person}
+	return {shop, talent, person}
 }
 
 function menuText(ctx: any): string {
@@ -45,8 +43,8 @@ const menu = new TelegrafInlineMenu(menuText)
 menu.button(buttonText(emojis.employmentTermination, 'action.employmentTermination'), 'remove', {
 	hide: ctx => !fromCtx(ctx).person,
 	doFunc: (ctx: any) => {
-		const {product, talent} = fromCtx(ctx)
-		delete product.personal[talent]
+		const {shop, talent} = fromCtx(ctx)
+		delete shop.personal[talent]
 	}
 })
 

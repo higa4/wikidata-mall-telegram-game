@@ -1,5 +1,5 @@
 import {Session} from '../types'
-import {Shop, Product} from '../types/shop'
+import {Shop} from '../types/shop'
 import {TalentName} from '../types/people'
 
 export default function calcPersonal(session: Session, now: number): void {
@@ -13,19 +13,13 @@ function retirePersonal(session: Session, now: number): void {
 }
 
 function retireShopPersonal(shop: Shop, now: number): void {
-	for (const p of shop.products) {
-		retireProductPersonal(p, now)
-	}
-}
-
-function retireProductPersonal(product: Product, now: number): void {
-	const takenSpots = Object.keys(product.personal) as TalentName[]
+	const takenSpots = Object.keys(shop.personal) as TalentName[]
 
 	for (const talent of takenSpots) {
-		const person = product.personal[talent]
+		const person = shop.personal[talent]
 		const retire = !person || person.retirementTimestamp < now
 		if (retire) {
-			delete product.personal[talent]
+			delete shop.personal[talent]
 		}
 	}
 }

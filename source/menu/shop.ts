@@ -3,7 +3,6 @@ import WikidataEntityReader from 'wikidata-entity-reader'
 
 import {Session} from '../lib/types'
 import {Shop, Product} from '../lib/types/shop'
-import {TALENTS} from '../lib/types/people'
 
 import {randomUnusedEntry} from '../lib/js-helper/array'
 
@@ -15,6 +14,7 @@ import {buttonText, menuPhoto} from '../lib/interface/menu'
 import {infoHeader, labeledFloat, labeledInt} from '../lib/interface/formatted-strings'
 import emoji from '../lib/interface/emojis'
 
+import employeeMenu from './product-employees'
 import productMenu from './product'
 
 function fromCtx(ctx: any): Shop {
@@ -31,18 +31,9 @@ function addProductCostFromSession(session: Session, shop: Shop): number {
 	return productCost(session.shops.length, shop.products.length)
 }
 
-function productLine(ctx: any, shop: Shop, product: Product): string {
+function productLine(ctx: any, product: Product): string {
 	let text = ''
 	text += labeledInt(ctx.wd.r(product.id), product.itemsInStore, emoji.storage)
-
-	const hobbyPersonal = TALENTS
-		.filter(t => product.personal[t])
-		.filter(t => product.personal[t]!.hobby === shop.id)
-		.map(() => emoji.hobby)
-
-	if (hobbyPersonal.length > 0) {
-		text += ' ' + hobbyPersonal.join('')
-	}
 
 	return text
 }
@@ -66,7 +57,7 @@ function menuText(ctx: any): string {
 	text += '\n'
 
 	text += shop.products
-		.map(product => productLine(ctx, shop, product))
+		.map(product => productLine(ctx, product))
 		.map(o => `  ${o}`)
 		.join('\n')
 	text += '\n'
@@ -115,14 +106,15 @@ menu.button(buttonText(emoji.add, 'other.assortment'), 'addProduct', {
 		const pickedProduct: Product = {
 			id: pickedProductId,
 			itemsInStore: 0,
-			itemTimestamp: now,
-			personal: {}
+			itemTimestamp: now
 		}
 
 		session.money -= cost
 		shop.products.push(pickedProduct)
 	}
 })
+
+menu.submenu(buttonText(emoji.person, 'menu.employee'), 'e', employeeMenu)
 
 menu.button(buttonText(emoji.close, 'action.close'), 'remove', {
 	setParentMenuAfter: true,

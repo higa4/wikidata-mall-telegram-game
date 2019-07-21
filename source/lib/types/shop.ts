@@ -4,7 +4,6 @@ export interface Product {
 	id: string;
 	itemsInStore: number;
 	itemTimestamp: number;
-	personal: Personal;
 }
 
 interface Personal {
@@ -15,5 +14,6 @@ interface Personal {
 
 export interface Shop {
 	id: string;
+	personal: Personal;
 	products: Product[];
 }

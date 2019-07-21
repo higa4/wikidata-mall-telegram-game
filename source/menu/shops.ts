@@ -69,6 +69,7 @@ menu.button(buttonText(emoji.construction, 'action.construction'), 'build', {
 		const newShopId = randomUnusedEntry(wdShops.allShops(), userShops(ctx))
 		const newShop: Shop = {
 			id: newShopId,
+			personal: {},
 			products: []
 		}
 

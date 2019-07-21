@@ -11,8 +11,6 @@ import {infoHeader, bonusPercentString, labeledInt, labeledFloat} from '../lib/i
 import {menuPhoto, buttonText} from '../lib/interface/menu'
 import emoji from '../lib/interface/emojis'
 
-import employeeMenu from './product-employees'
-
 function fromCtx(ctx: any): {shop: Shop; product: Product} {
 	const shopType = ctx.match[1]
 	const productId = ctx.match[2]
@@ -22,8 +20,8 @@ function fromCtx(ctx: any): {shop: Shop; product: Product} {
 	return {shop, product}
 }
 
-function bonusPerson(shop: Shop, product: Product, talent: TalentName): string {
-	const person = product.personal[talent]
+function bonusPerson(shop: Shop, talent: TalentName): string {
+	const person = shop.personal[talent]
 	if (!person) {
 		return ''
 	}
@@ -31,13 +29,13 @@ function bonusPerson(shop: Shop, product: Product, talent: TalentName): string {
 	const {name, hobby} = person
 	const namePart = `*${name.given}* ${name.family}`
 	const isHobby = hobby === shop.id
-	const bonus = personalBonus(shop, product, talent)
+	const bonus = personalBonus(shop, talent)
 
 	return `\n  ${bonusPercentString(bonus)} ${isHobby ? emoji.hobby + ' ' : ''}${namePart}`
 }
 
 function itemsPurchasable(session: Session, shop: Shop, product: Product): number {
-	const capacity = storageCapacity(shop, product)
+	const capacity = storageCapacity(shop)
 	const freeCapacity = capacity - product.itemsInStore
 
 	const cost = purchasingCost(shop, product)
@@ -51,7 +49,7 @@ function menuText(ctx: any): string {
 	const session = ctx.session as Session
 	const reader = ctx.wd.r(product.id) as WikidataEntityReader
 
-	const capacity = storageCapacity(shop, product)
+	const capacity = storageCapacity(shop)
 	const freeCapacity = capacity - product.itemsInStore
 	const purchaseCostPerItem = purchasingCost(shop, product)
 	const sellingCostPerItem = sellingCost(shop, product)
@@ -67,7 +65,7 @@ function menuText(ctx: any): string {
 	text += labeledInt(ctx.wd.r('product.storage'), product.itemsInStore)
 	text += '\n'
 	text += labeledInt(ctx.wd.r('product.storageCapacity'), capacity)
-	text += bonusPerson(shop, product, 'storage')
+	text += bonusPerson(shop, 'storage')
 	text += '\n'
 
 	text += '\n'
@@ -79,12 +77,12 @@ function menuText(ctx: any): string {
 
 	text += emoji.purchasing
 	text += labeledFloat(ctx.wd.r('person.talents.purchasing'), purchaseCostPerItem, emoji.currency)
-	text += bonusPerson(shop, product, 'purchasing')
+	text += bonusPerson(shop, 'purchasing')
 	text += '\n'
 
 	text += emoji.selling
 	text += labeledFloat(ctx.wd.r('person.talents.selling'), sellingCostPerItem, emoji.currency)
-	text += bonusPerson(shop, product, 'selling')
+	text += bonusPerson(shop, 'selling')
 	text += '\n'
 
 	text += emoji.income
@@ -134,8 +132,6 @@ menu.button(buttonText(emoji.purchasing, 'person.talents.purchasing'), 'fill', {
 		product.itemTimestamp = now
 	}
 })
-
-menu.submenu(buttonText(emoji.person, 'menu.employee'), 'e', employeeMenu)
 
 menu.urlButton(
 	(ctx: any) => `${emoji.wikidataItem} ${ctx.wd.r('menu.wikidataItem').label()}`,
