@@ -5,10 +5,11 @@ import {Session} from '../lib/types'
 import {Shop, Product} from '../lib/types/shop'
 import {TalentName} from '../lib/types/people'
 
-import {storageCapacity, personalBonus, sellingCost, purchasingCost} from '../lib/math/product'
+import {storageCapacity, sellingCost, purchasingCost} from '../lib/math/product'
 
 import {infoHeader, bonusPercentString, labeledInt, labeledFloat} from '../lib/interface/formatted-strings'
 import {menuPhoto, buttonText} from '../lib/interface/menu'
+import {personInShopLine} from '../lib/interface/person'
 import emoji from '../lib/interface/emojis'
 
 function fromCtx(ctx: any): {shop: Shop; product: Product} {
@@ -26,12 +27,7 @@ function bonusPerson(shop: Shop, talent: TalentName): string {
 		return ''
 	}
 
-	const {name, hobby} = person
-	const namePart = `*${name.given}* ${name.family}`
-	const isHobby = hobby === shop.id
-	const bonus = personalBonus(shop, talent)
-
-	return `\n  ${bonusPercentString(bonus)} ${isHobby ? emoji.hobby + ' ' : ''}${namePart}`
+	return '\n  ' + personInShopLine(shop, talent)
 }
 
 function itemsPurchasable(session: Session, shop: Shop, product: Product): number {

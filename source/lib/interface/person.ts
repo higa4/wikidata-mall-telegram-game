@@ -1,6 +1,9 @@
 import WikidataEntityReader from 'wikidata-entity-reader'
 
 import {Person, TalentName} from '../types/people'
+import {Shop} from '../types/shop'
+
+import {personalBonus} from '../math/product'
 
 import {bonusPercentString} from './formatted-strings'
 import emojis from './emojis'
@@ -44,3 +47,16 @@ function talentLine(ctx: any, t: TalentName, percentage: number): string {
 	return `${emojis[t]} ${reader.label()}: ${bonusPercentString(percentage)}`
 }
 
+export function personInShopLine(shop: Shop, talent: TalentName): string {
+	const person = shop.personal[talent]
+	if (!person) {
+		throw new Error(`There is no person in the shop assigned to the position + ${talent}`)
+	}
+
+	const {name, hobby} = person
+	const namePart = `*${name.given}* ${name.family}`
+	const isHobby = hobby === shop.id
+	const bonus = personalBonus(shop, talent)
+
+	return `${bonusPercentString(bonus)} ${isHobby ? emojis.hobby + ' ' : ''}${namePart}`
+}

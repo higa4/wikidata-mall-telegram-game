@@ -6,6 +6,7 @@ import {TALENTS, TalentName} from '../lib/types/people'
 
 import {buttonText} from '../lib/interface/menu'
 import {infoHeader} from '../lib/interface/formatted-strings'
+import {personInShopLine} from '../lib/interface/person'
 import emojis from '../lib/interface/emojis'
 
 import employee from './shop-employee'
@@ -27,12 +28,7 @@ function talentLine(ctx: any, shop: Shop, talent: TalentName): string {
 	text += '\n  '
 
 	if (person) {
-		if (person.hobby === shop.id) {
-			text += emojis.hobby
-			text += ' '
-		}
-
-		text += `*${person.name.given}* ${person.name.family}`
+		text += personInShopLine(shop, talent)
 	} else {
 		text += emojis.noPerson
 	}
