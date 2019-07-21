@@ -44,6 +44,8 @@ function menuText(ctx: any): string {
 
 	const session = ctx.session as Session
 
+	const productAmount = shop.products.length
+
 	let text = ''
 	text += infoHeader(reader)
 	text += '\n\n'
@@ -51,20 +53,28 @@ function menuText(ctx: any): string {
 	text += labeledFloat(ctx.wd.r('other.money'), session.money, emoji.currency)
 	text += '\n\n'
 
-	text += '*'
-	text += ctx.wd.r('other.assortment').label()
-	text += '*'
-	text += '\n'
+	if (productAmount > 0) {
+		text += '*'
+		text += ctx.wd.r('other.assortment').label()
+		text += '*'
+		text += '\n'
 
-	text += shop.products
-		.map(product => productLine(ctx, product))
-		.map(o => `  ${o}`)
-		.join('\n')
-	text += '\n'
+		text += shop.products
+			.map(product => productLine(ctx, product))
+			.map(o => `  ${o}`)
+			.join('\n')
+		text += '\n\n'
+	}
 
-	const cost = addProductCostFromSession(session, shop)
-	if (userProducts(ctx).length < 5) {
+	if (productAmount < 5) {
+		const cost = addProductCostFromSession(session, shop)
+
 		text += emoji.add
+		text += '*'
+		text += ctx.wd.r('other.assortment').label()
+		text += '*'
+		text += '\n'
+		text += '  '
 		text += labeledFloat(ctx.wd.r('other.cost'), cost, emoji.currency)
 	}
 
