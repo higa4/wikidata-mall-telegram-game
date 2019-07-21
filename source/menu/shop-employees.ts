@@ -8,7 +8,7 @@ import {buttonText} from '../lib/interface/menu'
 import {infoHeader} from '../lib/interface/formatted-strings'
 import emojis from '../lib/interface/emojis'
 
-import employee from './product-employee'
+import employee from './shop-employee'
 
 function fromCtx(ctx: any): {shop: Shop} {
 	const shopType = ctx.match[1]

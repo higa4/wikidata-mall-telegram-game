@@ -9,7 +9,7 @@ import {infoHeader} from '../lib/interface/formatted-strings'
 import {personMarkdown} from '../lib/interface/person'
 import emojis from '../lib/interface/emojis'
 
-import confirmEmployee from './product-employee-confirm-applicant'
+import confirmEmployee from './shop-employee-confirm-applicant'
 
 function fromCtx(ctx: any): {shop: Shop; talent: TalentName; person?: Person} {
 	const shopType = ctx.match[1]

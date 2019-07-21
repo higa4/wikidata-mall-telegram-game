@@ -14,7 +14,7 @@ import {buttonText, menuPhoto} from '../lib/interface/menu'
 import {infoHeader, labeledFloat, labeledInt} from '../lib/interface/formatted-strings'
 import emoji from '../lib/interface/emojis'
 
-import employeeMenu from './product-employees'
+import employeeMenu from './shop-employees'
 import productMenu from './product'
 
 function fromCtx(ctx: any): Shop {
