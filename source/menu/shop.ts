@@ -20,6 +20,8 @@ import emoji from '../lib/interface/emojis'
 import employeeMenu from './shop-employees'
 import productMenu from './product'
 
+const POSSIBLE_PRODUCTS = 6
+
 function fromCtx(ctx: any): Shop {
 	const session = ctx.session as Session
 	const shopType = ctx.match[1]
@@ -94,7 +96,7 @@ function productsPart(ctx: any, shop: Shop): string {
 }
 
 function addProductPart(ctx: any, shop: Shop): string {
-	if (shop.products.length >= 5) {
+	if (shop.products.length >= POSSIBLE_PRODUCTS) {
 		return ''
 	}
 
@@ -161,7 +163,7 @@ menu.selectSubmenu('p', userProducts, productMenu, {
 })
 
 menu.button(buttonText(emoji.add, 'other.assortment'), 'addProduct', {
-	hide: (ctx: any) => userProducts(ctx).length >= 5 || addProductCostFromCtx(ctx) > ctx.session.money,
+	hide: (ctx: any) => userProducts(ctx).length >= POSSIBLE_PRODUCTS || addProductCostFromCtx(ctx) > ctx.session.money,
 	doFunc: (ctx: any) => {
 		const shop = fromCtx(ctx)
 		const session = ctx.session as Session
