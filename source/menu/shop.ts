@@ -3,15 +3,18 @@ import WikidataEntityReader from 'wikidata-entity-reader'
 
 import {Session} from '../lib/types'
 import {Shop, Product} from '../lib/types/shop'
+import {TalentName} from '../lib/types/people'
 
 import {randomUnusedEntry} from '../lib/js-helper/array'
 
-import {buildCost, productCost} from '../lib/math/shop'
+import {buildCost, productCost, storageCapacity} from '../lib/math/shop'
+import {incomeFactor} from '../lib/math/personal'
 
 import * as wdShop from '../lib/wikidata/shops'
 
 import {buttonText, menuPhoto} from '../lib/interface/menu'
-import {infoHeader, labeledFloat, labeledInt} from '../lib/interface/formatted-strings'
+import {infoHeader, labeledFloat, labeledInt, bonusPercentString} from '../lib/interface/formatted-strings'
+import {personInShopLine} from '../lib/interface/person'
 import emoji from '../lib/interface/emojis'
 
 import employeeMenu from './shop-employees'
@@ -38,6 +41,24 @@ function productLine(ctx: any, product: Product): string {
 	return text
 }
 
+function bonusPerson(ctx: any, shop: Shop, talent: TalentName): string {
+	const person = shop.personal[talent]
+	if (!person) {
+		return ''
+	}
+
+	let text = ''
+	text += '*'
+	text += ctx.wd.r(`person.talents.${talent}`).label()
+	text += '*'
+	text += '\n'
+	text += '  '
+	text += personInShopLine(shop, talent)
+	text += '\n'
+
+	return text
+}
+
 function menuText(ctx: any): string {
 	const shop = fromCtx(ctx)
 	const reader = ctx.wd.r(shop.id) as WikidataEntityReader
@@ -51,6 +72,15 @@ function menuText(ctx: any): string {
 	text += '\n\n'
 
 	text += labeledFloat(ctx.wd.r('other.money'), session.money, emoji.currency)
+	text += '\n\n'
+
+	text += labeledInt(ctx.wd.r('product.storageCapacity'), storageCapacity(shop))
+	if (shop.personal.storage) {
+		text += '\n'
+		text += '  '
+		text += personInShopLine(shop, 'storage')
+	}
+
 	text += '\n\n'
 
 	if (productAmount > 0) {
@@ -76,7 +106,17 @@ function menuText(ctx: any): string {
 		text += '\n'
 		text += '  '
 		text += labeledFloat(ctx.wd.r('other.cost'), cost, emoji.currency)
+		text += '\n\n'
 	}
+
+	text += bonusPerson(ctx, shop, 'selling')
+	text += bonusPerson(ctx, shop, 'purchasing')
+
+	text += emoji.income
+	text += ctx.wd.r('other.income').label()
+	text += ': '
+	text += bonusPercentString(incomeFactor(shop))
+	text += '\n\n'
 
 	return text
 }

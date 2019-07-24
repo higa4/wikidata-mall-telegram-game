@@ -5,9 +5,10 @@ import {Session} from '../lib/types'
 import {Shop, Product} from '../lib/types/shop'
 import {TalentName} from '../lib/types/people'
 
-import {storageCapacity, sellingCost, purchasingCost} from '../lib/math/product'
+import {sellingCost, purchasingCost} from '../lib/math/product'
+import {storageCapacity} from '../lib/math/shop'
 
-import {infoHeader, bonusPercentString, labeledInt, labeledFloat} from '../lib/interface/formatted-strings'
+import {infoHeader, labeledInt, labeledFloat, formattedNumber} from '../lib/interface/formatted-strings'
 import {menuPhoto, buttonText} from '../lib/interface/menu'
 import {personInShopLine} from '../lib/interface/person'
 import emoji from '../lib/interface/emojis'
@@ -59,9 +60,8 @@ function menuText(ctx: any): string {
 
 	text += emoji.storage
 	text += labeledInt(ctx.wd.r('product.storage'), product.itemsInStore)
-	text += '\n'
-	text += labeledInt(ctx.wd.r('product.storageCapacity'), capacity)
-	text += bonusPerson(shop, 'storage')
+	text += ' / '
+	text += formattedNumber(capacity, true)
 	text += '\n'
 
 	text += '\n'
@@ -79,12 +79,6 @@ function menuText(ctx: any): string {
 	text += emoji.selling
 	text += labeledFloat(ctx.wd.r('person.talents.selling'), sellingCostPerItem, emoji.currency)
 	text += bonusPerson(shop, 'selling')
-	text += '\n'
-
-	text += emoji.income
-	text += ctx.wd.r('other.income').label()
-	text += ': '
-	text += bonusPercentString(sellingCostPerItem / purchaseCostPerItem)
 	text += '\n'
 
 	if (freeCapacity > 0) {

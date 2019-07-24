@@ -3,7 +3,7 @@ import WikidataEntityReader from 'wikidata-entity-reader'
 import {Person, TalentName} from '../types/people'
 import {Shop} from '../types/shop'
 
-import {personalBonus} from '../math/product'
+import {personalBonus} from '../math/personal'
 
 import {bonusPercentString} from './formatted-strings'
 import emojis from './emojis'
