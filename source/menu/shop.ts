@@ -59,21 +59,8 @@ function bonusPerson(ctx: any, shop: Shop, talent: TalentName): string {
 	return text
 }
 
-function menuText(ctx: any): string {
-	const shop = fromCtx(ctx)
-	const reader = ctx.wd.r(shop.id) as WikidataEntityReader
-
-	const session = ctx.session as Session
-
-	const productAmount = shop.products.length
-
+function storageCapacityPart(ctx: any, shop: Shop): string {
 	let text = ''
-	text += infoHeader(reader)
-	text += '\n\n'
-
-	text += labeledFloat(ctx.wd.r('other.money'), session.money, emoji.currency)
-	text += '\n\n'
-
 	text += labeledInt(ctx.wd.r('product.storageCapacity'), storageCapacity(shop))
 	if (shop.personal.storage) {
 		text += '\n'
@@ -82,33 +69,49 @@ function menuText(ctx: any): string {
 	}
 
 	text += '\n\n'
+	return text
+}
 
-	if (productAmount > 0) {
-		text += '*'
-		text += ctx.wd.r('other.assortment').label()
-		text += '*'
-		text += '\n'
-
-		text += shop.products
-			.map(product => productLine(ctx, product))
-			.map(o => `  ${o}`)
-			.join('\n')
-		text += '\n\n'
+function productsPart(ctx: any, shop: Shop): string {
+	if (shop.products.length === 0) {
+		return ''
 	}
 
-	if (productAmount < 5) {
-		const cost = addProductCostFromSession(session, shop)
+	let text = ''
+	text += '*'
+	text += ctx.wd.r('other.assortment').label()
+	text += '*'
+	text += '\n'
 
-		text += emoji.add
-		text += '*'
-		text += ctx.wd.r('other.assortment').label()
-		text += '*'
-		text += '\n'
-		text += '  '
-		text += labeledFloat(ctx.wd.r('other.cost'), cost, emoji.currency)
-		text += '\n\n'
+	text += shop.products
+		.map(product => productLine(ctx, product))
+		.map(o => `  ${o}`)
+		.join('\n')
+	text += '\n\n'
+	return text
+}
+
+function addProductPart(ctx: any, shop: Shop): string {
+	if (shop.products.length >= 5) {
+		return ''
 	}
 
+	const cost = addProductCostFromSession(ctx.session, shop)
+
+	let text = ''
+	text += emoji.add
+	text += '*'
+	text += ctx.wd.r('other.assortment').label()
+	text += '*'
+	text += '\n'
+	text += '  '
+	text += labeledFloat(ctx.wd.r('other.cost'), cost, emoji.currency)
+	text += '\n\n'
+	return text
+}
+
+function incomePart(ctx: any, shop: Shop): string {
+	let text = ''
 	text += bonusPerson(ctx, shop, 'selling')
 	text += bonusPerson(ctx, shop, 'purchasing')
 
@@ -117,6 +120,26 @@ function menuText(ctx: any): string {
 	text += ': '
 	text += bonusPercentString(incomeFactor(shop))
 	text += '\n\n'
+	return text
+}
+
+function menuText(ctx: any): string {
+	const shop = fromCtx(ctx)
+	const reader = ctx.wd.r(shop.id) as WikidataEntityReader
+
+	const session = ctx.session as Session
+
+	let text = ''
+	text += infoHeader(reader)
+	text += '\n\n'
+
+	text += labeledFloat(ctx.wd.r('other.money'), session.money, emoji.currency)
+	text += '\n\n'
+
+	text += storageCapacityPart(ctx, shop)
+	text += productsPart(ctx, shop)
+	text += addProductPart(ctx, shop)
+	text += incomePart(ctx, shop)
 
 	return text
 }
