@@ -112,8 +112,8 @@ function addProductPart(ctx: any, shop: Shop): string {
 
 function incomePart(ctx: any, shop: Shop): string {
 	let text = ''
-	text += bonusPerson(ctx, shop, 'selling')
 	text += bonusPerson(ctx, shop, 'purchasing')
+	text += bonusPerson(ctx, shop, 'selling')
 
 	text += emoji.income
 	text += ctx.wd.r('other.income').label()
