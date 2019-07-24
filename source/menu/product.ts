@@ -100,6 +100,22 @@ const menu = new TelegrafInlineMenu(menuText, {
 	photo: menuPhoto(ctx => fromCtx(ctx).product.id)
 })
 
+function buyAmount(ctx: any, amount: number, now: number): void {
+	const session = ctx.session as Session
+	const {shop, product} = fromCtx(ctx)
+
+	const maxItems = itemsPurchasable(session, shop, product)
+	const buyItems = Math.min(amount, maxItems)
+	if (buyItems < 1) {
+		return
+	}
+
+	const costPerItem = purchasingCost(shop, product)
+	session.money -= buyItems * costPerItem
+	product.itemsInStore += buyItems
+	product.itemTimestamp = now
+}
+
 menu.button(buttonText(emoji.purchasing, 'person.talents.purchasing'), 'fill', {
 	hide: (ctx: any) => {
 		const session = ctx.session as Session
@@ -107,19 +123,8 @@ menu.button(buttonText(emoji.purchasing, 'person.talents.purchasing'), 'fill', {
 		return itemsPurchasable(session, shop, product) < 1
 	},
 	doFunc: (ctx: any) => {
-		const session = ctx.session as Session
 		const now = Math.floor(Date.now() / 1000)
-		const {shop, product} = fromCtx(ctx)
-
-		const buyItems = itemsPurchasable(session, shop, product)
-		if (buyItems < 1) {
-			return
-		}
-
-		const costPerItem = purchasingCost(shop, product)
-		session.money -= buyItems * costPerItem
-		product.itemsInStore += buyItems
-		product.itemTimestamp = now
+		buyAmount(ctx, Infinity, now)
 	}
 })
 
