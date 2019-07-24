@@ -128,6 +128,20 @@ menu.button(buttonText(emoji.purchasing, 'person.talents.purchasing'), 'fill', {
 	}
 })
 
+menu.select('buy', [1, 5, 10, 42, 50, 100, 250, 420, 500, 666, 1000].map(o => String(o)), {
+	columns: 4,
+	hide: (ctx: any, key) => {
+		const session = ctx.session as Session
+		const {shop, product} = fromCtx(ctx)
+		return itemsPurchasable(session, shop, product) < Number(key)
+	},
+	textFunc: (_, key) => `${emoji.purchasing}${key}`,
+	setFunc: (ctx, key) => {
+		const now = Math.floor(Date.now() / 1000)
+		buyAmount(ctx, Number(key), now)
+	}
+})
+
 menu.urlButton(
 	(ctx: any) => `${emoji.wikidataItem} ${ctx.wd.r('menu.wikidataItem').label()}`,
 	(ctx: any) => ctx.wd.r(fromCtx(ctx).product.id).url()
