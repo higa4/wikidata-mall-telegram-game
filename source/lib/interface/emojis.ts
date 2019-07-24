@@ -18,6 +18,7 @@ const emojis: Dictionary<string> = {
 	purchasing: '🛒',
 	recruitment: '👏',
 	retirement: '👻',
+	seat: '💺',
 	selling: '🤝',
 	shop: '🏪',
 	storage: '📦',

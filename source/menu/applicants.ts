@@ -9,11 +9,14 @@ import emojis from '../lib/interface/emojis'
 import applicantMenu from './applicant'
 
 function menuText(ctx: any): string {
+	const session = ctx.session as Session
+
 	let text = ''
 	text += infoHeader(ctx.wd.r('menu.applicant'))
 	text += '\n\n'
 
-	text += `+1${emojis.person} / ${60} sec`
+	text += `+1${emojis.person} / ${60} sec\n`
+	text += `${ctx.wd.r('other.seat').label()} ${session.applicants.length} / ${session.shops.length}${emojis.seat}\n`
 
 	return text
 }
