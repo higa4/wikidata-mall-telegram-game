@@ -27,8 +27,8 @@ menu.setCommand('start')
 
 menu.submenu(buttonText(emoji.shop, 'menu.shop'), 'shops', shops)
 
-menu.simpleButton(buttonText(emoji.mall, 'menu.mall'), 'mall', {
-	doFunc: async ctx => ctx.answerCbQuery('soon…')
+menu.simpleButton(buttonText(emoji.mall + emoji.underConstruction, 'menu.mall'), 'mall', {
+	doFunc: async ctx => ctx.answerCbQuery(emoji.underConstruction + 'soon…')
 })
 
 function applicantEmoji(ctx: any): string {

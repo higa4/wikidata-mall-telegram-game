@@ -22,6 +22,7 @@ const emojis: Dictionary<string> = {
 	selling: '🤝',
 	shop: '🏪',
 	storage: '📦',
+	underConstruction: '🚧',
 	wikidataItem: 'ℹ️'
 }
 
