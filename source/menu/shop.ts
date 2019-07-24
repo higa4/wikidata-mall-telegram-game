@@ -191,6 +191,10 @@ menu.submenu(buttonText(emoji.person, 'menu.employee'), 'e', employeeMenu)
 
 menu.button(buttonText(emoji.close, 'action.close'), 'remove', {
 	setParentMenuAfter: true,
+	hide: (ctx: any) => {
+		const session = ctx.session as Session
+		return session.shops.length <= 1
+	},
 	doFunc: (ctx: any) => {
 		const shop = fromCtx(ctx)
 		const session = ctx.session as Session
