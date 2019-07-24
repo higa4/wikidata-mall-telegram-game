@@ -9,7 +9,7 @@ import {sellingCost, purchasingCost} from '../lib/math/product'
 import {storageCapacity} from '../lib/math/shop'
 
 import {infoHeader, labeledInt, labeledFloat, formattedNumber} from '../lib/interface/formatted-strings'
-import {menuPhoto, buttonText} from '../lib/interface/menu'
+import {menuPhoto} from '../lib/interface/menu'
 import {personInShopLine} from '../lib/interface/person'
 import emoji from '../lib/interface/emojis'
 
@@ -29,6 +29,12 @@ function bonusPerson(shop: Shop, talent: TalentName): string {
 	}
 
 	return '\n  ' + personInShopLine(shop, talent)
+}
+
+function itemsPurchasableCtx(ctx: any): number {
+	const session = ctx.session as Session
+	const {shop, product} = fromCtx(ctx)
+	return itemsPurchasable(session, shop, product)
 }
 
 function itemsPurchasable(session: Session, shop: Shop, product: Product): number {
@@ -116,12 +122,8 @@ function buyAmount(ctx: any, amount: number, now: number): void {
 	product.itemTimestamp = now
 }
 
-menu.button(buttonText(emoji.purchasing, 'person.talents.purchasing'), 'fill', {
-	hide: (ctx: any) => {
-		const session = ctx.session as Session
-		const {shop, product} = fromCtx(ctx)
-		return itemsPurchasable(session, shop, product) < 1
-	},
+menu.button((ctx: any) => `${emoji.purchasing} ${ctx.wd.r('person.talents.purchasing').label()} (${itemsPurchasableCtx(ctx)})`, 'fill', {
+	hide: ctx => itemsPurchasableCtx(ctx) < 1,
 	doFunc: (ctx: any) => {
 		const now = Math.floor(Date.now() / 1000)
 		buyAmount(ctx, Infinity, now)
@@ -130,11 +132,7 @@ menu.button(buttonText(emoji.purchasing, 'person.talents.purchasing'), 'fill', {
 
 menu.select('buy', [1, 5, 10, 42, 50, 100, 250, 420, 500, 666, 1000].map(o => String(o)), {
 	columns: 4,
-	hide: (ctx: any, key) => {
-		const session = ctx.session as Session
-		const {shop, product} = fromCtx(ctx)
-		return itemsPurchasable(session, shop, product) < Number(key)
-	},
+	hide: (ctx, key) => itemsPurchasableCtx(ctx) < Number(key),
 	textFunc: (_, key) => `${emoji.purchasing}${key}`,
 	setFunc: (ctx, key) => {
 		const now = Math.floor(Date.now() / 1000)
