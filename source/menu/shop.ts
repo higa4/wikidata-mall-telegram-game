@@ -48,6 +48,7 @@ function bonusPerson(ctx: any, shop: Shop, talent: TalentName): string {
 	}
 
 	let text = ''
+	text += emoji[talent]
 	text += '*'
 	text += ctx.wd.r(`person.talents.${talent}`).label()
 	text += '*'
@@ -61,6 +62,7 @@ function bonusPerson(ctx: any, shop: Shop, talent: TalentName): string {
 
 function storageCapacityPart(ctx: any, shop: Shop): string {
 	let text = ''
+	text += emoji.storage
 	text += labeledInt(ctx.wd.r('product.storageCapacity'), storageCapacity(shop))
 	if (shop.personal.storage) {
 		text += '\n'

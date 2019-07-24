@@ -22,6 +22,7 @@ function talentLine(ctx: any, shop: Shop, talent: TalentName): string {
 	const person = shop.personal[talent]
 
 	let text = ''
+	text += emojis[talent]
 	text += '*'
 	text += ctx.wd.r(`person.talents.${talent}`).label()
 	text += '*'

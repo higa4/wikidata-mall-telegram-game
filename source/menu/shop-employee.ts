@@ -28,7 +28,7 @@ function menuText(ctx: any): string {
 	const {talent, person} = fromCtx(ctx)
 
 	let text = ''
-	text += infoHeader(ctx.wd.r(`person.talents.${talent}`))
+	text += infoHeader(ctx.wd.r(`person.talents.${talent}`), {titlePrefix: emojis[talent]})
 	text += '\n\n'
 
 	if (person) {
