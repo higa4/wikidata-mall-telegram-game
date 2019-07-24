@@ -4,8 +4,10 @@ import {Session} from '../lib/types'
 import {Shop} from '../lib/types/shop'
 import {TalentName, Person} from '../lib/types/people'
 
+import {personalBonusWhenEmployed} from '../lib/math/personal'
+
 import {buttonText} from '../lib/interface/menu'
-import {infoHeader} from '../lib/interface/formatted-strings'
+import {infoHeader, bonusPercentString} from '../lib/interface/formatted-strings'
 import {personMarkdown} from '../lib/interface/person'
 import emojis from '../lib/interface/emojis'
 
@@ -59,9 +61,19 @@ function availableApplicants(ctx: any): string[] {
 menu.selectSubmenu('a', availableApplicants, confirmEmployee, {
 	columns: 2,
 	textFunc: (ctx: any, key) => {
+		const {shop, talent} = fromCtx(ctx)
 		const session = ctx.session as Session
-		const {name} = session.applicants[Number(key)]
-		return `${name.given} ${name.family}`
+		const applicant = session.applicants[Number(key)]
+
+		const {name} = applicant
+
+		const bonus = personalBonusWhenEmployed(shop, talent, applicant)
+		const bonusString = bonusPercentString(bonus)
+
+		const isHobby = applicant.hobby === shop.id
+		const hobbyString = isHobby ? emojis.hobby + ' ' : ''
+
+		return `${name.given} ${name.family} (${hobbyString}${bonusString})`
 	}
 })
 

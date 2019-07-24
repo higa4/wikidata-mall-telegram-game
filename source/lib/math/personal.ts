@@ -1,5 +1,5 @@
 import {Shop} from '../types/shop'
-import {TalentName} from '../types/people'
+import {TalentName, Person} from '../types/people'
 
 import {PURCHASING_FACTOR} from './constants'
 
@@ -9,6 +9,10 @@ export function personalBonus(shop: Shop, talent: TalentName): number {
 		return 1
 	}
 
+	return personalBonusWhenEmployed(shop, talent, person)
+}
+
+export function personalBonusWhenEmployed(shop: Shop, talent: TalentName, person: Person): number {
 	const talentFactor = person.talents[talent]
 
 	const isHobby = shop.id === person.hobby
