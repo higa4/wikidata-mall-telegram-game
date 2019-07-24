@@ -130,7 +130,7 @@ menu.button((ctx: any) => `${emoji.purchasing} ${ctx.wd.r('person.talents.purcha
 	}
 })
 
-menu.select('buy', [1, 5, 10, 42, 50, 100, 250, 420, 500, 666, 1000].map(o => String(o)), {
+menu.select('buy', [1, 5, 10, 42, 50, 100, 250, 500].map(o => String(o)), {
 	columns: 4,
 	hide: (ctx, key) => itemsPurchasableCtx(ctx) < Number(key),
 	textFunc: (_, key) => `${emoji.purchasing}${key}`,
