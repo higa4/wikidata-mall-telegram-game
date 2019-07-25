@@ -59,7 +59,7 @@ function availableApplicants(ctx: any): string[] {
 }
 
 menu.selectSubmenu('a', availableApplicants, confirmEmployee, {
-	columns: 2,
+	columns: 1,
 	textFunc: (ctx: any, key) => {
 		const {shop, talent} = fromCtx(ctx)
 		const session = ctx.session as Session
