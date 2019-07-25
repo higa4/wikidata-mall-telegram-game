@@ -1,11 +1,12 @@
 import {Session} from '../types'
 
+import achievements from './achievements'
 import applicants from './applicants'
 import income from './income'
 import personal from './personal'
 
-export default function middleware(): (ctx: any, next: any) => void {
-	return (ctx, next) => {
+export default function middleware(): (ctx: any, next: any) => Promise<void> {
+	return async (ctx, next) => {
 		const session = ctx.session as Session
 		const now = Date.now() / 1000
 
@@ -14,7 +15,9 @@ export default function middleware(): (ctx: any, next: any) => void {
 		personal(session, now)
 		income(session, now)
 
-		return next()
+		await next()
+
+		achievements(session, now)
 	}
 }
 
