@@ -1,7 +1,7 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 import WikidataEntityReader from 'wikidata-entity-reader'
 
-import {Session} from '../lib/types'
+import {Session, Persist} from '../lib/types'
 import {Shop, Product} from '../lib/types/shop'
 import {TalentName} from '../lib/types/people'
 
@@ -16,8 +16,8 @@ import emoji from '../lib/interface/emojis'
 function fromCtx(ctx: any): {shop: Shop; product: Product} {
 	const shopType = ctx.match[1]
 	const productId = ctx.match[2]
-	const session = ctx.session as Session
-	const shop = session.shops.filter(o => o.id === shopType)[0]
+	const persist = ctx.persist as Persist
+	const shop = persist.shops.filter(o => o.id === shopType)[0]
 	const product = shop.products.filter(o => o.id === productId)[0]
 	return {shop, product}
 }

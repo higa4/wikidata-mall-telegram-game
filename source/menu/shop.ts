@@ -1,7 +1,7 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 import WikidataEntityReader from 'wikidata-entity-reader'
 
-import {Session} from '../lib/types'
+import {Session, Persist} from '../lib/types'
 import {Shop, Product} from '../lib/types/shop'
 import {TalentName} from '../lib/types/people'
 
@@ -23,17 +23,17 @@ import productMenu from './product'
 const POSSIBLE_PRODUCTS = 6
 
 function fromCtx(ctx: any): Shop {
-	const session = ctx.session as Session
+	const persist = ctx.persist as Persist
 	const shopType = ctx.match[1]
-	return session.shops.filter(o => o.id === shopType)[0]
+	return persist.shops.filter(o => o.id === shopType)[0]
 }
 
 function addProductCostFromCtx(ctx: any): number {
-	return addProductCostFromSession(ctx.session, fromCtx(ctx))
+	return addProductCost(ctx.persist.shops, fromCtx(ctx))
 }
 
-function addProductCostFromSession(session: Session, shop: Shop): number {
-	return productCost(session.shops.length, shop.products.length)
+function addProductCost(shops: Shop[], shop: Shop): number {
+	return productCost(shops.length, shop.products.length)
 }
 
 function productLine(ctx: any, product: Product): string {
@@ -96,11 +96,13 @@ function productsPart(ctx: any, shop: Shop): string {
 }
 
 function addProductPart(ctx: any, shop: Shop): string {
+	const persist = ctx.persist as Persist
+
 	if (shop.products.length >= POSSIBLE_PRODUCTS) {
 		return ''
 	}
 
-	const cost = addProductCostFromSession(ctx.session, shop)
+	const cost = addProductCost(persist.shops, shop)
 
 	let text = ''
 	text += emoji.add
@@ -167,9 +169,10 @@ menu.button(buttonText(emoji.add, 'other.assortment'), 'addProduct', {
 	doFunc: (ctx: any) => {
 		const shop = fromCtx(ctx)
 		const session = ctx.session as Session
+		const persist = ctx.persist as Persist
 		const now = Math.floor(Date.now() / 1000)
 
-		const cost = addProductCostFromSession(session, shop)
+		const cost = addProductCost(persist.shops, shop)
 		if (session.money < cost) {
 			// Fishy
 			return
@@ -196,16 +199,17 @@ menu.submenu(buttonText(emoji.person, 'menu.employee'), 'e', employeeMenu)
 menu.button(buttonText(emoji.close, 'action.close'), 'remove', {
 	setParentMenuAfter: true,
 	hide: (ctx: any) => {
-		const session = ctx.session as Session
-		return session.shops.length <= 1
+		const persist = ctx.persist as Persist
+		return persist.shops.length <= 1
 	},
 	doFunc: (ctx: any) => {
 		const shop = fromCtx(ctx)
 		const session = ctx.session as Session
+		const persist = ctx.persist as Persist
 
-		session.shops = session.shops.filter(o => o.id !== shop.id)
+		persist.shops = persist.shops.filter(o => o.id !== shop.id)
 
-		const existingShops = session.shops.length
+		const existingShops = persist.shops.length
 		session.money += Math.ceil(buildCost(existingShops) / 2)
 	}
 })

@@ -1,12 +1,12 @@
-import {Session} from '../types'
+import {Session, Persist} from '../types'
 import {Shop, Product} from '../types/shop'
 
 import {sellingCost} from '../math/product'
 
 const ITEM_SELL_INTERVAL_SECONDS = 30
 
-export default function calcIncome(session: Session, now: number): void {
-	for (const shop of session.shops) {
+export default function calcIncome(session: Session, persist: Persist, now: number): void {
+	for (const shop of persist.shops) {
 		for (const product of shop.products) {
 			incomeProduct(session, shop, product, now)
 		}

@@ -1,13 +1,13 @@
-import {Session} from '../types'
+import {Session, Persist} from '../types'
 import {Shop} from '../types/shop'
 import {TalentName} from '../types/people'
 
-export default function calcPersonal(session: Session, now: number): void {
-	retirePersonal(session, now)
+export default function calcPersonal(_session: Session, persist: Persist, now: number): void {
+	retirePersonal(persist, now)
 }
 
-function retirePersonal(session: Session, now: number): void {
-	for (const shop of session.shops) {
+function retirePersonal(persist: Persist, now: number): void {
+	for (const shop of persist.shops) {
 		retireShopPersonal(shop, now)
 	}
 }

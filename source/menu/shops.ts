@@ -1,6 +1,6 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
-import {Session} from '../lib/types'
+import {Session, Persist} from '../lib/types'
 import {Shop} from '../lib/types/shop'
 
 import {randomUnusedEntry} from '../lib/js-helper/array'
@@ -46,8 +46,8 @@ const menu = new TelegrafInlineMenu(menuText, {
 })
 
 function userShops(ctx: any): string[] {
-	const session = ctx.session as Session
-	return session.shops.map(o => o.id)
+	const persist = ctx.persist as Persist
+	return persist.shops.map(o => o.id)
 }
 
 menu.selectSubmenu('s', userShops, shopMenu, {
@@ -59,7 +59,8 @@ menu.button(buttonText(emoji.construction, 'action.construction'), 'build', {
 	hide: (ctx: any) => buildCostFromCtx(ctx) > ctx.session.money,
 	doFunc: (ctx: any) => {
 		const session = ctx.session as Session
-		const cost = buildCost(session.shops.length)
+		const persist = ctx.persist as Persist
+		const cost = buildCost(persist.shops.length)
 
 		if (session.money < cost) {
 			// Fishy
@@ -74,7 +75,7 @@ menu.button(buttonText(emoji.construction, 'action.construction'), 'build', {
 		}
 
 		session.money -= cost
-		session.shops.push(newShop)
+		persist.shops.push(newShop)
 	}
 })
 

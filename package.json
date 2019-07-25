@@ -32,6 +32,7 @@
 		"@sindresorhus/tsconfig": "^0.4.0",
 		"array-filter-unique": "^2.1.0",
 		"gaussian": "^1.1.0",
+		"json-stable-stringify": "^1.0.1",
 		"locale-emoji": "^0.3.0",
 		"random-item": "^3.0.0",
 		"telegraf": "^3.30.1",
@@ -47,6 +48,7 @@
 	},
 	"devDependencies": {
 		"@types/gaussian": "^1.1.1",
+		"@types/json-stable-stringify": "^1.0.32",
 		"@types/node": "^12.0.2",
 		"@typescript-eslint/eslint-plugin": "^1.10.2",
 		"@typescript-eslint/parser": "^1.10.2",

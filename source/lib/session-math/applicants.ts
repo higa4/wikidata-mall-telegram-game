@@ -1,27 +1,27 @@
 import gaussian from 'gaussian'
 import randomItem from 'random-item'
 
-import {Session} from '../types'
+import {Session, Persist} from '../types'
 import {Talents, TALENTS} from '../types/people'
 
 import * as wdName from '../wikidata/name'
 import * as wdShops from '../wikidata/shops'
 
-export default function calcApplicants(session: Session, now: number): void {
+export default function calcApplicants(session: Session, persist: Persist, now: number): void {
 	if (!session.applicants) {
 		session.applicants = []
 		session.applicantTimestamp = now
 	}
 
 	retireWaitingApplicants(session, now)
-	addWaitingApplicants(session, now)
+	addWaitingApplicants(session, persist, now)
 }
 
 function retireWaitingApplicants(session: Session, now: number): void {
 	session.applicants = session.applicants.filter(person => person.retirementTimestamp > now)
 }
 
-function addWaitingApplicants(session: Session, now: number): void {
+function addWaitingApplicants(session: Session, persist: Persist, now: number): void {
 	const {applicantTimestamp, applicants} = session
 
 	const secondsBetweenApplicants = 60 // TODO: Skills
@@ -38,7 +38,7 @@ function addWaitingApplicants(session: Session, now: number): void {
 		return
 	}
 
-	const freeApplicantSeats = Object.keys(session.shops).length - applicants.length
+	const freeApplicantSeats = Object.keys(persist.shops).length - applicants.length
 	const creatableApplicants = Math.min(possibleApplicants, freeApplicantSeats)
 
 	// Ensure timer is still running when there are free seats.

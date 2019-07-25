@@ -1,6 +1,6 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
-import {Session} from '../lib/types'
+import {Session, Persist} from '../lib/types'
 
 import {infoHeader} from '../lib/interface/formatted-strings'
 import {menuPhoto} from '../lib/interface/menu'
@@ -10,13 +10,14 @@ import applicantMenu from './applicant'
 
 function menuText(ctx: any): string {
 	const session = ctx.session as Session
+	const persist = ctx.persist as Persist
 
 	let text = ''
 	text += infoHeader(ctx.wd.r('menu.applicant'))
 	text += '\n\n'
 
 	text += `+1${emojis.person} / ${60} sec\n`
-	text += `${ctx.wd.r('other.seat').label()} ${session.applicants.length} / ${session.shops.length}${emojis.seat}\n`
+	text += `${ctx.wd.r('other.seat').label()} ${session.applicants.length} / ${persist.shops.length}${emojis.seat}\n`
 
 	return text
 }

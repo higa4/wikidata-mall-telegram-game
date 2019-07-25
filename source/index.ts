@@ -7,6 +7,7 @@ import WikidataEntityStore from 'wikidata-entity-store'
 
 import {preload} from './lib/wikidata'
 import * as userSessions from './lib/data/user-sessions'
+import * as dataShops from './lib/data/shops'
 import menu from './menu'
 import sessionMathMiddleware from './lib/session-math'
 
@@ -30,6 +31,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 bot.use(userSessions.middleware())
+bot.use(dataShops.middleware())
 bot.use(sessionMathMiddleware())
 
 const i18n = new TelegrafI18n({

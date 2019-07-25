@@ -1,6 +1,6 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
-import {Session} from '../lib/types'
+import {Session, Persist} from '../lib/types'
 import {Shop} from '../lib/types/shop'
 import {TalentName, Person} from '../lib/types/people'
 
@@ -15,7 +15,8 @@ function fromCtx(ctx: any): {shop: Shop; talent: TalentName; applicantId: number
 	const applicantId = Number(ctx.match[3])
 
 	const session = ctx.session as Session
-	const shop = session.shops.filter(o => o.id === shopType)[0]
+	const persist = ctx.persist as Persist
+	const shop = persist.shops.filter(o => o.id === shopType)[0]
 	const applicant = session.applicants[applicantId]
 
 	return {shop, talent, applicantId, applicant}

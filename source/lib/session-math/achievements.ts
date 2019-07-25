@@ -1,17 +1,18 @@
-import {Session} from '../types'
+import {Session, Persist} from '../types'
 
-export default function applyAchievements(session: Session, now: number): void {
+export default function applyAchievements(session: Session, persist: Persist, now: number): void {
 	if (!session.achievements) {
 		session.achievements = {
 			gameStarted: now
 		}
 	}
 
-	addShopsOpened(session, now)
+	addShopsOpened(session, persist, now)
 }
 
-function addShopsOpened(session: Session, now: number): void {
-	const {achievements, shops} = session
+function addShopsOpened(session: Session, persist: Persist, now: number): void {
+	const {achievements} = session
+	const {shops} = persist
 
 	if (!achievements.shopsOpened) {
 		achievements.shopsOpened = {}
