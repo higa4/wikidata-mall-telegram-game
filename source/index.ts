@@ -22,8 +22,12 @@ if (process.env.NODE_ENV !== 'production') {
 		const identifier = `${updateId} ${ctx.updateType} ${ctx.from!.first_name} ${content && content.length} ${content}`
 
 		console.time(identifier)
-		if (next) {
-			await next()
+		try {
+			if (next) {
+				await next()
+			}
+		} catch (error) {
+			console.error(identifier, error)
 		}
 
 		console.timeEnd(identifier)
