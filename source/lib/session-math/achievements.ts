@@ -1,4 +1,5 @@
 import {Session, Persist} from '../types'
+import {Achievements, AchievementSet} from '../types/achievements'
 
 export default function applyAchievements(session: Session, persist: Persist, now: number): void {
 	if (!session.achievements) {
@@ -10,18 +11,34 @@ export default function applyAchievements(session: Session, persist: Persist, no
 	addShopsOpened(session, persist, now)
 }
 
-function addShopsOpened(session: Session, persist: Persist, now: number): void {
-	const {achievements} = session
-	const {shops} = persist
-
-	if (!achievements.shopsOpened) {
-		achievements.shopsOpened = {}
+function checkIfReachedNumeric(
+	achievements: Achievements,
+	achievementSetKey: keyof Achievements,
+	currentValue: number,
+	now: number,
+	initialValue: number,
+	increase: (curr: number) => number,
+): void {
+	if (!achievements[achievementSetKey]) {
+		achievements[achievementSetKey] = {} as any
 	}
 
-	for (let i = 1; i <= shops.length; i++) {
-		if (!achievements.shopsOpened[i]) {
-			achievements.shopsOpened[i] = now
+	const achievementSet = achievements[achievementSetKey] as AchievementSet
+
+	for (let i = initialValue; i <= currentValue; i = increase(i)) {
+		if (!achievementSet[i]) {
+			achievementSet[i] = now
 		}
 	}
 }
 
+function addShopsOpened(session: Session, persist: Persist, now: number): void {
+	checkIfReachedNumeric(
+		session.achievements,
+		'shopsOpened',
+		persist.shops.length,
+		now,
+		1,
+		curr => curr + 1,
+	)
+}
