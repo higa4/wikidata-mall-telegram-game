@@ -12,6 +12,8 @@ export default function middleware(): (ctx: any, next: any) => Promise<void> {
 		const now = Date.now() / 1000
 
 		init(session)
+		ensureStats(session)
+
 		applicants(session, persist, now)
 		personal(session, persist, now)
 		income(session, persist, now)
@@ -27,5 +29,13 @@ function init(session: Session): void {
 
 	if (!isFinite(money)) {
 		session.money = 300
+	}
+}
+
+function ensureStats(session: Session): void {
+	if (!session.stats) {
+		session.stats = {
+			productsBought: 0
+		}
 	}
 }

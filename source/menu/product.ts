@@ -120,6 +120,7 @@ function buyAmount(ctx: any, amount: number, now: number): void {
 	session.money -= buyItems * costPerItem
 	product.itemsInStore += buyItems
 	product.itemTimestamp = now
+	session.stats.productsBought += buyItems
 }
 
 menu.button((ctx: any) => `${emoji.purchasing} ${ctx.wd.r('person.talents.purchasing').label()} (${itemsPurchasableCtx(ctx)})`, 'fill', {

@@ -1,6 +1,8 @@
 import {Session, Persist} from '../types'
 import {Achievements, AchievementSet} from '../types/achievements'
 
+import {statefulFib} from '../math/some-function'
+
 export default function applyAchievements(session: Session, persist: Persist, now: number): void {
 	if (!session.achievements) {
 		session.achievements = {
@@ -9,6 +11,8 @@ export default function applyAchievements(session: Session, persist: Persist, no
 	}
 
 	addShopsOpened(session, persist, now)
+	addProductsInAssortment(session, persist, now)
+	addProductsBought(session, now)
 }
 
 function checkIfReachedNumeric(
@@ -40,5 +44,28 @@ function addShopsOpened(session: Session, persist: Persist, now: number): void {
 		now,
 		1,
 		curr => curr + 1,
+	)
+}
+
+function addProductsInAssortment(session: Session, persist: Persist, now: number): void {
+	const productsInAssortment = persist.shops.flatMap(o => o.products).length
+	checkIfReachedNumeric(
+		session.achievements,
+		'productsInAssortment',
+		productsInAssortment,
+		now,
+		1,
+		statefulFib()
+	)
+}
+
+function addProductsBought(session: Session, now: number): void {
+	checkIfReachedNumeric(
+		session.achievements,
+		'productsBought',
+		session.stats.productsBought,
+		now,
+		100,
+		statefulFib(100)
 	)
 }

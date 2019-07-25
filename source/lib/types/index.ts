@@ -1,4 +1,4 @@
-import {Achievements} from './achievements'
+import {Achievements, Stats} from './achievements'
 import {Person} from './people'
 import {Shop} from './shop'
 
@@ -8,6 +8,7 @@ export interface Session {
 	applicants: Person[];
 	applicantTimestamp: number;
 	money: number;
+	stats: Stats;
 }
 
 // Contains things that are stored outside of the session
