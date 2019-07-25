@@ -27,7 +27,8 @@ const menu = new TelegrafInlineMenu(menuText, {
 })
 
 function availableApplicants(ctx: any): string[] {
-	return Object.keys(ctx.session.applicants)
+	const session = ctx.session as Session
+	return Object.keys(session.applicants)
 }
 
 menu.selectSubmenu('a', availableApplicants, applicantMenu, {

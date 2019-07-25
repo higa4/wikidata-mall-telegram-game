@@ -51,11 +51,12 @@ menu.button(buttonText(emojis.employmentTermination, 'action.employmentTerminati
 })
 
 function availableApplicants(ctx: any): string[] {
+	const session = ctx.session as Session
 	if (fromCtx(ctx).person) {
 		return []
 	}
 
-	return Object.keys(ctx.session.applicants)
+	return Object.keys(session.applicants)
 }
 
 menu.selectSubmenu('a', availableApplicants, confirmEmployee, {

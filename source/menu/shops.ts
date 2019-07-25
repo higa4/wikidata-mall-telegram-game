@@ -56,7 +56,10 @@ menu.selectSubmenu('s', userShops, shopMenu, {
 })
 
 menu.button(buttonText(emoji.construction, 'action.construction'), 'build', {
-	hide: (ctx: any) => buildCostFromCtx(ctx) > ctx.session.money,
+	hide: (ctx: any) => {
+		const session = ctx.session as Session
+		return buildCostFromCtx(ctx) > session.money
+	},
 	doFunc: (ctx: any) => {
 		const session = ctx.session as Session
 		const persist = ctx.persist as Persist

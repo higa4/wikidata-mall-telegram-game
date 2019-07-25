@@ -165,7 +165,14 @@ menu.selectSubmenu('p', userProducts, productMenu, {
 })
 
 menu.button(buttonText(emoji.add, 'other.assortment'), 'addProduct', {
-	hide: (ctx: any) => userProducts(ctx).length >= POSSIBLE_PRODUCTS || addProductCostFromCtx(ctx) > ctx.session.money,
+	hide: (ctx: any) => {
+		if (userProducts(ctx).length >= POSSIBLE_PRODUCTS) {
+			return true
+		}
+
+		const session = ctx.session as Session
+		return addProductCostFromCtx(ctx) > session.money
+	},
 	doFunc: (ctx: any) => {
 		const shop = fromCtx(ctx)
 		const session = ctx.session as Session

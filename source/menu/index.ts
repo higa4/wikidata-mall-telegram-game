@@ -1,6 +1,6 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
-import {Session} from '../lib/types'
+import {Session, Persist} from '../lib/types'
 
 import {buttonText} from '../lib/interface/menu'
 import {infoHeader, labeledFloat} from '../lib/interface/formatted-strings'
@@ -37,7 +37,10 @@ function applicantEmoji(ctx: any): string {
 }
 
 menu.submenu(buttonText(applicantEmoji, 'menu.applicant'), 'applicants', applicants, {
-	hide: (ctx: any) => ctx.session.shops.length === 0
+	hide: (ctx: any) => {
+		const persist = ctx.persist as Persist
+		return persist.shops.length === 0
+	}
 })
 
 menu.submenu(buttonText(emoji.language, 'menu.language'), 'lang', languages)
