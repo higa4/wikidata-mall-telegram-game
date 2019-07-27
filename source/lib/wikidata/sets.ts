@@ -11,6 +11,10 @@ const queries: Dictionary<string> = {
 ?item wdt:P18 ?image.
 ?item wdt:P2048 ?height.
 FILTER((LANG(?label)) = "en")
+}`,
+	disaster: `SELECT DISTINCT ?item WHERE {
+?item wdt:P279+ wd:Q3839081.
+?item wdt:P18 ?image.
 }`
 }
 
