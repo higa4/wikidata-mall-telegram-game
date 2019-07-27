@@ -43,6 +43,12 @@ function canAddProductTechnically(shop: Shop): boolean {
 		return false
 	}
 
+	const possibleProductsThatCouldBeAdded = (wdShop.products(shop.id) || []).length
+	const productsAvailable = possibleProductsThatCouldBeAdded - currentProductsAmount
+	if (productsAvailable <= 0) {
+		return false
+	}
+
 	return true
 }
 
