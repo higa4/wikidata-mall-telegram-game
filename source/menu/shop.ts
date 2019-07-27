@@ -36,6 +36,15 @@ function addProductCost(shops: Shop[], shop: Shop): number {
 	return productCost(shops.length, shop.products.length)
 }
 
+function canAddProductTechnically(shop: Shop): boolean {
+	const currentProductsAmount = shop.products.length
+	if (currentProductsAmount >= POSSIBLE_PRODUCTS) {
+		return false
+	}
+
+	return true
+}
+
 function productLine(ctx: any, product: Product): string {
 	let text = ''
 	text += labeledInt(ctx.wd.r(product.id), product.itemsInStore, emoji.storage)
@@ -98,7 +107,7 @@ function productsPart(ctx: any, shop: Shop): string {
 function addProductPart(ctx: any, shop: Shop): string {
 	const persist = ctx.persist as Persist
 
-	if (shop.products.length >= POSSIBLE_PRODUCTS) {
+	if (!canAddProductTechnically(shop)) {
 		return ''
 	}
 
@@ -193,7 +202,8 @@ menu.selectSubmenu('p', userProducts, productMenu, {
 
 menu.button(buttonText(emoji.add, 'other.assortment'), 'addProduct', {
 	hide: (ctx: any) => {
-		if (userProducts(ctx).length >= POSSIBLE_PRODUCTS) {
+		const shop = fromCtx(ctx)
+		if (!canAddProductTechnically(shop)) {
 			return true
 		}
 
