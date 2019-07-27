@@ -17,4 +17,3 @@ export function sellingCost(shop: Shop, product: Product): number {
 export function productBasePrice(product: Product): number {
 	return Number(product.id[1]) * 2
 }
-
