@@ -7,7 +7,7 @@ import {TalentName} from '../lib/types/people'
 
 import {randomUnusedEntry} from '../lib/js-helper/array'
 
-import {buildCost, productCost, storageCapacity} from '../lib/math/shop'
+import {buildCost, productCost, storageCapacity, shopDiversificationFactor, customerInterval} from '../lib/math/shop'
 import {incomeFactor} from '../lib/math/personal'
 
 import * as wdShop from '../lib/wikidata/shops'
@@ -129,6 +129,32 @@ function incomePart(ctx: any, shop: Shop): string {
 	return text
 }
 
+function customerIntervalPart(ctx: any, shop: Shop): string {
+	if (shop.products.length === 0) {
+		return ''
+	}
+
+	let text = ''
+	text += '1 '
+	text += ctx.wd.r('other.customer').label()
+	text += ' / '
+	text += customerInterval(shop)
+	text += ' sec'
+	if (shop.products.length > 1) {
+		text += ' / '
+		text += ctx.wd.r('product.product').label()
+	}
+
+	text += '\n'
+	text += '  '
+	text += ctx.wd.r('product.diversification').label()
+	text += ': '
+	text += bonusPercentString(shopDiversificationFactor(shop))
+
+	text += '\n\n'
+	return text
+}
+
 function menuText(ctx: any): string {
 	const shop = fromCtx(ctx)
 	const reader = ctx.wd.r(shop.id) as WikidataEntityReader
@@ -142,6 +168,7 @@ function menuText(ctx: any): string {
 	text += labeledFloat(ctx.wd.r('other.money'), session.money, emoji.currency)
 	text += '\n\n'
 
+	text += customerIntervalPart(ctx, shop)
 	text += storageCapacityPart(ctx, shop)
 	text += productsPart(ctx, shop)
 	text += addProductPart(ctx, shop)
