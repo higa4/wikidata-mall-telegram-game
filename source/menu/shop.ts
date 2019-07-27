@@ -29,7 +29,8 @@ function fromCtx(ctx: any): Shop {
 }
 
 function addProductCostFromCtx(ctx: any): number {
-	return addProductCost(ctx.persist.shops, fromCtx(ctx))
+	const persist = ctx.persist as Persist
+	return addProductCost(persist.shops, fromCtx(ctx))
 }
 
 function addProductCost(shops: Shop[], shop: Shop): number {
