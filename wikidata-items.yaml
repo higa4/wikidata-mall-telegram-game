@@ -25,6 +25,7 @@ person:
     selling: Q194189
     storage: Q9158768
 product:
+  listprice: Q1144077
   storage: Q9158768
   storageCapacity: Q21551014
 other:

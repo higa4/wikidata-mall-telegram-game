@@ -5,7 +5,7 @@ import {Session, Persist} from '../lib/types'
 import {Shop, Product} from '../lib/types/shop'
 import {TalentName} from '../lib/types/people'
 
-import {sellingCost, purchasingCost} from '../lib/math/product'
+import {sellingCost, purchasingCost, productBasePrice} from '../lib/math/product'
 import {storageCapacity} from '../lib/math/shop'
 
 import {infoHeader, labeledInt, labeledFloat, formattedNumber} from '../lib/interface/formatted-strings'
@@ -75,6 +75,9 @@ function menuText(ctx: any): string {
 	text += ctx.wd.r('other.cost').label()
 	text += '*'
 	text += ' (1)'
+	text += '\n'
+
+	text += labeledFloat(ctx.wd.r('product.listprice'), productBasePrice(product), emoji.currency)
 	text += '\n'
 
 	text += emoji.purchasing
