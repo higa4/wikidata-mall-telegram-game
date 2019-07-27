@@ -5,6 +5,7 @@ import WikidataEntityStore from 'wikidata-entity-store'
 import * as name from './name'
 import * as sets from './sets'
 import * as shops from './shops'
+import * as inUseItems from './preload-in-use-items'
 
 export async function preload(store: WikidataEntityStore): Promise<void> {
 	console.time('wikidata preload')
@@ -15,6 +16,9 @@ export async function preload(store: WikidataEntityStore): Promise<void> {
 	await preloadSpecific('name', async () => name.preload())
 	await preloadSpecific('sets', async () => sets.preload(store))
 	await preloadSpecific('shops', async () => shops.preload(store))
+
+	// Load them last to see how much is missing
+	await preloadSpecific('in-use-items', async () => inUseItems.preload(store))
 
 	console.timeEnd('wikidata preload')
 }
