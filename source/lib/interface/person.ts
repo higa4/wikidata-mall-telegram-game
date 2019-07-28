@@ -5,7 +5,7 @@ import {Shop} from '../types/shop'
 
 import {personalBonus} from '../math/personal'
 
-import {bonusPercentString} from './formatted-strings'
+import {bonusPercentString, humanReadableTimestamp} from './formatted-strings'
 import emojis from './emojis'
 
 export function personMarkdown(ctx: any, person: Person): string {
@@ -26,7 +26,7 @@ export function personMarkdown(ctx: any, person: Person): string {
 	text += '*'
 	text += ctx.wd.r('person.retirement').label()
 	text += '*\n  '
-	text += new Date(retirementTimestamp * 1000).toUTCString()
+	text += humanReadableTimestamp(retirementTimestamp)
 	text += '\n'
 
 	text += '\n'
