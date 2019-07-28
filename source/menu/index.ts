@@ -44,6 +44,11 @@ menu.submenu(buttonText(applicantEmoji, 'menu.applicant'), 'applicants', applica
 	}
 })
 
+menu.simpleButton(buttonText(emoji.skill + emoji.underConstruction, 'menu.skill'), 'skill', {
+	joinLastRow: true,
+	doFunc: async ctx => ctx.answerCbQuery(emoji.underConstruction + 'soon…')
+})
+
 menu.submenu(buttonText(emoji.language, 'menu.language'), 'lang', languages)
 
 menu.submenu(buttonText(emoji.achievement, 'menu.achievement'), 'achievements', achievements, {
