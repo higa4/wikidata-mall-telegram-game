@@ -36,7 +36,7 @@ function menuText(ctx: any): string {
 
 const menu = new TelegrafInlineMenu(menuText)
 
-menu.button(buttonText(emojis.recruitment, 'action.recruitment'), 'recruit', {
+menu.button(buttonText(emojis.yes + emojis.recruitment, 'action.recruitment'), 'recruit', {
 	setParentMenuAfter: true,
 	doFunc: (ctx: any) => {
 		const now = Date.now() / 1000
