@@ -5,6 +5,7 @@ export type AchievementSet = Dictionary<UnixTimestamp>
 
 export interface Achievements {
 	gameStarted: UnixTimestamp;
+	moneyCollected?: AchievementSet;
 	productsBought?: AchievementSet;
 	productsInAssortment?: AchievementSet;
 	shopsOpened?: AchievementSet;

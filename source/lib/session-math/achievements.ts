@@ -10,9 +10,10 @@ export default function applyAchievements(session: Session, persist: Persist, no
 		}
 	}
 
-	addShopsOpened(session, persist, now)
-	addProductsInAssortment(session, persist, now)
+	addMoneyCollected(session, now)
 	addProductsBought(session, now)
+	addProductsInAssortment(session, persist, now)
+	addShopsOpened(session, persist, now)
 }
 
 function checkIfReachedNumeric(
@@ -67,5 +68,16 @@ function addProductsBought(session: Session, now: number): void {
 		now,
 		100,
 		fibonacci.stateful(100)
+	)
+}
+
+function addMoneyCollected(session: Session, now: number): void {
+	checkIfReachedNumeric(
+		session.achievements,
+		'moneyCollected',
+		session.money,
+		now,
+		1000,
+		fibonacci.stateful(1000)
 	)
 }
