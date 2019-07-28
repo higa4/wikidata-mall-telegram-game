@@ -19,14 +19,14 @@ const emojis: Dictionary<string> = {
 	purchasing: '🛒',
 	recruitment: '👏',
 	retirement: '👻',
-	yes: '👍',
 	seat: '💺',
 	selling: '🤝',
 	shop: '🏪',
 	skill: '⚗️',
 	storage: '📦',
 	underConstruction: '🚧',
-	wikidataItem: 'ℹ️'
+	wikidataItem: 'ℹ️',
+	yes: '👍'
 }
 
 export default emojis
