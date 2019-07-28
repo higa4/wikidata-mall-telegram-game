@@ -1,7 +1,7 @@
 import {Session, Persist} from '../types'
 import {Achievements, AchievementSet} from '../types/achievements'
 
-import {statefulFib} from '../math/some-function'
+import * as fibonacci from '../math/fibonacci'
 
 export default function applyAchievements(session: Session, persist: Persist, now: number): void {
 	if (!session.achievements) {
@@ -55,7 +55,7 @@ function addProductsInAssortment(session: Session, persist: Persist, now: number
 		productsInAssortment,
 		now,
 		1,
-		statefulFib()
+		fibonacci.stateful()
 	)
 }
 
@@ -66,6 +66,6 @@ function addProductsBought(session: Session, now: number): void {
 		session.stats.productsBought,
 		now,
 		100,
-		statefulFib(100)
+		fibonacci.stateful(100)
 	)
 }
