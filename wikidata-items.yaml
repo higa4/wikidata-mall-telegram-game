@@ -1,4 +1,5 @@
 menu:
+  achievement: Q618779
   applicant: Q54875338
   chat: Q287198
   employee: Q703534
@@ -30,6 +31,8 @@ product:
   product: Q2424752
   storage: Q9158768
   storageCapacity: Q21551014
+achievement:
+  gameStarted: Q529711
 other:
   customer: Q852835
   assortment: Q1412931

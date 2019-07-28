@@ -45,6 +45,15 @@ export function labeledInt(wdr: WikidataEntityReader, num: number, unit = ''): s
 	return `${wdr.label()}: ${formattedNumber(num, true)}${unit}`
 }
 
+export function humanReadableTimestamp(unixTimestamp: number): string {
+	const date = new Date(unixTimestamp * 1000)
+	return date.toUTCString()
+}
+
+export function labeledTimestamp(wdr: WikidataEntityReader, timestamp: number): string {
+	return `${wdr.label()}: ${humanReadableTimestamp(timestamp)}`
+}
+
 const LETTERS = ['', 'k', 'M', 'G', 'T', 'P', 'E']
 
 export function formattedNumber(num: number, isInt: boolean): string {

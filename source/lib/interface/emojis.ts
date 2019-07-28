@@ -1,6 +1,7 @@
 type Dictionary<T> = {[key: string]: T}
 
 const emojis: Dictionary<string> = {
+	achievement: '🏅',
 	add: '➕',
 	applicantsAvailable: '📬',
 	applicantsEmpty: '📭',

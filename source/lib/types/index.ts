@@ -8,6 +8,7 @@ export interface Session {
 	applicants: Person[];
 	applicantTimestamp: number;
 	money: number;
+	page: number;
 	stats: Stats;
 }
 

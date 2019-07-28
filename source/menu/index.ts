@@ -6,6 +6,7 @@ import {buttonText} from '../lib/interface/menu'
 import {infoHeader, labeledFloat} from '../lib/interface/formatted-strings'
 import emoji from '../lib/interface/emojis'
 
+import achievements from './achievements'
 import applicants from './applicants'
 import languages from './languages'
 import shops from './shops'
@@ -44,6 +45,10 @@ menu.submenu(buttonText(applicantEmoji, 'menu.applicant'), 'applicants', applica
 })
 
 menu.submenu(buttonText(emoji.language, 'menu.language'), 'lang', languages)
+
+menu.submenu(buttonText(emoji.achievement, 'menu.achievement'), 'achievements', achievements, {
+	joinLastRow: true
+})
 
 menu.urlButton(buttonText(emoji.chat, 'menu.chat'), 'https://t.me/WikidataMallChat')
 
