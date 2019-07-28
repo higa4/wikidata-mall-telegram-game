@@ -21,6 +21,7 @@ action:
 person:
   hobby: Q47728
   retirement: Q946865
+  salery: Q194489
   talent: Q1200995
   talents:
     purchasing: Q1369832
@@ -35,9 +36,10 @@ product:
 achievement:
   gameStarted: Q529711
 other:
-  customer: Q852835
   assortment: Q1412931
   cost: Q240673
+  customer: Q852835
+  hour: Q25235
   income: Q1527264
   money: Q1368
   seat: Q2207370

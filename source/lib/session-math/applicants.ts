@@ -53,6 +53,7 @@ function addWaitingApplicants(session: Session, persist: Persist, now: number): 
 			name,
 			hobby: randomItem(wdShops.allShops()),
 			retirementTimestamp: Math.ceil(now + (Math.random() * retirementTimespan)),
+			salery: Math.ceil(Math.random() * 1000 * 100) / 100,
 			talents: randomTalents()
 		})
 	}

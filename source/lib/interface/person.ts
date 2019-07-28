@@ -5,11 +5,11 @@ import {Shop} from '../types/shop'
 
 import {personalBonus} from '../math/personal'
 
-import {bonusPercentString, humanReadableTimestamp} from './formatted-strings'
+import {bonusPercentString, humanReadableTimestamp, formattedNumber} from './formatted-strings'
 import emojis from './emojis'
 
 export function personMarkdown(ctx: any, person: Person): string {
-	const {name, hobby, retirementTimestamp, talents} = person
+	const {name, hobby, retirementTimestamp, salery, talents} = person
 
 	let text = ''
 	text += `*${name.given}* ${name.family}`
@@ -27,6 +27,17 @@ export function personMarkdown(ctx: any, person: Person): string {
 	text += ctx.wd.r('person.retirement').label()
 	text += '*\n  '
 	text += humanReadableTimestamp(retirementTimestamp)
+	text += '\n'
+
+	text += emojis.salery
+	text += '*'
+	text += ctx.wd.r('person.salery').label()
+	text += '*'
+	text += ' / '
+	text += ctx.wd.r('other.hour').label()
+	text += '\n  '
+	text += formattedNumber(salery, false)
+	text += emojis.currency
 	text += '\n'
 
 	text += '\n'
