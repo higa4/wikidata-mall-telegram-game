@@ -27,7 +27,7 @@ if (process.env.NODE_ENV !== 'production') {
 				await next()
 			}
 		} catch (error) {
-			console.error(identifier, error)
+			console.error(identifier, error, error && error.on && error.on.payload)
 		}
 
 		console.timeEnd(identifier)
