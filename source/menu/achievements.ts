@@ -7,7 +7,7 @@ import {Session} from '../lib/types'
 import {infoHeader, labeledTimestamp, humanReadableTimestamp} from '../lib/interface/formatted-strings'
 import {menuPhoto} from '../lib/interface/menu'
 
-function achievementSetPart(topic: WikidataEntityReader, set: AchievementSet | undefined): string {
+function achievementSetPart(topic: WikidataEntityReader, set: AchievementSet | undefined, locale: string): string {
 	if (!set || Object.keys(set).length === 1) {
 		return ''
 	}
@@ -20,7 +20,7 @@ function achievementSetPart(topic: WikidataEntityReader, set: AchievementSet | u
 
 	const entries = Object.keys(set)
 	const lines = entries
-		.map(o => `${o}: ${humanReadableTimestamp(set[o])}`)
+		.map(o => `${o}: ${humanReadableTimestamp(set[o], locale)}`)
 
 	text += lines
 		.join('\n')
@@ -30,19 +30,19 @@ function achievementSetPart(topic: WikidataEntityReader, set: AchievementSet | u
 }
 
 function generateParts(ctx: any): string[] {
-	const {achievements} = ctx.session as Session
+	const {achievements, __wikibase_language_code: locale} = ctx.session as Session
 	const parts: string[] = []
 
-	parts.push(achievementSetPart(ctx.wd.r('other.money'), achievements.moneyCollected))
-	parts.push(achievementSetPart(ctx.wd.r('product.product'), achievements.productsInAssortment))
-	parts.push(achievementSetPart(ctx.wd.r('person.talents.purchasing'), achievements.productsBought))
+	parts.push(achievementSetPart(ctx.wd.r('other.money'), achievements.moneyCollected, locale))
+	parts.push(achievementSetPart(ctx.wd.r('product.product'), achievements.productsInAssortment, locale))
+	parts.push(achievementSetPart(ctx.wd.r('person.talents.purchasing'), achievements.productsBought, locale))
 
 	const possibleParts = parts.filter(o => o)
 	return possibleParts
 }
 
 function menuText(ctx: any): string {
-	const {achievements, page} = ctx.session as Session
+	const {achievements, page, __wikibase_language_code: locale} = ctx.session as Session
 
 	let text = ''
 	text += infoHeader(ctx.wd.r('menu.achievement'))
@@ -52,7 +52,7 @@ function menuText(ctx: any): string {
 	const sanePage = Math.min(parts.length + 1, page)
 
 	if (sanePage === 1) {
-		text += labeledTimestamp(ctx.wd.r('achievement.gameStarted'), achievements.gameStarted) + '\n'
+		text += labeledTimestamp(ctx.wd.r('achievement.gameStarted'), achievements.gameStarted, locale) + '\n'
 	} else {
 		text += parts[sanePage - 2]
 	}

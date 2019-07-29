@@ -2,8 +2,11 @@ import {Achievements, Stats} from './achievements'
 import {Person} from './people'
 import {Shop} from './shop'
 
+/* eslint @typescript-eslint/camelcase: warn */
+
 // Contains smaller things only relevant to a specific player
 export interface Session {
+	__wikibase_language_code: string;
 	achievements: Achievements;
 	applicants: Person[];
 	applicantTimestamp: number;

@@ -49,13 +49,21 @@ export function labeledInt(wdr: WikidataEntityReader, num: number, unit = ''): s
 	return `${wdr.label()}: ${formattedNumber(num, true)}${unit}`
 }
 
-export function humanReadableTimestamp(unixTimestamp: number): string {
+export function humanReadableTimestamp(unixTimestamp: number, locale: string): string {
 	const date = new Date(unixTimestamp * 1000)
-	return date.toUTCString()
+	return date.toLocaleString(locale, {
+		timeZone: 'UTC',
+		timeZoneName: 'short',
+		year: 'numeric',
+		month: 'short',
+		day: 'numeric',
+		hour: 'numeric',
+		minute: '2-digit'
+	})
 }
 
-export function labeledTimestamp(wdr: WikidataEntityReader, timestamp: number): string {
-	return `${wdr.label()}: ${humanReadableTimestamp(timestamp)}`
+export function labeledTimestamp(wdr: WikidataEntityReader, timestamp: number, locale: string): string {
+	return `${wdr.label()}: ${humanReadableTimestamp(timestamp, locale)}`
 }
 
 const LETTERS = ['', 'k', 'M', 'G', 'T', 'P', 'E']

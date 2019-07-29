@@ -1,14 +1,17 @@
 import WikidataEntityReader from 'wikidata-entity-reader'
 
 import {Person, TalentName} from '../types/people'
+import {Session} from '../types'
 import {Shop} from '../types/shop'
 
 import {personalBonus} from '../game-math/personal'
 
 import {bonusPercentString, humanReadableTimestamp, percentString} from './formatted-strings'
+
 import emojis from './emojis'
 
 export function personMarkdown(ctx: any, person: Person): string {
+	const {__wikibase_language_code: locale} = ctx.session as Session
 	const {name, hobby, profitShare, retirementTimestamp, talents} = person
 
 	let text = ''
@@ -35,7 +38,7 @@ export function personMarkdown(ctx: any, person: Person): string {
 	text += '*'
 	text += ctx.wd.r('person.retirement').label()
 	text += '*\n  '
-	text += humanReadableTimestamp(retirementTimestamp)
+	text += humanReadableTimestamp(retirementTimestamp, locale)
 	text += '\n'
 
 	text += '\n'
