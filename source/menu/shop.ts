@@ -13,7 +13,7 @@ import {incomeFactor} from '../lib/game-math/personal'
 import * as wdShop from '../lib/wikidata/shops'
 
 import {buttonText, menuPhoto} from '../lib/interface/menu'
-import {infoHeader, labeledFloat, labeledInt, bonusPercentString} from '../lib/interface/formatted-strings'
+import {infoHeader, labeledFloat, labeledInt, bonusPercentString, formattedNumber} from '../lib/interface/formatted-strings'
 import {personInShopLine} from '../lib/interface/person'
 import emoji from '../lib/interface/emojis'
 
@@ -145,7 +145,7 @@ function customerIntervalPart(ctx: any, shop: Shop): string {
 	text += '1 '
 	text += ctx.wd.r('other.customer').label()
 	text += ' / '
-	text += customerInterval(shop)
+	text += formattedNumber(customerInterval(shop), true)
 	text += ' sec'
 	if (shop.products.length > 1) {
 		text += ' / '
