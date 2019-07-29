@@ -4,6 +4,7 @@ import achievements from './achievements'
 import applicants from './applicants'
 import income from './income'
 import personal from './personal'
+import skills from './skills'
 
 export default function middleware(): (ctx: any, next: any) => Promise<void> {
 	return async (ctx, next) => {
@@ -16,7 +17,10 @@ export default function middleware(): (ctx: any, next: any) => Promise<void> {
 
 		applicants(session, persist, now)
 		personal(session, persist, now)
+
 		income(session, persist, now)
+
+		skills(session, persist, now)
 
 		await next()
 

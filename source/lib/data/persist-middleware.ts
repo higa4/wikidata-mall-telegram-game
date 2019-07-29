@@ -20,7 +20,8 @@ function generatePersistMiddlewareManually<Key extends keyof Persist>(
 	return async (ctx: Context, next) => {
 		if (!ctx.persist) {
 			const persist: Persist = {
-				shops: []
+				shops: [],
+				skills: {}
 			}
 
 			ctx.persist = persist
