@@ -27,7 +27,9 @@ function addWaitingApplicants(session: Session, persist: Persist, now: number): 
 	const {applicantTimestamp, applicants} = session
 
 	const secondsBetweenApplicants = 60 // TODO: Skills
+	// Maybe Recruiting Skill for speed
 	const retirementTimespan = SECONDS_PER_DAY * 30 // 30 days
+	// Maybe Healthcare Skill
 
 	const secondsSinceLastApplicant = now - applicantTimestamp
 	const possibleApplicants = Math.floor(secondsSinceLastApplicant / secondsBetweenApplicants)
