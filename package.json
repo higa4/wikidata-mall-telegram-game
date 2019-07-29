@@ -68,22 +68,22 @@
 			"ts-node/register"
 		]
 	},
-  "nyc": {
-    "extension": [
-      ".ts"
-    ],
-    "include": [
-      "source"
-    ],
-    "exclude": [
-      "**/*.test.ts"
-    ],
-    "all": true,
-    "reporter": [
-      "lcov",
-      "text"
-    ]
-  },
+	"nyc": {
+		"extension": [
+			".ts"
+		],
+		"include": [
+			"source"
+		],
+		"exclude": [
+			"**/*.test.ts"
+		],
+		"all": true,
+		"reporter": [
+			"lcov",
+			"text"
+		]
+	},
 	"xo": {
 		"semi": false,
 		"extends": "xo-typescript",
