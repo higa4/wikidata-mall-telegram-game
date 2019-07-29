@@ -5,11 +5,11 @@ import {Shop} from '../types/shop'
 
 import {personalBonus} from '../game-math/personal'
 
-import {bonusPercentString, humanReadableTimestamp, formattedNumber} from './formatted-strings'
+import {bonusPercentString, humanReadableTimestamp, percentString} from './formatted-strings'
 import emojis from './emojis'
 
 export function personMarkdown(ctx: any, person: Person): string {
-	const {name, hobby, retirementTimestamp, salery, talents} = person
+	const {name, hobby, profitShare, retirementTimestamp, talents} = person
 
 	let text = ''
 	text += `*${name.given}* ${name.family}`
@@ -18,8 +18,17 @@ export function personMarkdown(ctx: any, person: Person): string {
 	text += emojis.hobby
 	text += '*'
 	text += ctx.wd.r('person.hobby').label()
-	text += '*\n  '
+	text += '*'
+	text += ': '
 	text += ctx.wd.r(hobby).label()
+	text += '\n'
+
+	text += emojis.salery
+	text += '*'
+	text += ctx.wd.r('person.profitSharing').label()
+	text += '*'
+	text += ': '
+	text += percentString(profitShare)
 	text += '\n'
 
 	text += emojis.retirement
@@ -27,17 +36,6 @@ export function personMarkdown(ctx: any, person: Person): string {
 	text += ctx.wd.r('person.retirement').label()
 	text += '*\n  '
 	text += humanReadableTimestamp(retirementTimestamp)
-	text += '\n'
-
-	text += emojis.salery
-	text += '*'
-	text += ctx.wd.r('person.salery').label()
-	text += '*'
-	text += ' / '
-	text += ctx.wd.r('other.hour').label()
-	text += '\n  '
-	text += formattedNumber(salery, false)
-	text += emojis.currency
 	text += '\n'
 
 	text += '\n'

@@ -11,6 +11,7 @@ const examplePerson: Person = {
 		family: 'B'
 	},
 	hobby: 'Q42',
+	profitShare: 0.1,
 	retirementTimestamp: 0,
 	salery: 500,
 	talents: {
