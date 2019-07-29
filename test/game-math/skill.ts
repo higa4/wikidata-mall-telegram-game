@@ -2,7 +2,7 @@ import test from 'ava'
 
 import {Skills} from '../../source/lib/types/skills'
 
-import {currentLevel, collectorTotalLevel, skillUpgradeTimeNeeded, increaseLevelByOne} from '../../source/lib/game-math/skill'
+import {currentLevel, collectorTotalLevel, skillUpgradeTimeNeeded, increaseLevelByOne, skillUpgradeEndTimestamp} from '../../source/lib/game-math/skill'
 
 const emptySkills: Skills = {}
 const exampleSkills: Skills = {
@@ -51,6 +51,12 @@ test('skillUpgradeTimeNeeded examples', t => {
 	t.is(skillUpgradeTimeNeeded(2), 3)
 	t.is(skillUpgradeTimeNeeded(3), 5)
 	t.is(skillUpgradeTimeNeeded(4), 8)
+})
+
+test('skill', t => {
+	t.is(skillUpgradeEndTimestamp(0, 10000000), 10000000 + (60 * 60 * 1))
+	t.is(skillUpgradeEndTimestamp(1, 10000000), 10000000 + (60 * 60 * 2))
+	t.is(skillUpgradeEndTimestamp(2, 10000000), 10000000 + (60 * 60 * 3))
 })
 
 test('increaseLevelByOne productless not yet trained', t => {

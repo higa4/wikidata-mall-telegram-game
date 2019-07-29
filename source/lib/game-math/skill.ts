@@ -4,6 +4,8 @@ import * as fibonacci from '../math/fibonacci'
 
 type Dictionary<T> = {[key: string]: T}
 
+const SECONDS_IN_HOUR = 60 * 60
+
 export function currentLevel(skills: Skills, skill: keyof Skills, product?: string): number {
 	const content = skills[skill]
 
@@ -38,6 +40,12 @@ export function collectorTotalLevel(skills: Skills): number {
  */
 export function skillUpgradeTimeNeeded(currentLevel: number): number {
 	return fibonacci.cached(currentLevel + 2)
+}
+
+export function skillUpgradeEndTimestamp(currentLevel: number, startTimestamp: number): number {
+	const hoursNeeded = skillUpgradeTimeNeeded(currentLevel)
+	const secondsNeeded = SECONDS_IN_HOUR * hoursNeeded
+	return startTimestamp + secondsNeeded
 }
 
 /**

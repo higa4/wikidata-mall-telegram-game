@@ -1,7 +1,5 @@
 import {Session, Persist} from '../types'
-import {currentLevel, skillUpgradeTimeNeeded, increaseLevelByOne} from '../game-math/skill'
-
-const SECONDS_IN_HOUR = 60 * 60
+import {currentLevel, increaseLevelByOne, skillUpgradeEndTimestamp} from '../game-math/skill'
 
 export default function applySkills(session: Session, persist: Persist, now: number): void {
 	if (session.skillInTraining) {
@@ -26,10 +24,9 @@ function applySkillWhenFinished(session: Session, persist: Persist, now: number)
 	const {skill, product, startTimestamp} = session.skillInTraining!
 
 	const level = currentLevel(persist.skills, skill, product)
-	const hoursNeeded = skillUpgradeTimeNeeded(level)
-	const requiredTimestamp = startTimestamp + (hoursNeeded * SECONDS_IN_HOUR)
+	const endTimestamp = skillUpgradeEndTimestamp(level, startTimestamp)
 
-	if (now > requiredTimestamp) {
+	if (now > endTimestamp) {
 		increaseLevelByOne(persist.skills, skill, product)
 		delete session.skillInTraining
 	}
