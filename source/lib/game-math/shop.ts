@@ -5,12 +5,12 @@ import {distanceDiversity} from '../math/distance'
 import {personalBonus} from './personal'
 import {productBasePrice} from './product'
 
-export function buildCost(existingShops: number): number {
+export function costForAdditionalShop(existingShops: number): number {
 	return 10 ** (existingShops + 2)
 }
 
-export function productCost(existingShops: number, existingProducts: number): number {
-	return buildCost(existingShops - 1) * existingProducts
+export function costForAdditionalProduct(existingShops: number, existingProducts: number): number {
+	return costForAdditionalShop(existingShops - 1) * existingProducts
 }
 
 export function storageCapacity(shop: Shop): number {

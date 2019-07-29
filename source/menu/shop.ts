@@ -7,7 +7,7 @@ import {TalentName} from '../lib/types/people'
 
 import {randomUnusedEntry} from '../lib/js-helper/array'
 
-import {buildCost, productCost, storageCapacity, shopDiversificationFactor, customerInterval} from '../lib/game-math/shop'
+import {costForAdditionalProduct, costForAdditionalShop, storageCapacity, shopDiversificationFactor, customerInterval} from '../lib/game-math/shop'
 import {incomeFactor} from '../lib/game-math/personal'
 
 import * as wdShop from '../lib/wikidata/shops'
@@ -26,15 +26,6 @@ function fromCtx(ctx: any): Shop {
 	const persist = ctx.persist as Persist
 	const shopType = ctx.match[1]
 	return persist.shops.filter(o => o.id === shopType)[0]
-}
-
-function addProductCostFromCtx(ctx: any): number {
-	const persist = ctx.persist as Persist
-	return addProductCost(persist.shops, fromCtx(ctx))
-}
-
-function addProductCost(shops: Shop[], shop: Shop): number {
-	return productCost(shops.length, shop.products.length)
 }
 
 function canAddProductTechnically(shop: Shop): boolean {
@@ -118,7 +109,7 @@ function addProductPart(ctx: any, shop: Shop): string {
 		return ''
 	}
 
-	const cost = addProductCost(persist.shops, shop)
+	const cost = costForAdditionalProduct(persist.shops.length, shop.products.length)
 
 	let text = ''
 	text += emoji.add
@@ -217,7 +208,8 @@ menu.button(buttonText(emoji.add, 'other.assortment'), 'addProduct', {
 		}
 
 		const session = ctx.session as Session
-		return addProductCostFromCtx(ctx) > session.money
+		const persist = ctx.persist as Persist
+		return costForAdditionalProduct(persist.shops.length, shop.products.length) > session.money
 	},
 	doFunc: (ctx: any) => {
 		const shop = fromCtx(ctx)
@@ -225,7 +217,7 @@ menu.button(buttonText(emoji.add, 'other.assortment'), 'addProduct', {
 		const persist = ctx.persist as Persist
 		const now = Math.floor(Date.now() / 1000)
 
-		const cost = addProductCost(persist.shops, shop)
+		const cost = costForAdditionalProduct(persist.shops.length, shop.products.length)
 		if (session.money < cost) {
 			// Fishy
 			return
@@ -263,7 +255,7 @@ menu.button(buttonText(emoji.close, 'action.close'), 'remove', {
 		persist.shops = persist.shops.filter(o => o.id !== shop.id)
 
 		const existingShops = persist.shops.length
-		session.money += Math.ceil(buildCost(existingShops) / 2)
+		session.money += Math.ceil(costForAdditionalShop(existingShops) / 2)
 	}
 })
 

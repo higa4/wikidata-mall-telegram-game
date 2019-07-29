@@ -7,7 +7,7 @@ import {randomUnusedEntry} from '../lib/js-helper/array'
 
 import * as wdShops from '../lib/wikidata/shops'
 
-import {buildCost} from '../lib/game-math/shop'
+import {costForAdditionalShop} from '../lib/game-math/shop'
 
 import {buttonText, menuPhoto} from '../lib/interface/menu'
 import {infoHeader, labeledFloat} from '../lib/interface/formatted-strings'
@@ -15,12 +15,9 @@ import emoji from '../lib/interface/emojis'
 
 import shopMenu from './shop'
 
-function buildCostFromCtx(ctx: any): number {
-	return buildCost(userShops(ctx).length)
-}
-
 function menuText(ctx: any): string {
 	const session = ctx.session as Session
+	const persist = ctx.persist as Persist
 
 	let text = ''
 	text += infoHeader(ctx.wd.r('menu.shop'))
@@ -29,7 +26,7 @@ function menuText(ctx: any): string {
 	text += labeledFloat(ctx.wd.r('other.money'), session.money, emoji.currency)
 	text += '\n\n'
 
-	const cost = buildCostFromCtx(ctx)
+	const cost = costForAdditionalShop(persist.shops.length)
 
 	text += emoji.construction
 	text += '*'
@@ -58,12 +55,14 @@ menu.selectSubmenu('s', userShops, shopMenu, {
 menu.button(buttonText(emoji.construction, 'action.construction'), 'build', {
 	hide: (ctx: any) => {
 		const session = ctx.session as Session
-		return buildCostFromCtx(ctx) > session.money
+		const persist = ctx.persist as Persist
+		const cost = costForAdditionalShop(persist.shops.length)
+		return cost > session.money
 	},
 	doFunc: (ctx: any) => {
 		const session = ctx.session as Session
 		const persist = ctx.persist as Persist
-		const cost = buildCost(persist.shops.length)
+		const cost = costForAdditionalShop(persist.shops.length)
 
 		if (session.money < cost) {
 			// Fishy
