@@ -4,7 +4,7 @@ import {Session, Persist} from '../lib/types'
 import {Shop} from '../lib/types/shop'
 import {TalentName, Person} from '../lib/types/people'
 
-import {personalBonusWhenEmployed} from '../lib/math/personal'
+import {personalBonusWhenEmployed} from '../lib/game-math/personal'
 
 import {buttonText} from '../lib/interface/menu'
 import {infoHeader, bonusPercentString} from '../lib/interface/formatted-strings'

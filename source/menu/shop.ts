@@ -7,8 +7,8 @@ import {TalentName} from '../lib/types/people'
 
 import {randomUnusedEntry} from '../lib/js-helper/array'
 
-import {buildCost, productCost, storageCapacity, shopDiversificationFactor, customerInterval} from '../lib/math/shop'
-import {incomeFactor} from '../lib/math/personal'
+import {buildCost, productCost, storageCapacity, shopDiversificationFactor, customerInterval} from '../lib/game-math/shop'
+import {incomeFactor} from '../lib/game-math/personal'
 
 import * as wdShop from '../lib/wikidata/shops'
 

@@ -1,6 +1,7 @@
 import {Shop} from '../types/shop'
 
-import {distanceDiversity} from './distance'
+import {distanceDiversity} from '../math/distance'
+
 import {personalBonus} from './personal'
 import {productBasePrice} from './product'
 

@@ -5,8 +5,8 @@ import {Session, Persist} from '../lib/types'
 import {Shop, Product} from '../lib/types/shop'
 import {TalentName} from '../lib/types/people'
 
-import {sellingCost, purchasingCost, productBasePrice} from '../lib/math/product'
-import {storageCapacity} from '../lib/math/shop'
+import {sellingCost, purchasingCost, productBasePrice} from '../lib/game-math/product'
+import {storageCapacity} from '../lib/game-math/shop'
 
 import {infoHeader, labeledInt, labeledFloat, formattedNumber} from '../lib/interface/formatted-strings'
 import {menuPhoto} from '../lib/interface/menu'

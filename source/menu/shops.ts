@@ -7,7 +7,7 @@ import {randomUnusedEntry} from '../lib/js-helper/array'
 
 import * as wdShops from '../lib/wikidata/shops'
 
-import {buildCost} from '../lib/math/shop'
+import {buildCost} from '../lib/game-math/shop'
 
 import {buttonText, menuPhoto} from '../lib/interface/menu'
 import {infoHeader, labeledFloat} from '../lib/interface/formatted-strings'
