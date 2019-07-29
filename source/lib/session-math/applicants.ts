@@ -7,6 +7,8 @@ import {Talents, TALENTS} from '../types/people'
 import * as wdName from '../wikidata/name'
 import * as wdShops from '../wikidata/shops'
 
+const SECONDS_PER_DAY = 60 * 60 * 24
+
 export default function calcApplicants(session: Session, persist: Persist, now: number): void {
 	if (!session.applicants) {
 		session.applicants = []
@@ -25,7 +27,7 @@ function addWaitingApplicants(session: Session, persist: Persist, now: number): 
 	const {applicantTimestamp, applicants} = session
 
 	const secondsBetweenApplicants = 60 // TODO: Skills
-	const retirementTimespan = 60 * 60 * 24 * 30 // 30 days
+	const retirementTimespan = SECONDS_PER_DAY * 30 // 30 days
 
 	const secondsSinceLastApplicant = now - applicantTimestamp
 	const possibleApplicants = Math.floor(secondsSinceLastApplicant / secondsBetweenApplicants)
