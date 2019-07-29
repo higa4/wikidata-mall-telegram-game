@@ -2,7 +2,7 @@ import TelegrafInlineMenu from 'telegraf-inline-menu'
 
 import {Session, Persist} from '../lib/types'
 
-import {infoHeader} from '../lib/interface/formatted-strings'
+import {infoHeader, formattedNumber} from '../lib/interface/formatted-strings'
 import {menuPhoto} from '../lib/interface/menu'
 import emojis from '../lib/interface/emojis'
 
@@ -16,8 +16,21 @@ function menuText(ctx: any): string {
 	text += infoHeader(ctx.wd.r('menu.applicant'))
 	text += '\n\n'
 
-	text += `+1${emojis.person} / ${60} sec\n`
-	text += `${ctx.wd.r('other.seat').label()} ${session.applicants.length} / ${persist.shops.length}${emojis.seat}\n`
+	text += '+1'
+	text += emojis.person
+	text += ' / '
+	text += formattedNumber(60, true)
+	text += ' '
+	text += 'sec' // TODO: wikidata item
+	text += '\n'
+
+	text += ctx.wd.r('other.seat').label()
+	text += ' '
+	text += session.applicants.length
+	text += ' / '
+	text += persist.shops.length
+	text += emojis.seat
+	text += '\n'
 
 	return text
 }
