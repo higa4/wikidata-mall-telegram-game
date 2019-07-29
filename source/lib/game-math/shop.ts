@@ -24,7 +24,8 @@ export function shopDiversificationFactor(shop: Shop): number {
 
 	const diversity = distanceDiversity(basePrices)
 
-	return diversity * 2
+	// From 0 to 1 -> 0.75 to 1.25
+	return (diversity / 2) + 0.75
 }
 
 export function customerInterval(shop: Shop): number {
