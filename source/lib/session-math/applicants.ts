@@ -7,6 +7,9 @@ import {Talents, TALENTS} from '../types/people'
 import * as wdName from '../wikidata/name'
 import * as wdShops from '../wikidata/shops'
 
+import {currentLevel} from '../game-math/skill'
+import {secondsBetweenApplicants} from '../game-math/applicant'
+
 const SECONDS_PER_DAY = 60 * 60 * 24
 
 export default function calcApplicants(session: Session, persist: Persist, now: number): void {
@@ -26,13 +29,13 @@ function retireWaitingApplicants(session: Session, now: number): void {
 function addWaitingApplicants(session: Session, persist: Persist, now: number): void {
 	const {applicantTimestamp, applicants} = session
 
-	const secondsBetweenApplicants = 60 // TODO: Skills
-	// Maybe Recruiting Skill for speed
-	const retirementTimespan = SECONDS_PER_DAY * 30 // 30 days
-	// Maybe Healthcare Skill
+	const healthCareLevel = currentLevel(persist.skills, 'healthCare')
+	const retirementTimespan = SECONDS_PER_DAY * (14 + healthCareLevel)
+
+	const interval = secondsBetweenApplicants(persist.skills)
 
 	const secondsSinceLastApplicant = now - applicantTimestamp
-	const possibleApplicants = Math.floor(secondsSinceLastApplicant / secondsBetweenApplicants)
+	const possibleApplicants = Math.floor(secondsSinceLastApplicant / interval)
 	if (possibleApplicants <= 0) {
 		return
 	}
@@ -47,7 +50,7 @@ function addWaitingApplicants(session: Session, persist: Persist, now: number): 
 
 	// Ensure timer is still running when there are free seats.
 	// If not reset the timer to now
-	const newTimestamp = applicantTimestamp + (creatableApplicants * secondsBetweenApplicants)
+	const newTimestamp = applicantTimestamp + (creatableApplicants * interval)
 	session.applicantTimestamp = freeApplicantSeats > 0 ? newTimestamp : now
 
 	for (let i = 0; i < creatableApplicants; i++) {

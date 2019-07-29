@@ -2,6 +2,8 @@ import TelegrafInlineMenu from 'telegraf-inline-menu'
 
 import {Session, Persist} from '../lib/types'
 
+import {secondsBetweenApplicants} from '../lib/game-math/applicant'
+
 import {infoHeader, formattedNumber} from '../lib/interface/formatted-strings'
 import {menuPhoto} from '../lib/interface/menu'
 import emojis from '../lib/interface/emojis'
@@ -12,6 +14,8 @@ function menuText(ctx: any): string {
 	const session = ctx.session as Session
 	const persist = ctx.persist as Persist
 
+	const interval = secondsBetweenApplicants(persist.skills)
+
 	let text = ''
 	text += infoHeader(ctx.wd.r('menu.applicant'))
 	text += '\n\n'
@@ -19,7 +23,7 @@ function menuText(ctx: any): string {
 	text += '+1'
 	text += emojis.person
 	text += ' / '
-	text += formattedNumber(60, true)
+	text += formattedNumber(interval, true)
 	text += ' '
 	text += 'sec' // TODO: wikidata item
 	text += '\n'
