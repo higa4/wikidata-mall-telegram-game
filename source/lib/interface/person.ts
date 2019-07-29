@@ -6,13 +6,13 @@ import {Shop} from '../types/shop'
 
 import {personalBonus} from '../game-math/personal'
 
-import {bonusPercentString, humanReadableTimestamp, percentString} from './formatted-strings'
+import {bonusPercentString, humanReadableTimestamp} from './formatted-strings'
 
 import emojis from './emojis'
 
 export function personMarkdown(ctx: any, person: Person): string {
 	const {__wikibase_language_code: locale} = ctx.session as Session
-	const {name, hobby, profitShare, retirementTimestamp, talents} = person
+	const {name, hobby, retirementTimestamp, talents} = person
 
 	let text = ''
 	text += `*${name.given}* ${name.family}`
@@ -24,14 +24,6 @@ export function personMarkdown(ctx: any, person: Person): string {
 	text += '*'
 	text += ': '
 	text += ctx.wd.r(hobby).label()
-	text += '\n'
-
-	text += emojis.salery
-	text += '*'
-	text += ctx.wd.r('person.profitSharing').label()
-	text += '*'
-	text += ': '
-	text += percentString(profitShare)
 	text += '\n'
 
 	text += emojis.retirement

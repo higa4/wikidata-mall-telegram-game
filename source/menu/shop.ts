@@ -131,8 +131,6 @@ function incomePart(ctx: any, shop: Shop): string {
 	text += emoji.income
 	text += ctx.wd.r('other.income').label()
 	text += ': '
-	// TODO: add income from products per hour and personal salery costs.
-	// Warning sign when negative
 	text += bonusPercentString(incomeFactor(shop))
 	text += '\n\n'
 	return text
