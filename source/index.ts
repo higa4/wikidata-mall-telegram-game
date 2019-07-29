@@ -27,6 +27,11 @@ if (process.env.NODE_ENV !== 'production') {
 				await next()
 			}
 		} catch (error) {
+			if (error.message.includes('MEDIA_EMPTY')) {
+				console.error(identifier, error.message)
+				return
+			}
+
 			console.error(identifier, error, error && error.on && error.on.payload)
 		} finally {
 			console.timeEnd(identifier)
