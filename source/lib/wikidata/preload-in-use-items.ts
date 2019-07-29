@@ -5,7 +5,8 @@ import {getAllShops} from '../data/shops'
 
 export async function preload(wdItemStore: WikidataEntityStore): Promise<void> {
 	console.time('wikidata-preload-in-use-items')
-	const shops = await getAllShops()
+	const allPlayerShops = await getAllShops()
+	const shops = Object.values(allPlayerShops).flat()
 
 	const shopIds = shops
 		.map(o => o.id)

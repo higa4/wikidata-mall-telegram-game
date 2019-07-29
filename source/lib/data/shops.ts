@@ -5,6 +5,8 @@ import {Shop} from '../types/shop'
 
 import {InMemoryFiles} from './datastore'
 
+type Dictionary<T> = {[key: string]: T}
+
 interface Context {
 	from: {
 		id: number;
@@ -17,14 +19,8 @@ console.time('load user shops')
 const data = new InMemoryFiles<Shop[]>('persist/shops')
 console.timeEnd('load user shops')
 
-export async function getAllShops(): Promise<Shop[]> {
-	const list = await data.list()
-
-	const shops = await Promise.all(
-		list.map(async key => data.get(key))
-	) as Shop[][]
-
-	return shops.flat()
+export async function getAllShops(): Promise<Dictionary<Shop[]>> {
+	return data.getAll()
 }
 
 async function get(playerId: number): Promise<Shop[]> {

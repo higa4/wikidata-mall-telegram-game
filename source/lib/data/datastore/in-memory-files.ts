@@ -23,6 +23,10 @@ export class InMemoryFiles<T> implements Datastore<T> {
 		}
 	}
 
+	async getAll(): Promise<Dictionary<T>> {
+		return this._inMemoryStorage
+	}
+
 	async list(): Promise<readonly string[]> {
 		return Object.keys(this._inMemoryStorage)
 	}
