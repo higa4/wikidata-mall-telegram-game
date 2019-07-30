@@ -2,6 +2,7 @@ import TelegrafInlineMenu from 'telegraf-inline-menu'
 
 import {Session, Persist} from '../lib/types'
 
+import {currentLevel} from '../lib/game-math/skill'
 import {secondsBetweenApplicants} from '../lib/game-math/applicant'
 
 import {infoHeader, formattedNumber} from '../lib/interface/formatted-strings'
@@ -14,6 +15,7 @@ function menuText(ctx: any): string {
 	const session = ctx.session as Session
 	const persist = ctx.persist as Persist
 
+	const applicantSpeedLevel = currentLevel(persist.skills, 'applicantSpeed')
 	const interval = secondsBetweenApplicants(persist.skills)
 
 	let text = ''
@@ -27,7 +29,16 @@ function menuText(ctx: any): string {
 	text += ' '
 	text += 'sec' // TODO: wikidata item
 	text += '\n'
+	if (applicantSpeedLevel > 0) {
+		text += '  '
+		text += emojis.skill
+		text += ctx.wd.r('skill.applicantSpeed').label()
+		text += ': '
+		text += applicantSpeedLevel
+		text += '\n'
+	}
 
+	text += '\n'
 	text += ctx.wd.r('other.seat').label()
 	text += ' '
 	text += session.applicants.length
