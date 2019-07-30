@@ -146,7 +146,8 @@ function customerIntervalPart(ctx: any, shop: Shop): string {
 	text += ctx.wd.r('other.customer').label()
 	text += ' / '
 	text += formattedNumber(customerInterval(shop), true)
-	text += ' sec'
+	text += ' '
+	text += ctx.wd.r('other.second').label()
 	if (shop.products.length > 1) {
 		text += ' / '
 		text += ctx.wd.r('product.product').label()

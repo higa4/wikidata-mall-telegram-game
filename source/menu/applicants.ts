@@ -27,7 +27,7 @@ function menuText(ctx: any): string {
 	text += ' / '
 	text += formattedNumber(interval, true)
 	text += ' '
-	text += 'sec' // TODO: wikidata item
+	text += ctx.wd.r('other.second').label()
 	text += '\n'
 	if (applicantSpeedLevel > 0) {
 		text += '  '
