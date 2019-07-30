@@ -1,7 +1,7 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 import WikidataEntityReader from 'wikidata-entity-reader'
 
-import {AchievementSet} from '../lib/types/achievements'
+import {Achievements, AchievementSet} from '../lib/types/achievements'
 import {Session} from '../lib/types'
 
 import {infoHeader, labeledTimestamp, humanReadableTimestamp} from '../lib/interface/formatted-strings'
@@ -29,9 +29,19 @@ function achievementSetPart(topic: WikidataEntityReader, set: AchievementSet | u
 	return text
 }
 
-function generateParts(ctx: any): string[] {
+function simpleAchievementPage(ctx: any, achievements: Achievements, locale: string): string {
+	let text = ''
+
+	text += labeledTimestamp(ctx.wd.r('achievement.gameStarted'), achievements.gameStarted, locale) + '\n'
+
+	return text
+}
+
+function generatePages(ctx: any): string[] {
 	const {achievements, __wikibase_language_code: locale} = ctx.session as Session
 	const parts: string[] = []
+
+	parts.push(simpleAchievementPage(ctx, achievements, locale))
 
 	parts.push(achievementSetPart(ctx.wd.r('other.money'), achievements.moneyCollected, locale))
 	parts.push(achievementSetPart(ctx.wd.r('product.product'), achievements.productsInAssortment, locale))
@@ -42,20 +52,16 @@ function generateParts(ctx: any): string[] {
 }
 
 function menuText(ctx: any): string {
-	const {achievements, page, __wikibase_language_code: locale} = ctx.session as Session
+	const {page} = ctx.session as Session
 
 	let text = ''
 	text += infoHeader(ctx.wd.r('menu.achievement'))
 	text += '\n\n'
 
-	const parts = generateParts(ctx)
-	const sanePage = Math.min(parts.length + 1, page)
+	const allPages = generatePages(ctx)
+	const sanePage = Math.min(allPages.length, page)
 
-	if (sanePage === 1) {
-		text += labeledTimestamp(ctx.wd.r('achievement.gameStarted'), achievements.gameStarted, locale) + '\n'
-	} else {
-		text += parts[sanePage - 2]
-	}
+	text += allPages[sanePage - 1]
 
 	return text
 }
@@ -66,7 +72,7 @@ const menu = new TelegrafInlineMenu(menuText, {
 
 menu.pagination('page', {
 	getCurrentPage: (ctx: any) => (ctx.session as Session).page,
-	getTotalPages: ctx => generateParts(ctx).length + 1,
+	getTotalPages: ctx => generatePages(ctx).length,
 	setPage: (ctx: any, page) => {
 		const session = ctx.session as Session
 		session.page = page
