@@ -8,7 +8,7 @@ import {infoHeader, labeledTimestamp, humanReadableTimestamp} from '../lib/inter
 import {menuPhoto} from '../lib/interface/menu'
 
 function achievementSetPart(topic: WikidataEntityReader, set: AchievementSet | undefined, locale: string): string {
-	if (!set || Object.keys(set).length === 1) {
+	if (!set || Object.keys(set).length === 0) {
 		return ''
 	}
 
