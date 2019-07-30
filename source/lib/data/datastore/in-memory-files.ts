@@ -37,7 +37,7 @@ export class InMemoryFiles<T> implements Datastore<T> {
 
 	async set(key: string, value: T): Promise<void> {
 		this._inMemoryStorage[key] = value
-		const content = stringify(value, {space: 2}) + '\n'
+		const content = stringify(value, {space: '\t'}) + '\n'
 		await writeFile(this._pathOfKey(key), content, 'utf8')
 	}
 
