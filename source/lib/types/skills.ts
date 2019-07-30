@@ -22,6 +22,6 @@ export interface Skills {
 
 export interface SkillInTraining {
 	skill: keyof Skills;
-	product?: string;
+	category?: string;
 	startTimestamp: number;
 }

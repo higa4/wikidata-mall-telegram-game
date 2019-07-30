@@ -9,25 +9,25 @@ export default function applySkills(session: Session, persist: Persist, now: num
 }
 
 function ensureCurrentlyTrainedSkillForShopHasItsShop(session: Session, persist: Persist): void {
-	const {product} = session.skillInTraining!
-	if (!product) {
+	const {category} = session.skillInTraining!
+	if (!category) {
 		return
 	}
 
-	const shopExists = persist.shops.some(o => o.id === product)
+	const shopExists = persist.shops.some(o => o.id === category)
 	if (!shopExists) {
 		delete session.skillInTraining
 	}
 }
 
 function applySkillWhenFinished(session: Session, persist: Persist, now: number): void {
-	const {skill, product, startTimestamp} = session.skillInTraining!
+	const {skill, category, startTimestamp} = session.skillInTraining!
 
-	const level = currentLevel(persist.skills, skill, product)
+	const level = currentLevel(persist.skills, skill, category)
 	const endTimestamp = skillUpgradeEndTimestamp(level, startTimestamp)
 
 	if (now > endTimestamp) {
-		increaseLevelByOne(persist.skills, skill, product)
+		increaseLevelByOne(persist.skills, skill, category)
 		delete session.skillInTraining
 	}
 }

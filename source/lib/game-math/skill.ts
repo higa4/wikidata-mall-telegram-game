@@ -6,7 +6,7 @@ type Dictionary<T> = {[key: string]: T}
 
 const SECONDS_IN_HOUR = 60 * 60
 
-export function currentLevel(skills: Skills, skill: keyof Skills, product?: string): number {
+export function currentLevel(skills: Skills, skill: keyof Skills, category?: string): number {
 	const content = skills[skill]
 
 	if (!content) {
@@ -17,11 +17,11 @@ export function currentLevel(skills: Skills, skill: keyof Skills, product?: stri
 		return content
 	}
 
-	if (!product) {
-		throw new TypeError('product has to be specified on product specific skill')
+	if (!category) {
+		throw new TypeError('category has to be specified on category specific skill')
 	}
 
-	return content[product] || 0
+	return content[category] || 0
 }
 
 export function collectorTotalLevel(skills: Skills): number {
@@ -50,13 +50,13 @@ export function skillUpgradeEndTimestamp(currentLevel: number, startTimestamp: n
 
 /**
  * Increases the given skills level in `skills`.
- * Ensure product is set or not based on the `skill`!
+ * Ensure category is set or not based on the `skill`!
  */
-export function increaseLevelByOne(skills: Skills, skill: keyof Skills, product?: string): void {
+export function increaseLevelByOne(skills: Skills, skill: keyof Skills, category?: string): void {
 	if (!skills[skill]) {
-		if (product) {
+		if (category) {
 			const initialContent: Dictionary<number> = {}
-			initialContent[product] = 0
+			initialContent[category] = 0
 			skills[skill] = initialContent as any
 		} else {
 			const initialContent = 0
@@ -71,9 +71,9 @@ export function increaseLevelByOne(skills: Skills, skill: keyof Skills, product?
 
 	const content = skills[skill] as Dictionary<number>
 
-	if (!content[product!]) {
-		content[product!] = 0
+	if (!content[category!]) {
+		content[category!] = 0
 	}
 
-	content[product!]++
+	content[category!]++
 }
