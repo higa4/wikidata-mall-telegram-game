@@ -25,7 +25,7 @@ function languageMenuText(ctx: any): string {
 	return text
 }
 
-menu.select('lang', (ctx: any) => ctx.wd.availableLocales(), {
+menu.select('lang', (ctx: any) => ctx.wd.availableLocales(0.05), {
 	columns: 3,
 	textFunc: (_ctx, key) => {
 		const flag = flagString(key)
