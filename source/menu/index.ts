@@ -51,7 +51,11 @@ menu.submenu(buttonText(applicantEmoji, 'menu.applicant'), 'applicants', applica
 })
 
 menu.submenu(buttonText(emoji.skill, 'menu.skill'), 'skill', skills, {
-	joinLastRow: true
+	joinLastRow: true,
+	hide: (ctx: any) => {
+		const persist = ctx.persist as Persist
+		return persist.shops.length < 2
+	}
 })
 
 menu.submenu(buttonText(emoji.language, 'menu.language'), 'lang', languages)
