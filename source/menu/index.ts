@@ -62,4 +62,8 @@ menu.submenu(buttonText(emoji.achievement, 'menu.achievement'), 'achievements', 
 
 menu.urlButton(buttonText(emoji.chat, 'menu.chat'), 'https://t.me/WikidataMallChat')
 
+menu.urlButton(buttonText('🦑', 'other.github'), 'https://github.com/EdJoPaTo/wikidata-mall-telegram-game', {
+	joinLastRow: true
+})
+
 export default menu
