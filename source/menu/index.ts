@@ -10,6 +10,7 @@ import achievements from './achievements'
 import applicants from './applicants'
 import languages from './languages'
 import shops from './shops'
+import skills from './skills'
 
 function menuText(ctx: any): string {
 	const session = ctx.session as Session
@@ -44,9 +45,8 @@ menu.submenu(buttonText(applicantEmoji, 'menu.applicant'), 'applicants', applica
 	}
 })
 
-menu.simpleButton(buttonText(emoji.skill + emoji.underConstruction, 'menu.skill'), 'skill', {
-	joinLastRow: true,
-	doFunc: async ctx => ctx.answerCbQuery(emoji.underConstruction + 'soon…')
+menu.submenu(buttonText(emoji.skill, 'menu.skill'), 'skill', skills, {
+	joinLastRow: true
 })
 
 menu.submenu(buttonText(emoji.language, 'menu.language'), 'lang', languages)

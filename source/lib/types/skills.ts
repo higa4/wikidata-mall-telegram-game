@@ -25,3 +25,14 @@ export interface SkillInTraining {
 	category?: string;
 	startTimestamp: number;
 }
+
+type Skill = keyof Skills
+
+export const SIMPLE_SKILLS: Skill[] = [
+	'applicantSpeed',
+	'healthCare'
+]
+
+export const CATEGORY_SKILLS: Skill[] = [
+	'collector'
+]

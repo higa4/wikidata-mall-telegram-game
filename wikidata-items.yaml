@@ -16,6 +16,7 @@ action:
   construction: Q385378
   employmentTermination: Q685744
   recruitment: Q899277
+  research: Q42240
   search: Q36963
   upgrade: Q920419
 person:
@@ -34,6 +35,12 @@ product:
   storageCapacity: Q21551014
 achievement:
   gameStarted: Q529711
+skill:
+  level: Q20825944
+  training: Q918385
+  applicantSpeed: Q656850
+  collector: Q3243461
+  healthCare: Q31207
 other:
   assortment: Q1412931
   cost: Q240673
