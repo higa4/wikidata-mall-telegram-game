@@ -4,8 +4,9 @@ import {Session, Persist} from '../lib/types'
 import {Skills} from '../lib/types/skills'
 
 import {infoHeader} from '../lib/interface/formatted-strings'
-import {menuPhoto} from '../lib/interface/menu'
+import {menuPhoto, buttonText} from '../lib/interface/menu'
 import {skillInTrainingString} from '../lib/interface/skill'
+import emojis from '../lib/interface/emojis'
 
 import skillMenu from './skill'
 
@@ -35,7 +36,7 @@ function menuText(ctx: any): string {
 }
 
 const menu = new TelegrafInlineMenu(menuText, {
-	photo: menuPhoto('menu.skill')
+	photo: menuPhoto(ctx => `skill.${fromCtx(ctx).skill}`)
 })
 
 function shops(ctx: any): string[] {
@@ -47,5 +48,10 @@ menu.selectSubmenu('s', shops, skillMenu, {
 	columns: 2,
 	textFunc: (ctx: any, key) => ctx.wd.r(key).label()
 })
+
+menu.urlButton(
+	buttonText(emojis.wikidataItem, 'menu.wikidataItem'),
+	(ctx: any) => ctx.wd.r(`skill.${fromCtx(ctx).skill}`).url()
+)
 
 export default menu

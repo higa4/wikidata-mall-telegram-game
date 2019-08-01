@@ -259,7 +259,7 @@ menu.button(buttonText(emoji.close, 'action.close'), 'remove', {
 })
 
 menu.urlButton(
-	(ctx: any) => `${emoji.wikidataItem} ${ctx.wd.r('menu.wikidataItem').label()}`,
+	buttonText(emoji.wikidataItem, 'menu.wikidataItem'),
 	(ctx: any) => ctx.wd.r(fromCtx(ctx).id).url()
 )
 

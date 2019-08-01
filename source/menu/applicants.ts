@@ -6,7 +6,7 @@ import {currentLevel} from '../lib/game-math/skill'
 import {secondsBetweenApplicants} from '../lib/game-math/applicant'
 
 import {infoHeader, formattedNumber} from '../lib/interface/formatted-strings'
-import {menuPhoto} from '../lib/interface/menu'
+import {menuPhoto, buttonText} from '../lib/interface/menu'
 import emojis from '../lib/interface/emojis'
 
 import applicantMenu from './applicant'
@@ -67,5 +67,10 @@ menu.selectSubmenu('a', availableApplicants, applicantMenu, {
 		return `${name.given} ${name.family}`
 	}
 })
+
+menu.urlButton(
+	buttonText(emojis.wikidataItem, 'menu.wikidataItem'),
+	(ctx: any) => ctx.wd.r('menu.applicant').url()
+)
 
 export default menu

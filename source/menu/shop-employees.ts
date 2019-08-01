@@ -4,7 +4,7 @@ import {Persist} from '../lib/types'
 import {Shop} from '../lib/types/shop'
 import {TALENTS, TalentName} from '../lib/types/people'
 
-import {buttonText} from '../lib/interface/menu'
+import {buttonText, menuPhoto} from '../lib/interface/menu'
 import {infoHeader} from '../lib/interface/formatted-strings'
 import {personInShopLine} from '../lib/interface/person'
 import emojis from '../lib/interface/emojis'
@@ -50,11 +50,18 @@ function menuText(ctx: any): string {
 	return text
 }
 
-const menu = new TelegrafInlineMenu(menuText)
+const menu = new TelegrafInlineMenu(menuText, {
+	photo: menuPhoto('menu.employee')
+})
 
 menu.selectSubmenu('t', TALENTS, employee, {
 	columns: 1,
 	textFunc: buttonText((_ctx, key) => emojis[key!], (_ctx, key) => `person.talents.${key}`)
 })
+
+menu.urlButton(
+	buttonText(emojis.wikidataItem, 'menu.wikidataItem'),
+	(ctx: any) => ctx.wd.r('menu.employee').url()
+)
 
 export default menu

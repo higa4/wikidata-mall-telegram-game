@@ -5,7 +5,8 @@ import {Achievements, AchievementSet} from '../lib/types/achievements'
 import {Session} from '../lib/types'
 
 import {infoHeader, labeledTimestamp, humanReadableTimestamp} from '../lib/interface/formatted-strings'
-import {menuPhoto} from '../lib/interface/menu'
+import {menuPhoto, buttonText} from '../lib/interface/menu'
+import emojis from '../lib/interface/emojis'
 
 function achievementSetPart(topic: WikidataEntityReader, set: AchievementSet | undefined, locale: string): string {
 	if (!set || Object.keys(set).length === 0) {
@@ -78,5 +79,10 @@ menu.pagination('page', {
 		session.page = page
 	}
 })
+
+menu.urlButton(
+	buttonText(emojis.wikidataItem, 'menu.wikidataItem'),
+	(ctx: any) => ctx.wd.r('menu.achievement').url()
+)
 
 export default menu

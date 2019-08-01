@@ -78,4 +78,9 @@ menu.selectSubmenu('a', availableApplicants, confirmEmployee, {
 	}
 })
 
+menu.urlButton(
+	buttonText(emojis.wikidataItem, 'menu.wikidataItem'),
+	(ctx: any) => ctx.wd.r(`person.talents.${fromCtx(ctx).talent}`).url()
+)
+
 export default menu

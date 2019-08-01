@@ -81,4 +81,9 @@ menu.button(buttonText(emoji.skill, 'action.research'), 'research', {
 	}
 })
 
+menu.urlButton(
+	buttonText(emoji.wikidataItem, 'menu.wikidataItem'),
+	(ctx: any) => ctx.wd.r(`skill.${fromCtx(ctx).skill}`).url()
+)
+
 export default menu

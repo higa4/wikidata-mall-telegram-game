@@ -81,4 +81,9 @@ menu.button(buttonText(emoji.construction, 'action.construction'), 'build', {
 	}
 })
 
+menu.urlButton(
+	buttonText(emoji.wikidataItem, 'menu.wikidataItem'),
+	(ctx: any) => ctx.wd.r('menu.shop').url()
+)
+
 export default menu

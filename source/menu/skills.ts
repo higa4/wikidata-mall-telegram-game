@@ -6,7 +6,7 @@ import {Skills, SIMPLE_SKILLS, CATEGORY_SKILLS} from '../lib/types/skills'
 import {currentLevel} from '../lib/game-math/skill'
 
 import {infoHeader} from '../lib/interface/formatted-strings'
-import {menuPhoto} from '../lib/interface/menu'
+import {menuPhoto, buttonText} from '../lib/interface/menu'
 import {skillInTrainingString} from '../lib/interface/skill'
 import emoji from '../lib/interface/emojis'
 
@@ -110,5 +110,10 @@ menu.selectSubmenu('c', CATEGORY_SKILLS, skillSelectCategory, {
 	columns: 2,
 	textFunc: (ctx: any, key) => ctx.wd.r(`skill.${key}`).label()
 })
+
+menu.urlButton(
+	buttonText(emoji.wikidataItem, 'menu.wikidataItem'),
+	(ctx: any) => ctx.wd.r('menu.skill').url()
+)
 
 export default menu
