@@ -9,13 +9,17 @@ type Dictionary<T> = {[key: string]: T}
 const toplevelShopCategories: string[] = [
 	'Q11410', // Game
 	'Q11460', // Clothing
+	'Q1207302', // Jar
+	'Q13629441', // Electric vehicle
 	'Q2095', // Food
 	'Q210729', // Electrical element
 	'Q2294986', // Smart object
 	'Q34379', // Musical instrument
+	'Q40218', // Spacecraft
 	'Q5082128', // Mobile device
+	'Q628983', // Working ship
 	'Q768186', // Sports Equipment
-	'Q987767' // Container
+	'Q848944' // Merchant ship
 ]
 
 const shopsWithProducts: Dictionary<string[]> = {}
