@@ -20,7 +20,7 @@ function menuText(ctx: any): string {
 	const persist = ctx.persist as Persist
 
 	let text = ''
-	text += infoHeader(ctx.wd.r('menu.shop'))
+	text += infoHeader(ctx.wd.r('menu.shop'), {titlePrefix: emoji.shop})
 	text += '\n\n'
 
 	text += labeledFloat(ctx.wd.r('other.money'), session.money, emoji.currency)

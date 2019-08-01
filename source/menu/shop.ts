@@ -170,7 +170,7 @@ function menuText(ctx: any): string {
 	const session = ctx.session as Session
 
 	let text = ''
-	text += infoHeader(reader)
+	text += infoHeader(reader, {titlePrefix: emoji.shop})
 	text += '\n\n'
 
 	text += labeledFloat(ctx.wd.r('other.money'), session.money, emoji.currency)

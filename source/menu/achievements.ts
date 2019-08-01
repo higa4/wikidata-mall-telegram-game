@@ -56,7 +56,7 @@ function menuText(ctx: any): string {
 	const {page} = ctx.session as Session
 
 	let text = ''
-	text += infoHeader(ctx.wd.r('menu.achievement'))
+	text += infoHeader(ctx.wd.r('menu.achievement'), {titlePrefix: emojis.achievement})
 	text += '\n\n'
 
 	const allPages = generatePages(ctx)
