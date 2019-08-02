@@ -72,7 +72,7 @@ menu.button(buttonText(emoji.skill, 'action.research'), 'research', {
 		}
 
 		const {skill, category} = fromCtx(ctx)
-		const now = Date.now() / 1000
+		const now = Math.floor(Date.now() / 1000)
 		session.skillInTraining = {
 			skill,
 			category,

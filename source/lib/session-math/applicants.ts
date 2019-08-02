@@ -51,7 +51,7 @@ function addWaitingApplicants(session: Session, persist: Persist, now: number): 
 	// Ensure timer is still running when there are free seats.
 	// If not reset the timer to now
 	const newTimestamp = applicantTimestamp + (creatableApplicants * interval)
-	session.applicantTimestamp = freeApplicantSeats > 0 ? newTimestamp : now
+	session.applicantTimestamp = Math.floor(freeApplicantSeats > 0 ? newTimestamp : now)
 
 	for (let i = 0; i < creatableApplicants; i++) {
 		const name = wdName.randomName()

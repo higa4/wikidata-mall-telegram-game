@@ -10,7 +10,7 @@ export default function middleware(): (ctx: any, next: any) => Promise<void> {
 	return async (ctx, next) => {
 		const session = ctx.session as Session
 		const persist = ctx.persist as Persist
-		const now = Date.now() / 1000
+		const now = Math.floor(Date.now() / 1000)
 
 		init(session)
 		ensureStats(session)
