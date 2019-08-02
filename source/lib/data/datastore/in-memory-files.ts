@@ -1,13 +1,12 @@
 import * as fs from 'fs'
 
-import stringify from 'json-stable-stringify'
+import writeJsonFile from 'write-json-file'
 
 import {Datastore} from './datastore'
 
 type Dictionary<T> = {[key: string]: T}
 
 const {mkdirSync, readdirSync, readFileSync} = fs
-const {writeFile} = fs.promises
 
 export class InMemoryFiles<T> implements Datastore<T> {
 	private _inMemoryStorage: Dictionary<T> = {}
@@ -37,8 +36,7 @@ export class InMemoryFiles<T> implements Datastore<T> {
 
 	async set(key: string, value: T): Promise<void> {
 		this._inMemoryStorage[key] = value
-		const content = stringify(value, {space: '\t'}) + '\n'
-		await writeFile(this._pathOfKey(key), content, 'utf8')
+		await writeJsonFile(this._pathOfKey(key), value, {sortKeys: true})
 	}
 
 	private _pathOfKey(key: string): string {
