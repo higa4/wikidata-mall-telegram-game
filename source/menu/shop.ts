@@ -240,11 +240,23 @@ menu.button(buttonText(emoji.add, 'other.assortment'), 'addProduct', {
 
 menu.submenu(buttonText(emoji.person, 'menu.employee'), 'e', employeeMenu)
 
+menu.simpleButton(buttonText(emoji.close, 'action.close'), 'remove-not-possible', {
+	hide: (ctx: any) => {
+		const persist = ctx.persist as Persist
+		const shop = fromCtx(ctx)
+		const itemsInStore = shop.products.map(o => o.itemsInStore).reduce((a, b) => a + b, 0)
+		return persist.shops.length <= 1 || itemsInStore === 0
+	},
+	doFunc: async ctx => ctx.answerCbQuery(emoji.warning + emoji.storage)
+})
+
 menu.button(buttonText(emoji.close, 'action.close'), 'remove', {
 	setParentMenuAfter: true,
 	hide: (ctx: any) => {
 		const persist = ctx.persist as Persist
-		return persist.shops.length <= 1
+		const shop = fromCtx(ctx)
+		const itemsInStore = shop.products.map(o => o.itemsInStore).reduce((a, b) => a + b, 0)
+		return persist.shops.length <= 1 || itemsInStore > 0
 	},
 	doFunc: (ctx: any) => {
 		const shop = fromCtx(ctx)
