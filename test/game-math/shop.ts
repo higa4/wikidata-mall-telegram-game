@@ -1,6 +1,12 @@
 import test, {ExecutionContext} from 'ava'
 
-import {costForAdditionalShop, costForAdditionalProduct, moneyForShopClosure} from '../../source/lib/game-math/shop'
+import {Shop, Product} from '../../source/lib/types/shop'
+import {Skills} from '../../source/lib/types/skills'
+
+import {PURCHASING_FACTOR} from '../../source/lib/game-math/constants'
+
+import {costForAdditionalShop, costForAdditionalProduct, moneyForShopClosure, buyAllCostFactor, buyAllCost} from '../../source/lib/game-math/shop'
+import {productBasePrice} from '../../source/lib/game-math/product'
 
 function costForAdditionalShopMacro(t: ExecutionContext, existingShops: number, expectedCost: number): void {
 	t.is(costForAdditionalShop(existingShops), expectedCost)
@@ -35,3 +41,39 @@ test('moneyForShopClosure with 2 shops 0 products buildable', moneyForShopClosur
 test('moneyForShopClosure with 2 shops 5 products buildable', moneyForShopClosureMacro, 2, 5, true, 500 + 2000)
 test('moneyForShopClosure with 2 shops 0 products not buildable', moneyForShopClosureMacro, 2, 0, false, 1000)
 test('moneyForShopClosure with 2 shops 5 products not buildable', moneyForShopClosureMacro, 2, 5, false, 1000 + 4000)
+
+function buyAllCostFactorMacro(t: ExecutionContext, magnetismLevel: number, expected: number): void {
+	const skills: Skills = {magnetism: magnetismLevel}
+	t.is(buyAllCostFactor(skills), expected)
+}
+
+test('buyAllCostFactor 0', buyAllCostFactorMacro, 0, 1.5)
+test('buyAllCostFactor 5', buyAllCostFactorMacro, 5, 1.4)
+test('buyAllCostFactor 10', buyAllCostFactorMacro, 10, 1.3)
+
+function buyAllCostMacro(t: ExecutionContext, amounts: number[], expectedItemsToPayFor: number): void {
+	const skills: Skills = {magnetism: 0}
+
+	const costFactor = buyAllCostFactor(skills)
+	t.is(costFactor, 1.5, 'sanity check')
+
+	const basePrice = productBasePrice({id: 'Q42', itemTimestamp: 0, itemsInStore: 0}, skills)
+	t.is(basePrice, 8, 'sanity check')
+	const expectedCostForItemsAlone = basePrice * expectedItemsToPayFor
+	const expectedCost = expectedCostForItemsAlone * costFactor * PURCHASING_FACTOR
+
+	const products: Product[] = amounts.map(o => ({id: 'Q42', itemTimestamp: 0, itemsInStore: o}))
+	const shop: Shop = {
+		id: 'Q5',
+		personal: {},
+		products
+	}
+
+	t.is(buyAllCost(shop, skills), expectedCost)
+}
+
+test('buyAllCost no products', buyAllCostMacro, [], 0)
+test('buyAllCost single product full', buyAllCostMacro, [100], 0)
+test('buyAllCost single product one missing', buyAllCostMacro, [99], 1)
+test('buyAllCost two product each one missing', buyAllCostMacro, [99, 99], 2)
+test('buyAllCost two product empty', buyAllCostMacro, [0, 0], 200)

@@ -7,7 +7,8 @@ import {TalentName} from '../lib/types/people'
 
 import {randomUnusedEntry} from '../lib/js-helper/array'
 
-import {costForAdditionalProduct, storageCapacity, shopDiversificationFactor, customerInterval, moneyForShopClosure} from '../lib/game-math/shop'
+import {costForAdditionalProduct, storageCapacity, shopDiversificationFactor, customerInterval, moneyForShopClosure, buyAllCost, buyAllCostFactor} from '../lib/game-math/shop'
+import {currentLevel} from '../lib/game-math/skill'
 import {incomeFactor} from '../lib/game-math/personal'
 
 import * as wdShop from '../lib/wikidata/shops'
@@ -235,6 +236,47 @@ menu.button(buttonText(emoji.add, 'other.assortment'), 'addProduct', {
 
 		session.money -= cost
 		shop.products.push(pickedProduct)
+	}
+})
+
+function buyAllAdditionalCostString(ctx: any): string {
+	const persist = ctx.persist as Persist
+	const factor = buyAllCostFactor(persist.skills)
+	return bonusPercentString(factor) + emoji.currency
+}
+
+menu.button((ctx: any) => `${emoji.magnet} ${ctx.wd.r('person.talents.purchasing').label()} (${buyAllAdditionalCostString(ctx)})`, 'buy-all', {
+	hide: (ctx: any) => {
+		const shop = fromCtx(ctx)
+		const session = ctx.session as Session
+		const persist = ctx.persist as Persist
+
+		const magnetismLevel = currentLevel(persist.skills, 'magnetism')
+
+		const cost = buyAllCost(shop, persist.skills)
+
+		return magnetismLevel === 0 || shop.products.length === 0 || session.money < cost || cost < 1
+	},
+	doFunc: (ctx: any) => {
+		const shop = fromCtx(ctx)
+		const session = ctx.session as Session
+		const persist = ctx.persist as Persist
+		const now = Math.floor(Date.now() / 1000)
+
+		const cost = buyAllCost(shop, persist.skills)
+		const storage = storageCapacity(shop)
+
+		if (cost > session.money) {
+			// What?
+			return
+		}
+
+		for (const product of shop.products) {
+			product.itemsInStore = storage
+			product.itemTimestamp = now
+		}
+
+		session.money -= cost
 	}
 })
 

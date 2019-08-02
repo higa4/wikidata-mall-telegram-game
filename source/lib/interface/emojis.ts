@@ -14,6 +14,7 @@ const emojis: Dictionary<string> = {
 	hobby: '💚',
 	income: '📈',
 	language: '🏳️‍🌈',
+	magnet: '🧲',
 	mall: '🏬',
 	noPerson: '🕳',
 	person: '👤',

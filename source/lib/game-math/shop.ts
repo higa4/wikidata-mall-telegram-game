@@ -1,9 +1,11 @@
 import {Shop} from '../types/shop'
+import {Skills} from '../types/skills'
 
 import {distanceDiversity} from '../math/distance'
 
+import {currentLevel} from './skill'
 import {personalBonus} from './personal'
-import {productBasePrice} from './product'
+import {productBasePrice, purchasingCost} from './product'
 
 export function costForAdditionalShop(existingShops: number): number {
 	return 10 ** (existingShops + 2)
@@ -40,4 +42,24 @@ export function customerInterval(shop: Shop): number {
 
 	const factor = diversityFactor
 	return 30 / factor
+}
+
+export function buyAllCostFactor(skills: Skills): number {
+	const magnetismLevel = currentLevel(skills, 'magnetism')
+	// This would require someone to have magnetism level 25 for factor 1 -> Fib 25 alone is 75025 which equals 8.5 Years
+	return 1.5 - (0.02 * magnetismLevel)
+}
+
+export function buyAllCost(shop: Shop, skills: Skills): number {
+	const storage = storageCapacity(shop)
+	const factor = buyAllCostFactor(skills)
+	const cost = shop.products
+		.map(product => {
+			const oneCost = purchasingCost(shop, product, skills)
+			const amount = storage - product.itemsInStore
+			return oneCost * amount
+		})
+		.reduce((a, b) => a + b, 0)
+
+	return cost * factor
 }

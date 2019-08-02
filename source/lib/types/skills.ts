@@ -15,6 +15,11 @@ export interface Skills {
 	healthCare?: number;
 
 	/**
+	 * Allows for 'Buy all' and reduces its additional cost
+	 */
+	magnetism?: number;
+
+	/**
 	 * Skill Level per Shop a player ever had
 	 */
 	collector?: Dictionary<number>;
@@ -30,7 +35,8 @@ type Skill = keyof Skills
 
 export const SIMPLE_SKILLS: Skill[] = [
 	'applicantSpeed',
-	'healthCare'
+	'healthCare',
+	'magnetism'
 ]
 
 export const CATEGORY_SKILLS: Skill[] = [
