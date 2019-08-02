@@ -13,6 +13,13 @@ export function costForAdditionalProduct(existingShops: number, existingProducts
 	return costForAdditionalShop(existingShops - 1) * existingProducts
 }
 
+export function moneyForShopClosure(existingShops: number, productsInShop: number, shopIsBuildableUnderCurrentConditions: boolean): number {
+	const lastBuildCost = costForAdditionalShop(existingShops - 1)
+	const lastProductAddCost = costForAdditionalProduct(existingShops, Math.max(0, productsInShop - 1))
+	const factor = shopIsBuildableUnderCurrentConditions ? 0.5 : 1
+	return Math.ceil(factor * (lastBuildCost + lastProductAddCost))
+}
+
 export function storageCapacity(shop: Shop): number {
 	const personal = personalBonus(shop, 'storage')
 	return Math.round(100 * personal)

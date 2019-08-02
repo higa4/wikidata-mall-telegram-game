@@ -7,7 +7,7 @@ import {TalentName} from '../lib/types/people'
 
 import {randomUnusedEntry} from '../lib/js-helper/array'
 
-import {costForAdditionalProduct, costForAdditionalShop, storageCapacity, shopDiversificationFactor, customerInterval} from '../lib/game-math/shop'
+import {costForAdditionalProduct, storageCapacity, shopDiversificationFactor, customerInterval, moneyForShopClosure} from '../lib/game-math/shop'
 import {incomeFactor} from '../lib/game-math/personal'
 
 import * as wdShop from '../lib/wikidata/shops'
@@ -263,10 +263,12 @@ menu.button(buttonText(emoji.close, 'action.close'), 'remove', {
 		const session = ctx.session as Session
 		const persist = ctx.persist as Persist
 
-		persist.shops = persist.shops.filter(o => o.id !== shop.id)
+		const isBuildable = wdShop.allShops().includes(shop.id)
 
-		const existingShops = persist.shops.length
-		session.money += Math.ceil(costForAdditionalShop(existingShops) / 2)
+		const reward = moneyForShopClosure(persist.shops.length, shop.products.length, isBuildable)
+
+		persist.shops = persist.shops.filter(o => o.id !== shop.id)
+		session.money += reward
 	}
 })
 
