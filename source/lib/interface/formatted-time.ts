@@ -8,3 +8,16 @@ export function countdownHourMinute(secondsLeft: number): string {
 
 	return `${hourString}:${minuteString}`
 }
+
+export function humanReadableTimestamp(unixTimestamp: number, locale: string): string {
+	const date = new Date(unixTimestamp * 1000)
+	return date.toLocaleString(locale, {
+		timeZone: 'UTC',
+		timeZoneName: 'short',
+		year: 'numeric',
+		month: 'short',
+		day: 'numeric',
+		hour: 'numeric',
+		minute: '2-digit'
+	})
+}

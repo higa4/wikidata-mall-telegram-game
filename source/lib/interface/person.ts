@@ -6,7 +6,8 @@ import {Shop} from '../types/shop'
 
 import {personalBonus} from '../game-math/personal'
 
-import {bonusPercentString, humanReadableTimestamp} from './formatted-strings'
+import {bonusPercentString} from './formatted-strings'
+import {humanReadableTimestamp} from './formatted-time'
 
 import emojis from './emojis'
 
