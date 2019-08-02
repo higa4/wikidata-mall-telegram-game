@@ -27,7 +27,7 @@ function menuText(ctx: any): string {
 	text += ' / '
 	text += formattedNumber(interval, true)
 	text += ' '
-	text += ctx.wd.r('other.second').label()
+	text += ctx.wd.r('unit.second').label()
 	text += '\n'
 	if (applicantSpeedLevel > 0) {
 		text += '  '
