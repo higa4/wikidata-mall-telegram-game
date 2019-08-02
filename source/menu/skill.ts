@@ -29,7 +29,7 @@ function menuText(ctx: any): string {
 	const level = currentLevel(persist.skills, skill, category)
 
 	let text = ''
-	text += infoHeader(ctx.wd.r(`skill.${skill}`))
+	text += infoHeader(ctx.wd.r(`skill.${skill}`), {titlePrefix: emoji.skill})
 	text += '\n\n'
 
 	if (category) {

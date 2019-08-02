@@ -24,7 +24,7 @@ function menuText(ctx: any): string {
 	const {skill} = fromCtx(ctx)
 
 	let text = ''
-	text += infoHeader(ctx.wd.r(`skill.${skill}`))
+	text += infoHeader(ctx.wd.r(`skill.${skill}`), {titlePrefix: emojis.skill})
 	text += '\n\n'
 
 	if (session.skillInTraining) {
