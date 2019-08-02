@@ -1,7 +1,12 @@
 import arrayFilterUnique from 'array-filter-unique'
 import WikidataEntityStore from 'wikidata-entity-store'
 
+import {CATEGORY_SKILLS} from '../types/skills'
+
 import {getAllShops} from '../data/shops'
+import {getAllSkills} from '../data/skills'
+
+type Dictionary<T> = {[key: string]: T}
 
 export async function preload(wdItemStore: WikidataEntityStore): Promise<void> {
 	console.time('wikidata-preload-in-use-items')
@@ -19,9 +24,19 @@ export async function preload(wdItemStore: WikidataEntityStore): Promise<void> {
 		.filter(arrayFilterUnique())
 	console.timeLog('wikidata-preload-in-use-items', 'products', productIds.length)
 
+	const allPlayerSkills = await getAllSkills()
+	const skills = Object.values(allPlayerSkills)
+	const categories = skills
+		.flatMap(s =>
+			CATEGORY_SKILLS.flatMap(categorySkill => Object.keys(s[categorySkill] as Dictionary<number>))
+		)
+		.filter(arrayFilterUnique())
+	console.timeLog('wikidata-preload-in-use-items', 'skill categories', categories.length)
+
 	const ids = [
-		...shopIds,
-		...productIds
+		...categories,
+		...productIds,
+		...shopIds
 	].filter(arrayFilterUnique())
 	console.timeLog('wikidata-preload-in-use-items', 'ids', ids.length)
 
