@@ -3,12 +3,14 @@ import WikidataEntityReader from 'wikidata-entity-reader'
 
 import {Session, Persist} from '../lib/types'
 import {Shop, Product} from '../lib/types/shop'
+import {Skills} from '../lib/types/skills'
 import {TalentName} from '../lib/types/people'
 
-import {sellingCost, purchasingCost, productBasePrice} from '../lib/game-math/product'
+import {collectorTotalLevel} from '../lib/game-math/skill'
+import {sellingCost, purchasingCost, productBasePrice, productBasePriceCollectorFactor} from '../lib/game-math/product'
 import {storageCapacity} from '../lib/game-math/shop'
 
-import {infoHeader, labeledInt, labeledFloat, formattedNumber} from '../lib/interface/formatted-strings'
+import {infoHeader, labeledInt, labeledFloat, formattedNumber, bonusPercentString} from '../lib/interface/formatted-strings'
 import {menuPhoto} from '../lib/interface/menu'
 import {personInShopLine} from '../lib/interface/person'
 import emoji from '../lib/interface/emojis'
@@ -28,20 +30,21 @@ function bonusPerson(shop: Shop, talent: TalentName): string {
 		return ''
 	}
 
-	return '\n  ' + personInShopLine(shop, talent)
+	return '\n  ' + emoji.person + personInShopLine(shop, talent)
 }
 
 function itemsPurchasableCtx(ctx: any): number {
 	const session = ctx.session as Session
+	const persist = ctx.persist as Persist
 	const {shop, product} = fromCtx(ctx)
-	return itemsPurchasable(session, shop, product)
+	return itemsPurchasable(session, shop, product, persist.skills)
 }
 
-function itemsPurchasable(session: Session, shop: Shop, product: Product): number {
+function itemsPurchasable(session: Session, shop: Shop, product: Product, skills: Skills): number {
 	const capacity = storageCapacity(shop)
 	const freeCapacity = capacity - product.itemsInStore
 
-	const cost = purchasingCost(shop, product)
+	const cost = purchasingCost(shop, product, skills)
 	const moneyAvailableForAmount = Math.floor(session.money / cost)
 
 	return Math.max(0, Math.min(freeCapacity, moneyAvailableForAmount))
@@ -50,12 +53,16 @@ function itemsPurchasable(session: Session, shop: Shop, product: Product): numbe
 function menuText(ctx: any): string {
 	const {product, shop} = fromCtx(ctx)
 	const session = ctx.session as Session
+	const persist = ctx.persist as Persist
 	const reader = ctx.wd.r(product.id) as WikidataEntityReader
 
 	const capacity = storageCapacity(shop)
 	const freeCapacity = capacity - product.itemsInStore
-	const purchaseCostPerItem = purchasingCost(shop, product)
-	const sellingCostPerItem = sellingCost(shop, product)
+	const basePrice = productBasePrice(product, persist.skills)
+	const purchaseCostPerItem = purchasingCost(shop, product, persist.skills)
+	const sellingCostPerItem = sellingCost(shop, product, persist.skills)
+
+	const collectorLevel = collectorTotalLevel(persist.skills)
 
 	let text = ''
 	text += infoHeader(reader)
@@ -77,8 +84,19 @@ function menuText(ctx: any): string {
 	text += ' (1)'
 	text += '\n'
 
-	text += labeledFloat(ctx.wd.r('product.listprice'), productBasePrice(product), emoji.currency)
+	text += labeledFloat(ctx.wd.r('product.listprice'), basePrice, emoji.currency)
 	text += '\n'
+	if (collectorLevel > 0) {
+		text += '  '
+		text += emoji.skill
+		text += bonusPercentString(productBasePriceCollectorFactor(persist.skills))
+		text += ' '
+		text += ctx.wd.r('skill.collector').label()
+		text += ' ('
+		text += collectorLevel
+		text += ')'
+		text += '\n'
+	}
 
 	text += emoji.purchasing
 	text += labeledFloat(ctx.wd.r('person.talents.purchasing'), purchaseCostPerItem, emoji.currency)
@@ -111,15 +129,16 @@ const menu = new TelegrafInlineMenu(menuText, {
 
 function buyAmount(ctx: any, amount: number, now: number): void {
 	const session = ctx.session as Session
+	const persist = ctx.persist as Persist
 	const {shop, product} = fromCtx(ctx)
 
-	const maxItems = itemsPurchasable(session, shop, product)
+	const maxItems = itemsPurchasable(session, shop, product, persist.skills)
 	const buyItems = Math.min(amount, maxItems)
 	if (buyItems < 1) {
 		return
 	}
 
-	const costPerItem = purchasingCost(shop, product)
+	const costPerItem = purchasingCost(shop, product, persist.skills)
 	session.money -= buyItems * costPerItem
 	product.itemsInStore += buyItems
 	product.itemTimestamp = now

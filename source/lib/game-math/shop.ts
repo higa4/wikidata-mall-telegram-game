@@ -27,7 +27,7 @@ export function storageCapacity(shop: Shop): number {
 
 export function shopDiversificationFactor(shop: Shop): number {
 	const basePrices = shop.products
-		.map(p => productBasePrice(p))
+		.map(p => productBasePrice(p, {}))
 
 	const diversity = distanceDiversity(basePrices)
 

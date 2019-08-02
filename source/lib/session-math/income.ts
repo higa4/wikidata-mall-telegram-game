@@ -7,18 +7,18 @@ import {sellingCost} from '../game-math/product'
 export default function calcIncome(session: Session, persist: Persist, now: number): void {
 	for (const shop of persist.shops) {
 		for (const product of shop.products) {
-			incomeProduct(session, shop, product, now)
+			incomeProduct(session, persist, shop, product, now)
 		}
 	}
 }
 
-function incomeProduct(session: Session, shop: Shop, product: Product, now: number): void {
+function incomeProduct(session: Session, persist: Persist, shop: Shop, product: Product, now: number): void {
 	const secondsAgo = now - product.itemTimestamp
 	const sellInterval = customerInterval(shop)
 
 	const canSell = Math.floor(secondsAgo / sellInterval)
 	const sellItems = Math.min(canSell, product.itemsInStore)
-	const pricePerItem = sellingCost(shop, product)
+	const pricePerItem = sellingCost(shop, product, persist.skills)
 
 	product.itemsInStore -= sellItems
 	product.itemTimestamp += sellItems * sellInterval
