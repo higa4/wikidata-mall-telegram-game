@@ -11,8 +11,14 @@ test('countdownHourMinute examples', t => {
 	t.is(countdownHourMinute(600 * 60 * 60), '600:00')
 })
 
-test('humanReadableTimestamp', t => {
+test('humanReadableTimestamp de', t => {
 	t.is(humanReadableTimestamp(1564782891, 'de'), '2. Aug. 2019, 21:54 UTC')
-	t.is(humanReadableTimestamp(1564782891, 'en-US'), 'Aug 2, 2019, 9:54 PM UTC')
-	t.is(humanReadableTimestamp(1564782891, 'en-GB'), '2 Aug 2019, 21:54 UTC')
+})
+
+test('humanReadableTimestamp en-us', t => {
+	t.is(humanReadableTimestamp(1564782891, 'en-us'), 'Aug 2, 2019, 9:54 PM UTC')
+})
+
+test('humanReadableTimestamp en-gb', t => {
+	t.is(humanReadableTimestamp(1564782891, 'en-gb'), '2 Aug 2019, 21:54 UTC')
 })
