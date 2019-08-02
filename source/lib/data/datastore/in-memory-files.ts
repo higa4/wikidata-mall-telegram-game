@@ -1,12 +1,10 @@
-import * as fs from 'fs'
+import {mkdirSync, readdirSync, readFileSync} from 'fs'
 
 import writeJsonFile from 'write-json-file'
 
 import {Datastore} from './datastore'
 
 type Dictionary<T> = {[key: string]: T}
-
-const {mkdirSync, readdirSync, readFileSync} = fs
 
 export class InMemoryFiles<T> implements Datastore<T> {
 	private _inMemoryStorage: Dictionary<T> = {}
