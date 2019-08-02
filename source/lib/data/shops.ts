@@ -10,7 +10,7 @@ const data = new InMemoryFiles<Shop[]>('persist/shops')
 console.timeEnd('load user shops')
 
 export async function getAllShops(): Promise<Dictionary<Shop[]>> {
-	return data.getAll()
+	return data.entries()
 }
 
 export function middleware(): (ctx: any, next: any) => Promise<void> {
