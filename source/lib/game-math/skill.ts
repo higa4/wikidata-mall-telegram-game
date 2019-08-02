@@ -31,7 +31,7 @@ export function collectorTotalLevel(skills: Skills): number {
 	}
 
 	return Object.values(collector)
-		.reduce((a, b) => a + b)
+		.reduce((a, b) => a + b, 0)
 }
 
 /**
