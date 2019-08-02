@@ -4,7 +4,7 @@ import WikidataEntityReader from 'wikidata-entity-reader'
 import {Achievements, AchievementSet} from '../lib/types/achievements'
 import {Session} from '../lib/types'
 
-import {infoHeader, labeledTimestamp, humanReadableTimestamp} from '../lib/interface/formatted-strings'
+import {infoHeader, humanReadableTimestamp} from '../lib/interface/formatted-strings'
 import {menuPhoto, buttonText} from '../lib/interface/menu'
 import emojis from '../lib/interface/emojis'
 
@@ -32,8 +32,10 @@ function achievementSetPart(topic: WikidataEntityReader, set: AchievementSet | u
 
 function simpleAchievementPage(ctx: any, achievements: Achievements, locale: string): string {
 	let text = ''
-
-	text += labeledTimestamp(ctx.wd.r('achievement.gameStarted'), achievements.gameStarted, locale) + '\n'
+	text += ctx.wd.r('achievement.gameStarted').label()
+	text += ': '
+	text += humanReadableTimestamp(achievements.gameStarted, locale)
+	text += '\n'
 
 	return text
 }

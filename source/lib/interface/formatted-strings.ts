@@ -62,10 +62,6 @@ export function humanReadableTimestamp(unixTimestamp: number, locale: string): s
 	})
 }
 
-export function labeledTimestamp(wdr: WikidataEntityReader, timestamp: number, locale: string): string {
-	return `${wdr.label()}: ${humanReadableTimestamp(timestamp, locale)}`
-}
-
 const LETTERS = ['', 'k', 'M', 'G', 'T', 'P', 'E']
 
 export function formattedNumber(num: number, isInt: boolean): string {
