@@ -7,8 +7,7 @@ import {Talents, TALENTS} from '../types/people'
 import * as wdName from '../wikidata/name'
 import * as wdShops from '../wikidata/shops'
 
-import {currentLevel} from '../game-math/skill'
-import {secondsBetweenApplicants} from '../game-math/applicant'
+import {secondsBetweenApplicants, maxDaysUntilRetirement} from '../game-math/applicant'
 
 const SECONDS_PER_DAY = 60 * 60 * 24
 
@@ -29,10 +28,8 @@ function retireWaitingApplicants(session: Session, now: number): void {
 function addWaitingApplicants(session: Session, persist: Persist, now: number): void {
 	const {applicantTimestamp, applicants} = session
 
-	const healthCareLevel = currentLevel(persist.skills, 'healthCare')
-	const retirementTimespan = SECONDS_PER_DAY * (14 + healthCareLevel)
-
 	const interval = secondsBetweenApplicants(persist.skills)
+	const retirementTimespan = SECONDS_PER_DAY * maxDaysUntilRetirement(persist.skills)
 
 	const secondsSinceLastApplicant = now - applicantTimestamp
 	const possibleApplicants = Math.floor(secondsSinceLastApplicant / interval)

@@ -3,7 +3,7 @@ import TelegrafInlineMenu from 'telegraf-inline-menu'
 import {Session, Persist} from '../lib/types'
 
 import {currentLevel} from '../lib/game-math/skill'
-import {secondsBetweenApplicants} from '../lib/game-math/applicant'
+import {secondsBetweenApplicants, maxDaysUntilRetirement} from '../lib/game-math/applicant'
 
 import {infoHeader, formattedNumber} from '../lib/interface/formatted-strings'
 import {menuPhoto, buttonText} from '../lib/interface/menu'
@@ -17,6 +17,9 @@ function menuText(ctx: any): string {
 
 	const applicantSpeedLevel = currentLevel(persist.skills, 'applicantSpeed')
 	const interval = secondsBetweenApplicants(persist.skills)
+
+	const healthCareLevel = currentLevel(persist.skills, 'healthCare')
+	const retirementDays = maxDaysUntilRetirement(persist.skills)
 
 	let text = ''
 	text += infoHeader(ctx.wd.r('menu.applicant'))
@@ -35,6 +38,23 @@ function menuText(ctx: any): string {
 		text += ctx.wd.r('skill.applicantSpeed').label()
 		text += ': '
 		text += applicantSpeedLevel
+		text += '\n'
+	}
+
+	text += emojis.retirement
+	text += ctx.wd.r('person.retirement').label()
+	text += ': '
+	text += '≤'
+	text += formattedNumber(retirementDays, true)
+	text += ' '
+	text += ctx.wd.r('unit.day').label()
+	text += '\n'
+	if (healthCareLevel > 0) {
+		text += '  '
+		text += emojis.skill
+		text += ctx.wd.r('skill.healthCare').label()
+		text += ': '
+		text += healthCareLevel
 		text += '\n'
 	}
 
