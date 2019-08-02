@@ -1,6 +1,6 @@
 import {existsSync, readFileSync} from 'fs'
 
-import Telegraf from 'telegraf'
+import Telegraf, {Extra, Markup} from 'telegraf'
 import TelegrafI18n from 'telegraf-i18n'
 import TelegrafWikibase from 'telegraf-wikibase'
 import WikidataEntityStore from 'wikidata-entity-store'
@@ -9,6 +9,7 @@ import {preload} from './lib/wikidata'
 import * as dataShops from './lib/data/shops'
 import * as dataSkills from './lib/data/skills'
 import * as userSessions from './lib/data/user-sessions'
+import emojis from './lib/interface/emojis'
 import menu from './menu'
 import sessionMathMiddleware from './lib/session-math'
 
@@ -23,22 +24,48 @@ if (process.env.NODE_ENV !== 'production') {
 		const identifier = `${updateId} ${ctx.updateType} ${ctx.from!.first_name} ${content && content.length} ${content}`
 
 		console.time(identifier)
-		try {
-			if (next) {
-				await next()
-			}
-		} catch (error) {
-			if (error.message.includes('MEDIA_EMPTY')) {
-				console.error(identifier, error.message)
-				return
-			}
-
-			console.error(identifier, error, error && error.on && error.on.payload)
-		} finally {
-			console.timeEnd(identifier)
+		if (next) {
+			await next()
 		}
+
+		console.timeEnd(identifier)
 	})
 }
+
+bot.use(async (ctx, next) => {
+	try {
+		if (next) {
+			await next()
+		}
+	} catch (error) {
+		if (error.message.includes('Too Many Requests')) {
+			console.warn('Telegraf Too Many Requests error. Skip.', error)
+			return
+		}
+
+		if (error.message.includes('MEDIA_EMPTY')) {
+			console.warn('MEDIA_EMPTY', ctx.from!.id, ctx.callbackQuery && ctx.callbackQuery.data)
+		} else {
+			console.error('try to send error to user', ctx.update, error, error && error.on && error.on.payload)
+		}
+
+		let text = '🔥 Something went wrong here!'
+		text += '\n'
+		text += 'You should join the Chat Group and report this error. Let us make this bot even better together. ☺️'
+
+		text += '\n\n'
+		text += 'Error: `'
+		text += error.message
+			.replace(token, '')
+		text += '`'
+
+		const target = (ctx.chat || ctx.from!).id
+		const keyboard = Markup.inlineKeyboard([
+			Markup.urlButton(emojis.chat + 'Join Chat', 'https://t.me/WikidataMallChat')
+		], {columns: 1})
+		await bot.telegram.sendMessage(target, text, Extra.markdown().markup(keyboard))
+	}
+})
 
 bot.use(userSessions.middleware())
 bot.use(dataShops.middleware())
