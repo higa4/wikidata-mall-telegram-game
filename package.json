@@ -17,7 +17,7 @@
 		"build": "del dist && tsc",
 		"prepack": "npm run build",
 		"start": "ts-node source/index.ts",
-		"test": "xo && nyc ava"
+		"test": "xo && NODE_ICU_DATA='node_modules/full-icu' nyc ava"
 	},
 	"main": "dist",
 	"types": "dist",
