@@ -38,7 +38,7 @@ export async function preload(wdItemStore: WikidataEntityStore): Promise<void> {
 		...productIds,
 		...shopIds
 	].filter(arrayFilterUnique())
-	console.timeLog('wikidata-preload-in-use-items', 'ids', ids.length)
+	console.timeLog('wikidata-preload-in-use-items', 'total ids', ids.length)
 
 	const availableEntities = wdItemStore.availableEntities()
 	const unknownIds = ids.filter(o => !availableEntities.includes(o))
