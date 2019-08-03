@@ -15,6 +15,7 @@ WORKDIR /app
 VOLUME /app/persist
 
 ENV NODE_ENV=production
+ENV NODE_ICU_DATA="node_modules/full-icu"
 
 COPY --from=0 /build/node_modules ./node_modules
 COPY locales locales
