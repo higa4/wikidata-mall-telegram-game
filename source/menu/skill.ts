@@ -49,7 +49,7 @@ function menuText(ctx: any): string {
 
 	if (session.skillInTraining) {
 		text += '\n'
-		text += skillInTrainingString(ctx, persist.skills, session.skillInTraining)
+		text += skillInTrainingString(ctx, session.skillInTraining)
 		text += '\n\n'
 	}
 
@@ -67,16 +67,19 @@ menu.button(buttonText(emoji.skill, 'action.research'), 'research', {
 	},
 	doFunc: (ctx: any) => {
 		const session = ctx.session as Session
+		const persist = ctx.persist as Persist
 		if (session.skillInTraining) {
 			return
 		}
 
 		const {skill, category} = fromCtx(ctx)
 		const now = Math.floor(Date.now() / 1000)
+		const level = currentLevel(persist.skills, skill, category)
+		const endTimestamp = skillUpgradeEndTimestamp(level, now)
 		session.skillInTraining = {
 			skill,
 			category,
-			startTimestamp: now
+			endTimestamp
 		}
 	}
 })

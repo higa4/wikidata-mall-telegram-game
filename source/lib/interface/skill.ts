@@ -1,16 +1,11 @@
-import {SkillInTraining, Skills} from '../types/skills'
-
-import {currentLevel, skillUpgradeEndTimestamp} from '../game-math/skill'
+import {SkillInTraining} from '../types/skills'
 
 import {countdownHourMinute} from './formatted-time'
 import emojis from './emojis'
 
-export function skillInTrainingString(ctx: any, skills: Skills, skillInTraining: SkillInTraining): string {
-	const {skill, category, startTimestamp} = skillInTraining
+export function skillInTrainingString(ctx: any, skillInTraining: SkillInTraining): string {
+	const {skill, category, endTimestamp} = skillInTraining
 	const now = Date.now() / 1000
-
-	const level = currentLevel(skills, skill, category)
-	const endTimestamp = skillUpgradeEndTimestamp(level, startTimestamp)
 
 	let text = ''
 	text += '*'

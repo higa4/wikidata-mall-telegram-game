@@ -1,5 +1,5 @@
 import {Session, Persist} from '../types'
-import {currentLevel, increaseLevelByOne, skillUpgradeEndTimestamp} from '../game-math/skill'
+import {increaseLevelByOne} from '../game-math/skill'
 
 export default function applySkills(session: Session, persist: Persist, now: number): void {
 	if (session.skillInTraining) {
@@ -21,12 +21,10 @@ function ensureCurrentlyTrainedSkillForShopHasItsShop(session: Session, persist:
 }
 
 function applySkillWhenFinished(session: Session, persist: Persist, now: number): void {
-	const {skill, category, startTimestamp} = session.skillInTraining!
+	const {skill, category, endTimestamp} = session.skillInTraining!
 
-	const level = currentLevel(persist.skills, skill, category)
-	const endTimestamp = skillUpgradeEndTimestamp(level, startTimestamp)
-
-	if (now > endTimestamp) {
+	// SkillInTraining had startTimestamp and no endTimestamp -> undefined -> just skill it now as part of migration
+	if (now > (endTimestamp || 0)) {
 		increaseLevelByOne(persist.skills, skill, category)
 		delete session.skillInTraining
 	}

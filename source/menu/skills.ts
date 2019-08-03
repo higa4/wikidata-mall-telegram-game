@@ -90,7 +90,7 @@ function menuText(ctx: any): string {
 	}
 
 	if (session.skillInTraining) {
-		text += skillInTrainingString(ctx, persist.skills, session.skillInTraining)
+		text += skillInTrainingString(ctx, session.skillInTraining)
 		text += '\n\n'
 	}
 

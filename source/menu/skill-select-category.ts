@@ -20,7 +20,6 @@ function fromCtx(ctx: any): {skill: keyof Skills} {
 
 function menuText(ctx: any): string {
 	const session = ctx.session as Session
-	const persist = ctx.persist as Persist
 	const {skill} = fromCtx(ctx)
 
 	let text = ''
@@ -28,7 +27,7 @@ function menuText(ctx: any): string {
 	text += '\n\n'
 
 	if (session.skillInTraining) {
-		text += skillInTrainingString(ctx, persist.skills, session.skillInTraining)
+		text += skillInTrainingString(ctx, session.skillInTraining)
 		text += '\n\n'
 	}
 
