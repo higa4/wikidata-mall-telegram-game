@@ -1,3 +1,6 @@
+import WikidataEntityReader from 'wikidata-entity-reader'
+import WikidataEntityStore from 'wikidata-entity-store'
+
 import {SkillInTraining} from '../types/skills'
 
 import {countdownHourMinute} from './formatted-time'
@@ -25,6 +28,22 @@ export function skillInTrainingString(ctx: any, skillInTraining: SkillInTraining
 	text += '\n'
 	text += emojis.countdown
 	text += countdownHourMinute(endTimestamp - now)
+
+	return text
+}
+
+export function skillFinishedNotificationString(skillInTraining: SkillInTraining, entityStore: WikidataEntityStore, locale: string): string {
+	const {skill, category} = skillInTraining
+
+	let text = ''
+	text += new WikidataEntityReader(entityStore.entity(`skill.${skill}`), locale).label()
+
+	if (category) {
+		text += ' '
+		text += '('
+		text += new WikidataEntityReader(entityStore.entity(category), locale).label()
+		text += ')'
+	}
 
 	return text
 }

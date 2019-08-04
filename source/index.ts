@@ -5,9 +5,12 @@ import TelegrafI18n from 'telegraf-i18n'
 import TelegrafWikibase from 'telegraf-wikibase'
 import WikidataEntityStore from 'wikidata-entity-store'
 
+import {NotificationManager} from './lib/notification/manager'
+import {notificationText} from './lib/interface/notification'
 import {preload} from './lib/wikidata'
 import * as dataShops from './lib/data/shops'
 import * as dataSkills from './lib/data/skills'
+import * as notifications from './lib/session-math/notification'
 import * as userSessions from './lib/data/user-sessions'
 import emojis from './lib/interface/emojis'
 import menu from './menu'
@@ -85,6 +88,17 @@ const wdEntityStore = new WikidataEntityStore({
 	properties: ['labels', 'descriptions', 'claims']
 })
 
+const notificationManager = new NotificationManager(
+	async (chatId, notification, fireDate) => {
+		try {
+			const text = notificationText(notification, fireDate)
+			await bot.telegram.sendMessage(chatId, text, Extra.markdown() as any)
+		} catch (error) {
+			console.error('notification failed to send', chatId, error)
+		}
+	}
+)
+
 bot.use(new TelegrafWikibase(wdEntityStore, {
 	contextKey: 'wd'
 }).middleware())
@@ -99,7 +113,8 @@ bot.catch((error: any) => {
 })
 
 preload(wdEntityStore)
-	.then(() => {
+	.then(async () => {
+		await notifications.initialize(notificationManager, wdEntityStore)
 		bot.startPolling()
 		console.log(new Date(), 'Bot started')
 	})
