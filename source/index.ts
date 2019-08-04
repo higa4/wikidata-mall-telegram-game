@@ -46,6 +46,11 @@ bot.use(async (ctx, next) => {
 			return
 		}
 
+		if (error.message.includes('query is too old')) {
+			console.warn(error.message, ctx.from!.id, ctx.callbackQuery && ctx.callbackQuery.data)
+			return
+		}
+
 		if (error.message.includes('MEDIA_EMPTY')) {
 			console.warn('MEDIA_EMPTY', ctx.from!.id, ctx.callbackQuery && ctx.callbackQuery.data)
 		} else {
