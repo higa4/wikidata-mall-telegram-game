@@ -14,6 +14,7 @@ interface Personal {
 
 export interface Shop {
 	id: string;
+	opening: number;
 	personal: Personal;
 	products: Product[];
 }

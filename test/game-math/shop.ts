@@ -65,6 +65,7 @@ function buyAllCostMacro(t: ExecutionContext, amounts: number[], expectedItemsTo
 	const products: Product[] = amounts.map(o => ({id: 'Q42', itemTimestamp: 0, itemsInStore: o}))
 	const shop: Shop = {
 		id: 'Q5',
+		opening: 0,
 		personal: {},
 		products
 	}

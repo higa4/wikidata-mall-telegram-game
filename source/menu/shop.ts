@@ -14,6 +14,7 @@ import {incomeFactor} from '../lib/game-math/personal'
 import * as wdShop from '../lib/wikidata/shops'
 
 import {buttonText, menuPhoto} from '../lib/interface/menu'
+import {humanReadableTimestamp} from '../lib/interface/formatted-time'
 import {infoHeader, labeledFloat, labeledInt, bonusPercentString, formattedNumber} from '../lib/interface/formatted-strings'
 import {personInShopLine} from '../lib/interface/person'
 import emoji from '../lib/interface/emojis'
@@ -65,6 +66,20 @@ function bonusPerson(ctx: any, shop: Shop, talent: TalentName): string {
 	text += '\n'
 	text += '  '
 	text += personInShopLine(shop, talent)
+	text += '\n'
+
+	return text
+}
+
+function openingPart(ctx: any, shop: Shop): string {
+	const {__wikibase_language_code: locale} = ctx.session as Session
+
+	let text = ''
+	text += emoji.opening
+	text += ctx.wd.r('shop.opening').label()
+	text += '\n'
+	text += '  '
+	text += humanReadableTimestamp(shop.opening, locale)
 	text += '\n'
 
 	return text
@@ -175,7 +190,9 @@ function menuText(ctx: any): string {
 	text += '\n\n'
 
 	text += labeledFloat(ctx.wd.r('other.money'), session.money, emoji.currency)
-	text += '\n\n'
+	text += '\n'
+	text += openingPart(ctx, shop)
+	text += '\n'
 
 	text += customerIntervalPart(ctx, shop)
 	text += storageCapacityPart(ctx, shop)

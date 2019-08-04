@@ -27,6 +27,8 @@ person:
     purchasing: Q1369832
     selling: Q194189
     storage: Q9158768
+shop:
+  opening: Q15051339
 product:
   diversification: Q731453
   listprice: Q1144077

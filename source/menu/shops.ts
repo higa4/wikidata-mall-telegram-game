@@ -62,16 +62,18 @@ menu.button(buttonText(emoji.construction, 'action.construction'), 'build', {
 	doFunc: (ctx: any) => {
 		const session = ctx.session as Session
 		const persist = ctx.persist as Persist
-		const cost = costForAdditionalShop(persist.shops.length)
 
+		const cost = costForAdditionalShop(persist.shops.length)
 		if (session.money < cost) {
 			// Fishy
 			return
 		}
 
+		const now = Math.floor(Date.now() / 1000)
 		const newShopId = randomUnusedEntry(wdShops.allShops(), userShops(ctx))
 		const newShop: Shop = {
 			id: newShopId,
+			opening: now,
 			personal: {},
 			products: []
 		}

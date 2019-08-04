@@ -21,6 +21,7 @@ const examplePerson: Person = {
 
 const exampleShop: Shop = {
 	id: 'Q5',
+	opening: 0,
 	personal: {
 		storage: {
 			...examplePerson
