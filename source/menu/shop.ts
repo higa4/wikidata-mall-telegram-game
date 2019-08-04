@@ -80,7 +80,7 @@ function openingPart(ctx: any, shop: Shop): string {
 	text += '\n'
 	text += '  '
 	text += humanReadableTimestamp(shop.opening, locale)
-	text += '\n'
+	text += '\n\n'
 
 	return text
 }
@@ -190,10 +190,9 @@ function menuText(ctx: any): string {
 	text += '\n\n'
 
 	text += labeledFloat(ctx.wd.r('other.money'), session.money, emoji.currency)
-	text += '\n'
-	text += openingPart(ctx, shop)
-	text += '\n'
+	text += '\n\n'
 
+	text += openingPart(ctx, shop)
 	text += customerIntervalPart(ctx, shop)
 	text += storageCapacityPart(ctx, shop)
 	text += productsPart(ctx, shop)
