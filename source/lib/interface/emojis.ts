@@ -25,6 +25,7 @@ const emojis: Dictionary<string> = {
 	seat: '💺',
 	selling: '🤝',
 	shop: '🏪',
+	shopProductsEmpty: '🥺',
 	skill: '⚗️',
 	skillFinished: '✅',
 	storage: '📦',

@@ -37,6 +37,9 @@ export function shopDiversificationFactor(shop: Shop): number {
 	return (diversity / 2) + 0.75
 }
 
+/**
+ * Returns the interval in seconds between two customers in a given shop
+ */
 export function customerInterval(shop: Shop): number {
 	const diversityFactor = shopDiversificationFactor(shop)
 
@@ -62,4 +65,14 @@ export function buyAllCost(shop: Shop, skills: Skills): number {
 		.reduce((a, b) => a + b, 0)
 
 	return cost * factor
+}
+
+export function shopProductsEmptyTimestamps(shop: Shop): readonly number[] {
+	const interval = customerInterval(shop)
+
+	const emptyTimestamps = shop.products.map(p =>
+		p.itemTimestamp + (interval * p.itemsInStore)
+	)
+
+	return emptyTimestamps
 }

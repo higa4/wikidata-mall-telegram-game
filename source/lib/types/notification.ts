@@ -1,5 +1,5 @@
 export interface Notification {
-	type: 'skillFinished';
+	type: 'skillFinished' | 'storeProductsEmpty';
 	date: Date;
 	text: string;
 }
