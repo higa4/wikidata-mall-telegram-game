@@ -8,6 +8,7 @@ import emoji from '../lib/interface/emojis'
 
 import achievements from './achievements'
 import applicants from './applicants'
+import employees from './employees'
 import languages from './languages'
 import shops from './shops'
 import skills from './skills'
@@ -50,8 +51,15 @@ menu.submenu(buttonText(applicantEmoji, 'menu.applicant'), 'applicants', applica
 	}
 })
 
-menu.submenu(buttonText(emoji.skill, 'menu.skill'), 'skill', skills, {
+menu.submenu(buttonText(emoji.person, 'menu.employee'), 'employees', employees, {
 	joinLastRow: true,
+	hide: (ctx: any) => {
+		const persist = ctx.persist as Persist
+		return persist.shops.length === 0
+	}
+})
+
+menu.submenu(buttonText(emoji.skill, 'menu.skill'), 'skill', skills, {
 	hide: (ctx: any) => {
 		const persist = ctx.persist as Persist
 		return persist.shops.length < 2
