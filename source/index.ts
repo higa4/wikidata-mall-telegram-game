@@ -46,7 +46,10 @@ bot.use(async (ctx, next) => {
 			return
 		}
 
-		if (error.message.includes('query is too old')) {
+		if (
+			error.message.includes('query is too old') ||
+			error.message.includes('cancelled by new editMessageMedia request')
+		) {
 			console.warn(error.message, ctx.from!.id, ctx.callbackQuery && ctx.callbackQuery.data)
 			return
 		}
