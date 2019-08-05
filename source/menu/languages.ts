@@ -1,5 +1,6 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
+import {buttonText} from '../lib/interface/menu'
 import {infoHeader} from '../lib/interface/formatted-strings'
 import emoji from '../lib/interface/emojis'
 
@@ -9,6 +10,14 @@ const localeEmoji = require('locale-emoji')
 
 const menu = new TelegrafInlineMenu(ctx => languageMenuText(ctx))
 menu.setCommand(['language', 'settings'])
+
+menu.button(buttonText(emoji.language, 'menu.wikidata'), 'wikidata', {
+	doFunc: (ctx: any) => {
+		// Keep last set i18n locale
+		// ctx.i18n.locale(key)
+		ctx.wd.locale('wikidatanish')
+	}
+})
 
 function flagString(languageCode: string, useFallbackFlag = false): string {
 	const flag = localeEmoji(languageCode)

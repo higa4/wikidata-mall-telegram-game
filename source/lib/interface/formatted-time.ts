@@ -11,7 +11,7 @@ export function countdownHourMinute(secondsLeft: number): string {
 
 export function humanReadableTimestamp(unixTimestamp: number, locale: string): string {
 	const date = new Date(unixTimestamp * 1000)
-	return date.toLocaleString(locale, {
+	return date.toLocaleString(locale === 'wikidatanish' ? 'en' : locale, {
 		timeZone: 'UTC',
 		timeZoneName: 'short',
 		year: 'numeric',
