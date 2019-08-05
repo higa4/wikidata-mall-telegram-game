@@ -6,8 +6,6 @@ import {CATEGORY_SKILLS} from '../types/skills'
 import {getAllShops} from '../data/shops'
 import {getAllSkills} from '../data/skills'
 
-type Dictionary<T> = {[key: string]: T}
-
 export async function preload(wdItemStore: WikidataEntityStore): Promise<void> {
 	console.time('wikidata-preload-in-use-items')
 	const allPlayerShops = await getAllShops()
@@ -28,7 +26,7 @@ export async function preload(wdItemStore: WikidataEntityStore): Promise<void> {
 	const skills = Object.values(allPlayerSkills)
 	const categories = skills
 		.flatMap(s =>
-			CATEGORY_SKILLS.flatMap(categorySkill => Object.keys(s[categorySkill] as Dictionary<number>))
+			CATEGORY_SKILLS.flatMap(categorySkill => Object.keys(s[categorySkill] || {}))
 		)
 		.filter(arrayFilterUnique())
 	console.timeLog('wikidata-preload-in-use-items', 'skill categories', categories.length)
