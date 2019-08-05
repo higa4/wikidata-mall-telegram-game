@@ -10,7 +10,8 @@ import {collectorTotalLevel} from '../lib/game-math/skill'
 import {sellingCost, purchasingCost, productBasePrice, productBasePriceCollectorFactor} from '../lib/game-math/product'
 import {storageCapacity} from '../lib/game-math/shop'
 
-import {infoHeader, labeledInt, labeledFloat, formattedNumber, bonusPercentString} from '../lib/interface/formatted-strings'
+import {formatInt} from '../lib/interface/format-number'
+import {infoHeader, labeledInt, labeledFloat, bonusPercentString} from '../lib/interface/formatted-strings'
 import {menuPhoto} from '../lib/interface/menu'
 import {personInShopLine} from '../lib/interface/person'
 import emoji from '../lib/interface/emojis'
@@ -74,7 +75,7 @@ function menuText(ctx: any): string {
 	text += emoji.storage
 	text += labeledInt(ctx.wd.r('product.storage'), product.itemsInStore)
 	text += ' / '
-	text += formattedNumber(capacity, true)
+	text += formatInt(capacity)
 	text += '\n'
 
 	text += '\n'

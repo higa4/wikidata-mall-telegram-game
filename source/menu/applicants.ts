@@ -5,7 +5,8 @@ import {Session, Persist} from '../lib/types'
 import {currentLevel} from '../lib/game-math/skill'
 import {secondsBetweenApplicants, maxDaysUntilRetirement} from '../lib/game-math/applicant'
 
-import {infoHeader, formattedNumber} from '../lib/interface/formatted-strings'
+import {formatInt} from '../lib/interface/format-number'
+import {infoHeader} from '../lib/interface/formatted-strings'
 import {menuPhoto, buttonText} from '../lib/interface/menu'
 import emojis from '../lib/interface/emojis'
 
@@ -28,7 +29,7 @@ function menuText(ctx: any): string {
 	text += '+1'
 	text += emojis.person
 	text += ' / '
-	text += formattedNumber(interval, true)
+	text += formatInt(interval)
 	text += ' '
 	text += ctx.wd.r('unit.second').label()
 	text += '\n'
@@ -45,7 +46,7 @@ function menuText(ctx: any): string {
 	text += ctx.wd.r('person.retirement').label()
 	text += ': '
 	text += '≤'
-	text += formattedNumber(retirementDays, true)
+	text += formatInt(retirementDays)
 	text += ' '
 	text += ctx.wd.r('unit.day').label()
 	text += '\n'

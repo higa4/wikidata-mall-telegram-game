@@ -1,5 +1,7 @@
 import WikidataEntityReader from 'wikidata-entity-reader'
 
+import {formatFloat, formatInt} from './format-number'
+
 interface InfoHeaderOptions {
 	titlePrefix?: string;
 	titleSuffix?: string;
@@ -42,30 +44,9 @@ export function bonusPercentString(percent: number): string {
 }
 
 export function labeledFloat(wdr: WikidataEntityReader, num: number, unit = ''): string {
-	return `${wdr.label()}: ${formattedNumber(num, false)}${unit}`
+	return `${wdr.label()}: ${formatFloat(num)}${unit}`
 }
 
 export function labeledInt(wdr: WikidataEntityReader, num: number, unit = ''): string {
-	return `${wdr.label()}: ${formattedNumber(num, true)}${unit}`
-}
-
-const LETTERS = ['', 'k', 'M', 'G', 'T', 'P', 'E']
-
-export function formattedNumber(num: number, isInt: boolean): string {
-	const exp = Math.floor(Math.log10(Math.abs(num)))
-	const sciExp = Math.max(0, Math.floor(exp / 3) * 3)
-	const sciNum = 10 ** sciExp
-
-	if (sciNum === 0) {
-		return '0'
-	}
-
-	const relevantNumPart = num / sciNum
-
-	const fractionDigits = isInt && sciExp < 2 ? 0 : 2
-	const numberString = relevantNumPart.toFixed(fractionDigits)
-
-	const letterString = LETTERS[sciExp / 3]
-
-	return numberString + letterString
+	return `${wdr.label()}: ${formatInt(num)}${unit}`
 }
