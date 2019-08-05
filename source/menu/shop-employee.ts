@@ -50,6 +50,23 @@ menu.button(buttonText(emojis.employmentTermination, 'action.employmentTerminati
 	}
 })
 
+menu.button(buttonText(emojis.seat, 'action.demotion'), 'toApplicants', {
+	hide: ctx => !fromCtx(ctx).employee,
+	doFunc: (ctx: any) => {
+		const session = ctx.session as Session
+		const {shop, talent} = fromCtx(ctx)
+
+		const person = shop.personal[talent]
+		if (!person) {
+			// What?
+			return
+		}
+
+		session.applicants.push(person)
+		delete shop.personal[talent]
+	}
+})
+
 function availableApplicants(ctx: any): string[] {
 	const session = ctx.session as Session
 	if (fromCtx(ctx).employee) {
