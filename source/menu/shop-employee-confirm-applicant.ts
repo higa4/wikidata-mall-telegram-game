@@ -9,7 +9,7 @@ import {infoHeader} from '../lib/interface/formatted-strings'
 import {personMarkdown} from '../lib/interface/person'
 import emojis from '../lib/interface/emojis'
 
-function fromCtx(ctx: any): {shop: Shop; talent: TalentName; applicantId: number; applicant: Person} {
+function fromCtx(ctx: any): {shop: Shop; talent: TalentName; employee?: Person; applicantId: number; applicant: Person} {
 	const shopType = ctx.match[1]
 	const talent = ctx.match[2] as TalentName
 	const applicantId = Number(ctx.match[3])
@@ -17,9 +17,10 @@ function fromCtx(ctx: any): {shop: Shop; talent: TalentName; applicantId: number
 	const session = ctx.session as Session
 	const persist = ctx.persist as Persist
 	const shop = persist.shops.filter(o => o.id === shopType)[0]
+	const employee = shop.personal[talent]
 	const applicant = session.applicants[applicantId]
 
-	return {shop, talent, applicantId, applicant}
+	return {shop, talent, employee, applicantId, applicant}
 }
 
 function menuText(ctx: any): string {
@@ -40,8 +41,12 @@ menu.button(buttonText(emojis.yes + emojis.recruitment, 'action.recruitment'), '
 	setParentMenuAfter: true,
 	doFunc: (ctx: any) => {
 		const now = Date.now() / 1000
-		const {shop, talent, applicantId, applicant} = fromCtx(ctx)
+		const {shop, talent, employee, applicantId, applicant} = fromCtx(ctx)
 		const session = ctx.session as Session
+
+		if (employee) {
+			session.applicants.push(employee)
+		}
 
 		shop.personal[talent] = applicant
 		session.applicants.splice(applicantId, 1)
