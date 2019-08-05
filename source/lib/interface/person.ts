@@ -1,6 +1,6 @@
 import WikidataEntityReader from 'wikidata-entity-reader'
 
-import {Person, TalentName} from '../types/people'
+import {Person, TalentName, Name} from '../types/people'
 import {Session} from '../types'
 import {Shop} from '../types/shop'
 
@@ -16,7 +16,7 @@ export function personMarkdown(ctx: any, person: Person): string {
 	const {name, hobby, retirementTimestamp, talents} = person
 
 	let text = ''
-	text += `*${name.given}* ${name.family}`
+	text += nameMarkdown(name)
 	text += '\n\n'
 
 	text += emojis.hobby
@@ -47,6 +47,11 @@ export function personMarkdown(ctx: any, person: Person): string {
 	return text
 }
 
+export function nameMarkdown(name: Name): string {
+	const {given, family} = name
+	return `*${given}* ${family}`
+}
+
 function talentLine(ctx: any, t: TalentName, percentage: number): string {
 	const reader = ctx.wd.r(`person.talents.${t}`) as WikidataEntityReader
 	return `${emojis[t]} ${reader.label()}: ${bonusPercentString(percentage)}`
@@ -59,7 +64,7 @@ export function personInShopLine(shop: Shop, talent: TalentName): string {
 	}
 
 	const {name, hobby} = person
-	const namePart = `*${name.given}* ${name.family}`
+	const namePart = nameMarkdown(name)
 	const isHobby = hobby === shop.id
 	const bonus = personalBonus(shop, talent)
 
