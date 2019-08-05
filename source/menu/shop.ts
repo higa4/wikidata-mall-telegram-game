@@ -3,13 +3,11 @@ import WikidataEntityReader from 'wikidata-entity-reader'
 
 import {Session, Persist} from '../lib/types'
 import {Shop, Product} from '../lib/types/shop'
-import {TalentName} from '../lib/types/people'
 
 import {randomUnusedEntry} from '../lib/js-helper/array'
 
 import {costForAdditionalProduct, storageCapacity, shopDiversificationFactor, customerInterval, moneyForShopClosure, buyAllCost, buyAllCostFactor} from '../lib/game-math/shop'
 import {currentLevel} from '../lib/game-math/skill'
-import {incomeFactor} from '../lib/game-math/personal'
 
 import * as wdShop from '../lib/wikidata/shops'
 
@@ -48,25 +46,6 @@ function canAddProductTechnically(shop: Shop): boolean {
 function productLine(ctx: any, product: Product): string {
 	let text = ''
 	text += labeledInt(ctx.wd.r(product.id), product.itemsInStore, emoji.storage)
-
-	return text
-}
-
-function bonusPerson(ctx: any, shop: Shop, talent: TalentName): string {
-	const person = shop.personal[talent]
-	if (!person) {
-		return ''
-	}
-
-	let text = ''
-	text += emoji[talent]
-	text += '*'
-	text += ctx.wd.r(`person.talents.${talent}`).label()
-	text += '*'
-	text += '\n'
-	text += '  '
-	text += personInShopLine(shop, talent)
-	text += '\n'
 
 	return text
 }
@@ -139,19 +118,6 @@ function addProductPart(ctx: any, shop: Shop): string {
 	return text
 }
 
-function incomePart(ctx: any, shop: Shop): string {
-	let text = ''
-	text += bonusPerson(ctx, shop, 'purchasing')
-	text += bonusPerson(ctx, shop, 'selling')
-
-	text += emoji.income
-	text += ctx.wd.r('other.income').label()
-	text += ': '
-	text += bonusPercentString(incomeFactor(shop))
-	text += '\n\n'
-	return text
-}
-
 function customerIntervalPart(ctx: any, shop: Shop): string {
 	if (shop.products.length === 0) {
 		return ''
@@ -197,7 +163,6 @@ function menuText(ctx: any): string {
 	text += storageCapacityPart(ctx, shop)
 	text += productsPart(ctx, shop)
 	text += addProductPart(ctx, shop)
-	text += incomePart(ctx, shop)
 
 	return text
 }
