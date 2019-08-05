@@ -6,7 +6,7 @@ export interface Product {
 	itemTimestamp: number;
 }
 
-interface Personal {
+export interface Personal {
 	purchasing?: Person;
 	selling?: Person;
 	storage?: Person;

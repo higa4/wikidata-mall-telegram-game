@@ -3,7 +3,7 @@ import test from 'ava'
 import {Shop} from '../../source/lib/types/shop'
 import {Person} from '../../source/lib/types/people'
 
-import {personalBonus, personalBonusWhenEmployed} from '../../source/lib/game-math/personal'
+import {personalBonus, personalBonusWhenEmployed, allEmployees} from '../../source/lib/game-math/personal'
 
 const examplePerson: Person = {
 	name: {
@@ -53,4 +53,10 @@ test('personalBonus when spot empty', t => {
 
 test('personalBonus with taken spot', t => {
 	t.is(personalBonus(exampleShop, 'storage'), 2)
+})
+
+test('allEmployees', t => {
+	t.deepEqual(allEmployees(exampleShop.personal), [
+		examplePerson
+	])
 })

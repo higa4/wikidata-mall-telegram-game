@@ -1,4 +1,4 @@
-import {Shop} from '../types/shop'
+import {Shop, Personal} from '../types/shop'
 import {TalentName, Person} from '../types/people'
 
 import {PURCHASING_FACTOR} from './constants'
@@ -23,4 +23,8 @@ export function personalBonusWhenEmployed(shop: Shop, talent: TalentName, person
 
 export function incomeFactor(shop: Shop): number {
 	return (personalBonus(shop, 'selling') * personalBonus(shop, 'purchasing')) / PURCHASING_FACTOR
+}
+
+export function allEmployees(personal: Personal): readonly Person[] {
+	return Object.values(personal).filter(o => o)
 }

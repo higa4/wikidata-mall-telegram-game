@@ -18,6 +18,9 @@ export function notificationText(notification: Notification, fireDate: Date): st
 			text += emojis.shopProductsEmpty
 			text += emojis.storage
 			break
+		case 'employeeRetired':
+			text += emojis.retirement
+			break
 		default:
 			throw new Error(`notification message not implemented for type: ${notification.type}`)
 	}
