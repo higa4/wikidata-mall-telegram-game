@@ -13,26 +13,26 @@ import emojis from '../lib/interface/emojis'
 
 import confirmEmployee from './shop-employee-confirm-applicant'
 
-function fromCtx(ctx: any): {shop: Shop; talent: TalentName; person?: Person} {
+function fromCtx(ctx: any): {shop: Shop; talent: TalentName; employee?: Person} {
 	const shopType = ctx.match[1]
 	const talent = ctx.match[2] as TalentName
 
 	const persist = ctx.persist as Persist
 	const shop = persist.shops.filter(o => o.id === shopType)[0]
-	const person = shop.personal[talent]
+	const employee = shop.personal[talent]
 
-	return {shop, talent, person}
+	return {shop, talent, employee}
 }
 
 function menuText(ctx: any): string {
-	const {talent, person} = fromCtx(ctx)
+	const {talent, employee} = fromCtx(ctx)
 
 	let text = ''
 	text += infoHeader(ctx.wd.r(`person.talents.${talent}`), {titlePrefix: emojis[talent]})
 	text += '\n\n'
 
-	if (person) {
-		text += personMarkdown(ctx, person)
+	if (employee) {
+		text += personMarkdown(ctx, employee)
 	} else {
 		text += emojis.noPerson
 	}
@@ -43,7 +43,7 @@ function menuText(ctx: any): string {
 const menu = new TelegrafInlineMenu(menuText)
 
 menu.button(buttonText(emojis.employmentTermination, 'action.employmentTermination'), 'remove', {
-	hide: ctx => !fromCtx(ctx).person,
+	hide: ctx => !fromCtx(ctx).employee,
 	doFunc: (ctx: any) => {
 		const {shop, talent} = fromCtx(ctx)
 		delete shop.personal[talent]
@@ -52,7 +52,7 @@ menu.button(buttonText(emojis.employmentTermination, 'action.employmentTerminati
 
 function availableApplicants(ctx: any): string[] {
 	const session = ctx.session as Session
-	if (fromCtx(ctx).person) {
+	if (fromCtx(ctx).employee) {
 		return []
 	}
 
