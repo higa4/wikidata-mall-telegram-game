@@ -28,6 +28,7 @@ async function preloadSpecific(title: string, loadFunc: () => Promise<void>): Pr
 		await loadFunc()
 		console.timeLog('wikidata preload', title)
 	} catch (error) {
-		console.error('wikidata preload failed', title, error)
+		console.error('wikidata preloadSpecific', title, 'failed:', error)
+		throw new Error(`wikidata preload ${title} failed`)
 	}
 }

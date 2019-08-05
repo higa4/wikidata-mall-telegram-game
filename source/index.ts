@@ -126,3 +126,6 @@ preload(wdEntityStore)
 		bot.startPolling()
 		console.log(new Date(), 'Bot started')
 	})
+	.catch(error => {
+		console.error('startup failed:', error)
+	})
