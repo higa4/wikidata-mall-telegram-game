@@ -3,6 +3,8 @@ import TelegrafInlineMenu from 'telegraf-inline-menu'
 import {Session, Persist} from '../lib/types'
 import {Skills} from '../lib/types/skills'
 
+import {currentLevel} from '../lib/game-math/skill'
+
 import {infoHeader} from '../lib/interface/formatted-strings'
 import {menuPhoto, buttonText} from '../lib/interface/menu'
 import {skillInTrainingString} from '../lib/interface/skill'
@@ -18,13 +20,36 @@ function fromCtx(ctx: any): {skill: keyof Skills} {
 	}
 }
 
+function productSkillLine(ctx: any, skills: Skills, skill: keyof Skills, product: string): string {
+	let text = ''
+	text += ctx.wd.r(product).label()
+	text += ': '
+	text += currentLevel(skills, skill, product)
+	return text
+}
+
 function menuText(ctx: any): string {
 	const session = ctx.session as Session
+	const persist = ctx.persist as Persist
 	const {skill} = fromCtx(ctx)
 
 	let text = ''
 	text += infoHeader(ctx.wd.r(`skill.${skill}`), {titlePrefix: emojis.skill})
 	text += '\n\n'
+
+	const products = Object.keys(persist.skills[skill]!)
+	if (products.length > 0) {
+		text += '*'
+		text += ctx.wd.r('skill.level').label()
+		text += '*'
+		text += '\n'
+
+		text +=	products
+			.map(o => productSkillLine(ctx, persist.skills, skill, o))
+			.join('\n')
+
+		text += '\n\n'
+	}
 
 	if (session.skillInTraining) {
 		text += skillInTrainingString(ctx, session.skillInTraining)
