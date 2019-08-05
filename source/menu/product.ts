@@ -11,8 +11,9 @@ import {sellingCost, purchasingCost, productBasePrice, productBasePriceCollector
 import {storageCapacity} from '../lib/game-math/shop'
 
 import {formatInt} from '../lib/interface/format-number'
-import {infoHeader, labeledInt, labeledFloat, bonusPercentString} from '../lib/interface/formatted-strings'
+import {infoHeader, labeledInt, labeledFloat} from '../lib/interface/formatted-strings'
 import {menuPhoto} from '../lib/interface/menu'
+import {percentBonusString} from '../lib/interface/format-percent'
 import {personInShopLine} from '../lib/interface/person'
 import emoji from '../lib/interface/emojis'
 
@@ -90,7 +91,7 @@ function menuText(ctx: any): string {
 	if (collectorLevel > 0) {
 		text += '  '
 		text += emoji.skill
-		text += bonusPercentString(productBasePriceCollectorFactor(persist.skills))
+		text += percentBonusString(productBasePriceCollectorFactor(persist.skills))
 		text += ' '
 		text += ctx.wd.r('skill.collector').label()
 		text += ' ('

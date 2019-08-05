@@ -6,7 +6,7 @@ import {Shop} from '../types/shop'
 
 import {personalBonus} from '../game-math/personal'
 
-import {bonusPercentString} from './formatted-strings'
+import {percentBonusString} from './format-percent'
 import {humanReadableTimestamp} from './formatted-time'
 
 import emojis from './emojis'
@@ -54,7 +54,7 @@ export function nameMarkdown(name: Name): string {
 
 function talentLine(ctx: any, t: TalentName, percentage: number): string {
 	const reader = ctx.wd.r(`person.talents.${t}`) as WikidataEntityReader
-	return `${emojis[t]} ${reader.label()}: ${bonusPercentString(percentage)}`
+	return `${emojis[t]} ${reader.label()}: ${percentBonusString(percentage)}`
 }
 
 export function personInShopLine(shop: Shop, talent: TalentName): string {
@@ -68,5 +68,5 @@ export function personInShopLine(shop: Shop, talent: TalentName): string {
 	const isHobby = hobby === shop.id
 	const bonus = personalBonus(shop, talent)
 
-	return `${bonusPercentString(bonus)} ${isHobby ? emojis.hobby + ' ' : ''}${namePart}`
+	return `${percentBonusString(bonus)} ${isHobby ? emojis.hobby + ' ' : ''}${namePart}`
 }

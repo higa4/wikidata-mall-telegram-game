@@ -7,7 +7,8 @@ import {TalentName, Person} from '../lib/types/people'
 import {personalBonusWhenEmployed} from '../lib/game-math/personal'
 
 import {buttonText} from '../lib/interface/menu'
-import {infoHeader, bonusPercentString} from '../lib/interface/formatted-strings'
+import {infoHeader} from '../lib/interface/formatted-strings'
+import {percentBonusString} from '../lib/interface/format-percent'
 import {personMarkdown} from '../lib/interface/person'
 import emojis from '../lib/interface/emojis'
 
@@ -86,7 +87,7 @@ menu.selectSubmenu('a', availableApplicants, confirmEmployee, {
 		const {name} = applicant
 
 		const bonus = personalBonusWhenEmployed(shop, talent, applicant)
-		const bonusString = bonusPercentString(bonus)
+		const bonusString = percentBonusString(bonus)
 
 		const isHobby = applicant.hobby === shop.id
 		const hobbyString = isHobby ? emojis.hobby + ' ' : ''

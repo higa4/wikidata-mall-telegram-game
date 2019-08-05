@@ -14,7 +14,8 @@ import * as wdShop from '../lib/wikidata/shops'
 import {buttonText, menuPhoto} from '../lib/interface/menu'
 import {formatInt} from '../lib/interface/format-number'
 import {humanReadableTimestamp} from '../lib/interface/formatted-time'
-import {infoHeader, labeledFloat, labeledInt, bonusPercentString} from '../lib/interface/formatted-strings'
+import {infoHeader, labeledFloat, labeledInt} from '../lib/interface/formatted-strings'
+import {percentBonusString} from '../lib/interface/format-percent'
 import {personInShopLine} from '../lib/interface/person'
 import emoji from '../lib/interface/emojis'
 
@@ -140,7 +141,7 @@ function customerIntervalPart(ctx: any, shop: Shop): string {
 	text += '  '
 	text += ctx.wd.r('product.diversification').label()
 	text += ': '
-	text += bonusPercentString(shopDiversificationFactor(shop))
+	text += percentBonusString(shopDiversificationFactor(shop))
 
 	text += '\n\n'
 	return text
@@ -224,7 +225,7 @@ menu.button(buttonText(emoji.add, 'other.assortment'), 'addProduct', {
 function buyAllAdditionalCostString(ctx: any): string {
 	const persist = ctx.persist as Persist
 	const factor = buyAllCostFactor(persist.skills)
-	return bonusPercentString(factor) + emoji.currency
+	return percentBonusString(factor) + emoji.currency
 }
 
 menu.button((ctx: any) => `${emoji.magnet} ${ctx.wd.r('person.talents.purchasing').label()} (${buyAllAdditionalCostString(ctx)})`, 'buy-all', {
