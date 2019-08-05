@@ -11,6 +11,10 @@ function fromCtx(ctx: any): {applicantId: number; applicant: Person} {
 	const applicantId = Number(ctx.match[1])
 	const session = ctx.session as Session
 	const applicant: Person = session.applicants[applicantId]
+	if (!applicant) {
+		throw new Error('The applicant you are looking for is not there.')
+	}
+
 	return {applicantId, applicant}
 }
 
