@@ -14,12 +14,11 @@ function formatNumber(num: number, formatRelevantNumber: (relevantNumPart: numbe
 }
 
 export function formatFloat(num: number): string {
-	return formatNumber(num, num => num.toFixed(2))
+	return formatNumber(num, num => num.toPrecision(3))
 }
 
 export function formatInt(num: number): string {
-	return formatNumber(num, (relevantNumPart, sciExp) => {
-		const fractionDigits = sciExp < 2 ? 0 : 2
-		return relevantNumPart.toFixed(fractionDigits)
-	})
+	return formatNumber(num, (relevantNumPart, sciExp) =>
+		sciExp < 2 ? relevantNumPart.toFixed(0) : relevantNumPart.toPrecision(3)
+	)
 }
