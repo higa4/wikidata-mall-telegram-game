@@ -63,7 +63,7 @@ function menuText(ctx: any): string {
 	text += '\n\n'
 
 	const allPages = generatePages(ctx)
-	const sanePage = Math.min(allPages.length, page)
+	const sanePage = Math.min(allPages.length, page || 1)
 
 	text += allPages[sanePage - 1]
 
