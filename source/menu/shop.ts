@@ -3,10 +3,11 @@ import WikidataEntityReader from 'wikidata-entity-reader'
 
 import {Session, Persist} from '../lib/types'
 import {Shop, Product} from '../lib/types/shop'
+import {Skills} from '../lib/types/skills'
 
 import {randomUnusedEntry} from '../lib/js-helper/array'
 
-import {costForAdditionalProduct, storageCapacity, shopDiversificationFactor, customerInterval, moneyForShopClosure, buyAllCost, buyAllCostFactor} from '../lib/game-math/shop'
+import {costForAdditionalProduct, storageCapacity, shopDiversificationFactor, customerInterval, moneyForShopClosure, buyAllCost, buyAllCostFactor, storageCapactiyPressBonus} from '../lib/game-math/shop'
 import {currentLevel} from '../lib/game-math/skill'
 
 import * as wdShop from '../lib/wikidata/shops'
@@ -66,14 +67,29 @@ function openingPart(ctx: any, shop: Shop): string {
 	return text
 }
 
-function storageCapacityPart(ctx: any, shop: Shop): string {
+function storageCapacityPart(ctx: any, shop: Shop, skills: Skills): string {
 	let text = ''
 	text += emoji.storage
-	text += labeledInt(ctx.wd.r('product.storageCapacity'), storageCapacity(shop))
+	text += labeledInt(ctx.wd.r('product.storageCapacity'), storageCapacity(shop, skills))
 	if (shop.personal.storage) {
 		text += '\n'
 		text += '  '
+		text += emoji.person
 		text += personInShopLine(shop, 'storage')
+	}
+
+	const pressLevel = currentLevel(skills, 'machinePress', shop.id)
+	const pressBonus = storageCapactiyPressBonus(pressLevel)
+	if (pressBonus !== 1) {
+		text += '\n'
+		text += '  '
+		text += emoji.skill
+		text += percentBonusString(pressBonus)
+		text += ' '
+		text += ctx.wd.r('skill.machinePress').label()
+		text += ' ('
+		text += pressLevel
+		text += ')'
 	}
 
 	text += '\n\n'
@@ -152,6 +168,7 @@ function menuText(ctx: any): string {
 	const reader = ctx.wd.r(shop.id) as WikidataEntityReader
 
 	const session = ctx.session as Session
+	const persist = ctx.persist as Persist
 
 	let text = ''
 	text += infoHeader(reader, {titlePrefix: emoji.shop})
@@ -162,7 +179,7 @@ function menuText(ctx: any): string {
 
 	text += openingPart(ctx, shop)
 	text += customerIntervalPart(ctx, shop)
-	text += storageCapacityPart(ctx, shop)
+	text += storageCapacityPart(ctx, shop, persist.skills)
 	text += productsPart(ctx, shop)
 	text += addProductPart(ctx, shop)
 
@@ -247,7 +264,7 @@ menu.button((ctx: any) => `${emoji.magnet} ${ctx.wd.r('person.talents.purchasing
 		const now = Math.floor(Date.now() / 1000)
 
 		const cost = buyAllCost(shop, persist.skills)
-		const storage = storageCapacity(shop)
+		const storage = storageCapacity(shop, persist.skills)
 
 		if (cost > session.money) {
 			// What?

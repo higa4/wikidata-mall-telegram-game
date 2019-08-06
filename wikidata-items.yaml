@@ -44,8 +44,9 @@ skill:
   training: Q918385
   applicantSpeed: Q656850
   collector: Q3243461
-  magnetism: Q3294789
   healthCare: Q31207
+  machinePress: Q674484
+  magnetism: Q3294789
 other:
   assortment: Q1412931
   cost: Q240673

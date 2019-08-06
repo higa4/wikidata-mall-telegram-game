@@ -43,7 +43,7 @@ function itemsPurchasableCtx(ctx: any): number {
 }
 
 function itemsPurchasable(session: Session, shop: Shop, product: Product, skills: Skills): number {
-	const capacity = storageCapacity(shop)
+	const capacity = storageCapacity(shop, skills)
 	const freeCapacity = capacity - product.itemsInStore
 
 	const cost = purchasingCost(shop, product, skills)
@@ -58,7 +58,7 @@ function menuText(ctx: any): string {
 	const persist = ctx.persist as Persist
 	const reader = ctx.wd.r(product.id) as WikidataEntityReader
 
-	const capacity = storageCapacity(shop)
+	const capacity = storageCapacity(shop, persist.skills)
 	const freeCapacity = capacity - product.itemsInStore
 	const basePrice = productBasePrice(product, persist.skills)
 	const purchaseCostPerItem = purchasingCost(shop, product, persist.skills)

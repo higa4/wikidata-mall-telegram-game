@@ -1,4 +1,5 @@
 type Dictionary<T> = {[key: string]: T}
+type SkillCategorySet = Dictionary<number>
 
 /**
  * Contains Skill Levels
@@ -22,7 +23,12 @@ export interface Skills {
 	/**
 	 * Skill Level per Shop a player ever had
 	 */
-	collector?: Dictionary<number>;
+	collector?: SkillCategorySet;
+
+	/**
+	 * Improve storage capacity for the category
+	 */
+	machinePress?: SkillCategorySet;
 }
 
 export interface SkillInTraining {
@@ -40,5 +46,6 @@ export const SIMPLE_SKILLS: Skill[] = [
 ]
 
 export const CATEGORY_SKILLS: Skill[] = [
-	'collector'
+	'collector',
+	'machinePress'
 ]

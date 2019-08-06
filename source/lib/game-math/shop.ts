@@ -22,9 +22,15 @@ export function moneyForShopClosure(existingShops: number, productsInShop: numbe
 	return Math.ceil(factor * (lastBuildCost + lastProductAddCost))
 }
 
-export function storageCapacity(shop: Shop): number {
+export function storageCapacity(shop: Shop, skills: Skills): number {
 	const personal = personalBonus(shop, 'storage')
-	return Math.round(100 * personal)
+	const pressLevel = currentLevel(skills, 'machinePress', shop.id)
+	const press = storageCapactiyPressBonus(pressLevel)
+	return Math.round(100 * personal * press)
+}
+
+export function storageCapactiyPressBonus(pressLevel: number): number {
+	return 1 + (pressLevel * 0.1)
 }
 
 export function shopDiversificationFactor(shop: Shop): number {
@@ -54,7 +60,7 @@ export function buyAllCostFactor(skills: Skills): number {
 }
 
 export function buyAllCost(shop: Shop, skills: Skills): number {
-	const storage = storageCapacity(shop)
+	const storage = storageCapacity(shop, skills)
 	const factor = buyAllCostFactor(skills)
 	const cost = shop.products
 		.map(product => {
