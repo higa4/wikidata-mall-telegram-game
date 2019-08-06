@@ -7,7 +7,7 @@ import {Skills} from '../lib/types/skills'
 
 import {randomUnusedEntry} from '../lib/js-helper/array'
 
-import {costForAdditionalProduct, storageCapacity, shopDiversificationFactor, customerInterval, moneyForShopClosure, buyAllCost, buyAllCostFactor, storageCapactiyPressBonus} from '../lib/game-math/shop'
+import {costForAdditionalProduct, storageCapacity, shopDiversificationFactor, customerInterval, moneyForShopClosure, buyAllCost, buyAllCostFactor, storageCapactiyPressBonus, shopProductsPossible} from '../lib/game-math/shop'
 import {currentLevel} from '../lib/game-math/skill'
 
 import * as wdShop from '../lib/wikidata/shops'
@@ -23,22 +23,23 @@ import emoji from '../lib/interface/emojis'
 import employeeMenu from './shop-employees'
 import productMenu from './product'
 
-const POSSIBLE_PRODUCTS = 6
-
 function fromCtx(ctx: any): Shop {
 	const persist = ctx.persist as Persist
 	const shopType = ctx.match[1]
 	return persist.shops.filter(o => o.id === shopType)[0]
 }
 
-function canAddProductTechnically(shop: Shop): boolean {
+function canAddProductTechnically(shop: Shop, skills: Skills): boolean {
+	const logisticsLevel = currentLevel(skills, 'logistics', shop.id)
+	const possibleProducts = shopProductsPossible(logisticsLevel)
+
 	const currentProductsAmount = shop.products.length
-	if (currentProductsAmount >= POSSIBLE_PRODUCTS) {
+	if (currentProductsAmount >= possibleProducts) {
 		return false
 	}
 
-	const possibleProductsThatCouldBeAdded = (wdShop.products(shop.id) || []).length
-	const productsAvailable = possibleProductsThatCouldBeAdded - currentProductsAmount
+	const allAvailableProductsForShop = (wdShop.products(shop.id) || []).length
+	const productsAvailable = allAvailableProductsForShop - currentProductsAmount
 	if (productsAvailable <= 0) {
 		return false
 	}
@@ -96,20 +97,41 @@ function storageCapacityPart(ctx: any, shop: Shop, skills: Skills): string {
 	return text
 }
 
-function productsPart(ctx: any, shop: Shop): string {
+function productsPart(ctx: any, shop: Shop, skills: Skills): string {
 	if (shop.products.length === 0) {
 		return ''
 	}
+
+	const logisticsLevel = currentLevel(skills, 'logistics', shop.id)
+	const productsPossible = shopProductsPossible(logisticsLevel)
+	const allAvailableProductsForShop = (wdShop.products(shop.id) || []).length
 
 	let text = ''
 	text += '*'
 	text += ctx.wd.r('other.assortment').label()
 	text += '*'
+	text += ' ('
+	text += shop.products.length
+	text += ' / '
+	text += Math.min(productsPossible, allAvailableProductsForShop)
+	text += ')'
 	text += '\n'
+
+	if (logisticsLevel > 0) {
+		text += '  '
+		text += emoji.skill
+		text += '+'
+		text += logisticsLevel
+		text += ' '
+		text += ctx.wd.r('skill.logistics').label()
+		text += ' ('
+		text += logisticsLevel
+		text += ')'
+		text += '\n'
+	}
 
 	text += shop.products
 		.map(product => productLine(ctx, product))
-		.map(o => `  ${o}`)
 		.join('\n')
 	text += '\n\n'
 	return text
@@ -118,7 +140,7 @@ function productsPart(ctx: any, shop: Shop): string {
 function addProductPart(ctx: any, shop: Shop): string {
 	const persist = ctx.persist as Persist
 
-	if (!canAddProductTechnically(shop)) {
+	if (!canAddProductTechnically(shop, persist.skills)) {
 		return ''
 	}
 
@@ -180,7 +202,7 @@ function menuText(ctx: any): string {
 	text += openingPart(ctx, shop)
 	text += customerIntervalPart(ctx, shop)
 	text += storageCapacityPart(ctx, shop, persist.skills)
-	text += productsPart(ctx, shop)
+	text += productsPart(ctx, shop, persist.skills)
 	text += addProductPart(ctx, shop)
 
 	return text
@@ -202,13 +224,14 @@ menu.selectSubmenu('p', userProducts, productMenu, {
 
 menu.button(buttonText(emoji.add, 'other.assortment'), 'addProduct', {
 	hide: (ctx: any) => {
+		const session = ctx.session as Session
+		const persist = ctx.persist as Persist
 		const shop = fromCtx(ctx)
-		if (!canAddProductTechnically(shop)) {
+
+		if (!canAddProductTechnically(shop, persist.skills)) {
 			return true
 		}
 
-		const session = ctx.session as Session
-		const persist = ctx.persist as Persist
 		return costForAdditionalProduct(persist.shops.length, shop.products.length) > session.money
 	},
 	doFunc: (ctx: any) => {

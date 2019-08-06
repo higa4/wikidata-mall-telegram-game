@@ -82,3 +82,7 @@ export function shopProductsEmptyTimestamps(shop: Shop): readonly number[] {
 
 	return emptyTimestamps
 }
+
+export function shopProductsPossible(logisticsLevel: number): number {
+	return 2 + logisticsLevel
+}

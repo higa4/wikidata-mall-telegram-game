@@ -16,6 +16,11 @@ export interface Skills {
 	healthCare?: number;
 
 	/**
+	 * Improves the amount of products possible per shop
+	 */
+	logistics?: number;
+
+	/**
 	 * Allows for 'Buy all' and reduces its additional cost
 	 */
 	magnetism?: number;
@@ -52,6 +57,7 @@ type Skill = keyof Skills
 export const SIMPLE_SKILLS: Skill[] = [
 	'applicantSpeed',
 	'healthCare',
+	'logistics',
 	'magnetism',
 	'metalScissors'
 ]
