@@ -37,7 +37,7 @@ function menuText(ctx: any): string {
 	text += infoHeader(ctx.wd.r(`skill.${skill}`), {titlePrefix: emojis.skill})
 	text += '\n\n'
 
-	const products = Object.keys(persist.skills[skill]!)
+	const products = Object.keys(persist.skills[skill] || {})
 	if (products.length > 0) {
 		text += '*'
 		text += ctx.wd.r('skill.level').label()
