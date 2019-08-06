@@ -33,14 +33,25 @@ test('addProductToShopCost first shop 4 products', addProductToShopCostMacro, 0,
 test('addProductToShopCost second shop 4 products', addProductToShopCostMacro, 1, 4, 4000)
 test('addProductToShopCost third shop 4 products', addProductToShopCostMacro, 2, 4, 40000)
 
-function moneyForShopClosureMacro(t: ExecutionContext, existingShops: number, productsInShop: number, isBuildable: boolean, expectedMoney: number): void {
-	t.is(moneyForShopClosure(existingShops, productsInShop, isBuildable), expectedMoney)
+function closureIsNotProfitableMacro(t: ExecutionContext, shopsAtStart: number, products: number): void {
+	const buildCost = costForAdditionalShop(shopsAtStart)
+	let totalCost = buildCost
+	for (let i = 0; i < products; i++) {
+		totalCost += addProductToShopCost(shopsAtStart, i)
+	}
+
+	const closureMoney = moneyForShopClosure(shopsAtStart + 1, products, true)
+	t.log(totalCost, closureMoney, closureMoney / totalCost)
+	t.true(totalCost > closureMoney)
 }
 
-test('moneyForShopClosure with 2 shops 0 products buildable', moneyForShopClosureMacro, 2, 0, true, 500)
-test('moneyForShopClosure with 2 shops 5 products buildable', moneyForShopClosureMacro, 2, 5, true, 500 + 2000)
-test('moneyForShopClosure with 2 shops 0 products not buildable', moneyForShopClosureMacro, 2, 0, false, 1000)
-test('moneyForShopClosure with 2 shops 5 products not buildable', moneyForShopClosureMacro, 2, 5, false, 1000 + 4000)
+for (let shops = 1; shops <= 10; shops += 3) {
+	for (let products = 0; products < 10; products++) {
+		test(`shop closure is not profitable having ${shops} shop, buying ${products} products`, closureIsNotProfitableMacro, shops, products)
+	}
+}
+
+test('shop closure for insane players is not profitable', closureIsNotProfitableMacro, 12, 30)
 
 function buyAllCostFactorMacro(t: ExecutionContext, magnetismLevel: number, expected: number): void {
 	const skills: Skills = {magnetism: magnetismLevel}

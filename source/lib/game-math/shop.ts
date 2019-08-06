@@ -17,9 +17,9 @@ export function addProductToShopCost(indexOfShop: number, existingProducts: numb
 
 export function moneyForShopClosure(existingShops: number, productsInShop: number, shopIsBuildableUnderCurrentConditions: boolean): number {
 	const lastBuildCost = costForAdditionalShop(existingShops - 1)
-	const lastProductAddCost = costForAdditionalProduct(existingShops, Math.max(0, productsInShop - 1))
 	const factor = shopIsBuildableUnderCurrentConditions ? 0.5 : 1
-	return Math.ceil(factor * (lastBuildCost + lastProductAddCost))
+	const productsInShopBonus = 1 + (Math.max(0, productsInShop - 1) ** 2)
+	return Math.ceil(factor * lastBuildCost * productsInShopBonus)
 }
 
 export function storageCapacity(shop: Shop, skills: Skills): number {
