@@ -34,7 +34,7 @@ FILTER(EXISTS { ?item wdt:P18 ?image. })
 FILTER(LANG(?label) = "en")
 }
 GROUP BY ?class
-HAVING ((COUNT(?item)) >= 6 )`
+HAVING ((COUNT(?item)) >= 5 )`
 }
 
 function productsQuery(shopType: string): string {
