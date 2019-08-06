@@ -21,6 +21,11 @@ export interface Skills {
 	magnetism?: number;
 
 	/**
+	 * Improve purchase cost of products
+	 */
+	metalScissors?: number;
+
+	/**
 	 * Skill Level per Shop a player ever had
 	 */
 	collector?: SkillCategorySet;
@@ -29,6 +34,11 @@ export interface Skills {
 	 * Improve storage capacity for the category
 	 */
 	machinePress?: SkillCategorySet;
+
+	/**
+	 * Improve product sell price for the category
+	 */
+	packaging?: SkillCategorySet;
 }
 
 export interface SkillInTraining {
@@ -42,10 +52,12 @@ type Skill = keyof Skills
 export const SIMPLE_SKILLS: Skill[] = [
 	'applicantSpeed',
 	'healthCare',
-	'magnetism'
+	'magnetism',
+	'metalScissors'
 ]
 
 export const CATEGORY_SKILLS: Skill[] = [
 	'collector',
-	'machinePress'
+	'machinePress',
+	'packaging'
 ]

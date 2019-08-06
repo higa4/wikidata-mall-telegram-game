@@ -3,17 +3,21 @@ import {Skills} from '../types/skills'
 
 import {PURCHASING_FACTOR} from './constants'
 
-import {collectorTotalLevel} from './skill'
+import {collectorTotalLevel, currentLevel} from './skill'
 import {personalBonus} from './personal'
 
 export function purchasingCost(shop: Shop, product: Product, skills: Skills): number {
 	const personal = personalBonus(shop, 'purchasing')
-	return productBasePrice(product, skills) * (PURCHASING_FACTOR / personal)
+	const scissorsLevel = currentLevel(skills, 'metalScissors', shop.id)
+	const scissorsBonus = sellingCostPackagingBonus(scissorsLevel)
+	return productBasePrice(product, skills) * (PURCHASING_FACTOR / (personal * scissorsBonus))
 }
 
 export function sellingCost(shop: Shop, product: Product, skills: Skills): number {
 	const personal = personalBonus(shop, 'selling')
-	return productBasePrice(product, skills) * personal
+	const packagingLevel = currentLevel(skills, 'packaging', shop.id)
+	const packagingBonus = sellingCostPackagingBonus(packagingLevel)
+	return productBasePrice(product, skills) * personal * packagingBonus
 }
 
 export function productBasePrice(product: Product, skills: Skills): number {
@@ -25,4 +29,12 @@ export function productBasePrice(product: Product, skills: Skills): number {
 export function productBasePriceCollectorFactor(skills: Skills): number {
 	const collectorLevel = collectorTotalLevel(skills)
 	return 1 + (collectorLevel * 0.1)
+}
+
+export function purchasingCostScissorsBonus(scissorsLevel: number): number {
+	return 1 + (scissorsLevel * 0.05)
+}
+
+export function sellingCostPackagingBonus(packagingLevel: number): number {
+	return 1 + (packagingLevel * 0.1)
 }

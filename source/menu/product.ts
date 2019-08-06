@@ -6,8 +6,8 @@ import {Shop, Product} from '../lib/types/shop'
 import {Skills} from '../lib/types/skills'
 import {TalentName} from '../lib/types/people'
 
-import {collectorTotalLevel} from '../lib/game-math/skill'
-import {sellingCost, purchasingCost, productBasePrice, productBasePriceCollectorFactor} from '../lib/game-math/product'
+import {collectorTotalLevel, currentLevel} from '../lib/game-math/skill'
+import {sellingCost, purchasingCost, productBasePrice, productBasePriceCollectorFactor, sellingCostPackagingBonus, purchasingCostScissorsBonus} from '../lib/game-math/product'
 import {storageCapacity} from '../lib/game-math/shop'
 
 import {formatInt} from '../lib/interface/format-number'
@@ -33,6 +33,27 @@ function bonusPerson(shop: Shop, talent: TalentName): string {
 	}
 
 	return '\n  ' + emoji.person + personInShopLine(shop, talent)
+}
+
+function bonusSkill(ctx: any, shop: Shop, skills: Skills, skill: keyof Skills, bonusFunc: (level: number) => number): string {
+	const level = currentLevel(skills, skill, shop.id)
+	const bonus = bonusFunc(level)
+	if (bonus === 1) {
+		return ''
+	}
+
+	let text = ''
+	text += '\n'
+	text += '  '
+	text += emoji.skill
+	text += percentBonusString(bonus)
+	text += ' '
+	text += ctx.wd.r(`skill.${skill}`).label()
+	text += ' ('
+	text += level
+	text += ')'
+
+	return text
 }
 
 function itemsPurchasableCtx(ctx: any): number {
@@ -103,11 +124,13 @@ function menuText(ctx: any): string {
 	text += emoji.purchasing
 	text += labeledFloat(ctx.wd.r('person.talents.purchasing'), purchaseCostPerItem, emoji.currency)
 	text += bonusPerson(shop, 'purchasing')
+	text += bonusSkill(ctx, shop, persist.skills, 'metalScissors', purchasingCostScissorsBonus)
 	text += '\n'
 
 	text += emoji.selling
 	text += labeledFloat(ctx.wd.r('person.talents.selling'), sellingCostPerItem, emoji.currency)
 	text += bonusPerson(shop, 'selling')
+	text += bonusSkill(ctx, shop, persist.skills, 'packaging', sellingCostPackagingBonus)
 	text += '\n'
 
 	if (freeCapacity > 0) {
