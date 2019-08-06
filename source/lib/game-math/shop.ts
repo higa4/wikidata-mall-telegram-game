@@ -1,11 +1,9 @@
 import {Shop} from '../types/shop'
 import {Skills} from '../types/skills'
 
-import {distanceDiversity} from '../math/distance'
-
 import {currentLevel} from './skill'
 import {personalBonus} from './personal'
-import {productBasePrice, purchasingCost} from './product'
+import {purchasingCost} from './product'
 
 export function costForAdditionalShop(existingShops: number): number {
 	return 10 ** (existingShops + 2)
@@ -33,24 +31,11 @@ export function storageCapactiyPressBonus(pressLevel: number): number {
 	return 1 + (pressLevel * 0.1)
 }
 
-export function shopDiversificationFactor(shop: Shop): number {
-	const basePrices = shop.products
-		.map(p => productBasePrice(p, {}))
-
-	const diversity = distanceDiversity(basePrices)
-
-	// From 0 to 1 -> 0.75 to 1.25
-	return (diversity / 2) + 0.75
-}
-
 /**
  * Returns the interval in seconds between two customers in a given shop
  */
-export function customerInterval(shop: Shop): number {
-	const diversityFactor = shopDiversificationFactor(shop)
-
-	const factor = diversityFactor
-	return 30 / factor
+export function customerInterval(): number {
+	return 30
 }
 
 export function buyAllCostFactor(skills: Skills): number {
@@ -74,7 +59,7 @@ export function buyAllCost(shop: Shop, skills: Skills): number {
 }
 
 export function shopProductsEmptyTimestamps(shop: Shop): readonly number[] {
-	const interval = customerInterval(shop)
+	const interval = customerInterval()
 
 	const emptyTimestamps = shop.products.map(p =>
 		p.itemTimestamp + (interval * p.itemsInStore)

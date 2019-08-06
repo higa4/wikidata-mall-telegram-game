@@ -14,7 +14,7 @@ export default function calcIncome(session: Session, persist: Persist, now: numb
 
 function incomeProduct(session: Session, persist: Persist, shop: Shop, product: Product, now: number): void {
 	const secondsAgo = now - product.itemTimestamp
-	const sellInterval = customerInterval(shop)
+	const sellInterval = customerInterval()
 
 	const canSell = Math.floor(secondsAgo / sellInterval)
 	const sellItems = Math.min(canSell, product.itemsInStore)

@@ -7,7 +7,7 @@ import {Skills} from '../lib/types/skills'
 
 import {randomUnusedEntry} from '../lib/js-helper/array'
 
-import {addProductToShopCost, storageCapacity, shopDiversificationFactor, customerInterval, moneyForShopClosure, buyAllCost, buyAllCostFactor, storageCapactiyPressBonus, shopProductsPossible} from '../lib/game-math/shop'
+import {addProductToShopCost, storageCapacity, customerInterval, moneyForShopClosure, buyAllCost, buyAllCostFactor, storageCapactiyPressBonus, shopProductsPossible} from '../lib/game-math/shop'
 import {currentLevel} from '../lib/game-math/skill'
 
 import * as wdShop from '../lib/wikidata/shops'
@@ -170,19 +170,13 @@ function customerIntervalPart(ctx: any, shop: Shop): string {
 	text += '1 '
 	text += ctx.wd.r('other.customer').label()
 	text += ' / '
-	text += formatInt(customerInterval(shop))
+	text += formatInt(customerInterval())
 	text += ' '
 	text += ctx.wd.r('unit.second').label()
 	if (shop.products.length > 1) {
 		text += ' / '
 		text += ctx.wd.r('product.product').label()
 	}
-
-	text += '\n'
-	text += '  '
-	text += ctx.wd.r('product.diversification').label()
-	text += ': '
-	text += percentBonusString(shopDiversificationFactor(shop))
 
 	text += '\n\n'
 	return text
