@@ -7,7 +7,7 @@ import {Skills} from '../lib/types/skills'
 
 import {randomUnusedEntry} from '../lib/js-helper/array'
 
-import {costForAdditionalProduct, storageCapacity, shopDiversificationFactor, customerInterval, moneyForShopClosure, buyAllCost, buyAllCostFactor, storageCapactiyPressBonus, shopProductsPossible} from '../lib/game-math/shop'
+import {addProductToShopCost, storageCapacity, shopDiversificationFactor, customerInterval, moneyForShopClosure, buyAllCost, buyAllCostFactor, storageCapactiyPressBonus, shopProductsPossible} from '../lib/game-math/shop'
 import {currentLevel} from '../lib/game-math/skill'
 
 import * as wdShop from '../lib/wikidata/shops'
@@ -23,10 +23,12 @@ import emoji from '../lib/interface/emojis'
 import employeeMenu from './shop-employees'
 import productMenu from './product'
 
-function fromCtx(ctx: any): Shop {
+function fromCtx(ctx: any): {shop: Shop; indexOfShop: number} {
 	const persist = ctx.persist as Persist
 	const shopType = ctx.match[1]
-	return persist.shops.filter(o => o.id === shopType)[0]
+	const indexOfShop = persist.shops.map(o => o.id).indexOf(shopType)
+	const shop = persist.shops[indexOfShop]
+	return {shop, indexOfShop}
 }
 
 function canAddProductTechnically(shop: Shop, skills: Skills): boolean {
@@ -144,7 +146,8 @@ function addProductPart(ctx: any, shop: Shop): string {
 		return ''
 	}
 
-	const cost = costForAdditionalProduct(persist.shops.length, shop.products.length)
+	const indexOfShop = persist.shops.map(o => o.id).indexOf(shop.id)
+	const cost = addProductToShopCost(indexOfShop, shop.products.length)
 
 	let text = ''
 	text += emoji.add
@@ -186,7 +189,7 @@ function customerIntervalPart(ctx: any, shop: Shop): string {
 }
 
 function menuText(ctx: any): string {
-	const shop = fromCtx(ctx)
+	const {shop} = fromCtx(ctx)
 	const reader = ctx.wd.r(shop.id) as WikidataEntityReader
 
 	const session = ctx.session as Session
@@ -209,11 +212,11 @@ function menuText(ctx: any): string {
 }
 
 const menu = new TelegrafInlineMenu(menuText, {
-	photo: menuPhoto(ctx => fromCtx(ctx).id)
+	photo: menuPhoto(ctx => fromCtx(ctx).shop.id)
 })
 
 function userProducts(ctx: any): string[] {
-	const shop = fromCtx(ctx)
+	const {shop} = fromCtx(ctx)
 	return shop.products.map(o => o.id)
 }
 
@@ -226,21 +229,20 @@ menu.button(buttonText(emoji.add, 'other.assortment'), 'addProduct', {
 	hide: (ctx: any) => {
 		const session = ctx.session as Session
 		const persist = ctx.persist as Persist
-		const shop = fromCtx(ctx)
+		const {shop, indexOfShop} = fromCtx(ctx)
 
 		if (!canAddProductTechnically(shop, persist.skills)) {
 			return true
 		}
 
-		return costForAdditionalProduct(persist.shops.length, shop.products.length) > session.money
+		return addProductToShopCost(indexOfShop, shop.products.length) > session.money
 	},
 	doFunc: (ctx: any) => {
-		const shop = fromCtx(ctx)
+		const {shop, indexOfShop} = fromCtx(ctx)
 		const session = ctx.session as Session
-		const persist = ctx.persist as Persist
 		const now = Math.floor(Date.now() / 1000)
 
-		const cost = costForAdditionalProduct(persist.shops.length, shop.products.length)
+		const cost = addProductToShopCost(indexOfShop, shop.products.length)
 		if (session.money < cost) {
 			// Fishy
 			return
@@ -270,7 +272,7 @@ function buyAllAdditionalCostString(ctx: any): string {
 
 menu.button((ctx: any) => `${emoji.magnet} ${ctx.wd.r('person.talents.purchasing').label()} (${buyAllAdditionalCostString(ctx)})`, 'buy-all', {
 	hide: (ctx: any) => {
-		const shop = fromCtx(ctx)
+		const {shop} = fromCtx(ctx)
 		const session = ctx.session as Session
 		const persist = ctx.persist as Persist
 
@@ -281,7 +283,7 @@ menu.button((ctx: any) => `${emoji.magnet} ${ctx.wd.r('person.talents.purchasing
 		return magnetismLevel === 0 || shop.products.length === 0 || session.money < cost || cost < 1
 	},
 	doFunc: (ctx: any) => {
-		const shop = fromCtx(ctx)
+		const {shop} = fromCtx(ctx)
 		const session = ctx.session as Session
 		const persist = ctx.persist as Persist
 		const now = Math.floor(Date.now() / 1000)
@@ -308,7 +310,7 @@ menu.submenu(buttonText(emoji.person, 'menu.employee'), 'e', employeeMenu)
 menu.simpleButton(buttonText(emoji.close, 'action.close'), 'remove-not-possible', {
 	hide: (ctx: any) => {
 		const persist = ctx.persist as Persist
-		const shop = fromCtx(ctx)
+		const {shop} = fromCtx(ctx)
 		const itemsInStore = shop.products.map(o => o.itemsInStore).reduce((a, b) => a + b, 0)
 		return persist.shops.length <= 1 || itemsInStore === 0
 	},
@@ -319,12 +321,12 @@ menu.button(buttonText(emoji.close, 'action.close'), 'remove', {
 	setParentMenuAfter: true,
 	hide: (ctx: any) => {
 		const persist = ctx.persist as Persist
-		const shop = fromCtx(ctx)
+		const {shop} = fromCtx(ctx)
 		const itemsInStore = shop.products.map(o => o.itemsInStore).reduce((a, b) => a + b, 0)
 		return persist.shops.length <= 1 || itemsInStore > 0
 	},
 	doFunc: (ctx: any) => {
-		const shop = fromCtx(ctx)
+		const {shop} = fromCtx(ctx)
 		const session = ctx.session as Session
 		const persist = ctx.persist as Persist
 
@@ -339,7 +341,7 @@ menu.button(buttonText(emoji.close, 'action.close'), 'remove', {
 
 menu.urlButton(
 	buttonText(emoji.wikidataItem, 'menu.wikidataItem'),
-	(ctx: any) => ctx.wd.r(fromCtx(ctx).id).url()
+	(ctx: any) => ctx.wd.r(fromCtx(ctx).shop.id).url()
 )
 
 export default menu

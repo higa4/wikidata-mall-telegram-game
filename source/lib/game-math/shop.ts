@@ -11,8 +11,8 @@ export function costForAdditionalShop(existingShops: number): number {
 	return 10 ** (existingShops + 2)
 }
 
-export function costForAdditionalProduct(existingShops: number, existingProducts: number): number {
-	return costForAdditionalShop(existingShops - 1) * existingProducts
+export function addProductToShopCost(indexOfShop: number, existingProducts: number): number {
+	return costForAdditionalShop(indexOfShop) * existingProducts
 }
 
 export function moneyForShopClosure(existingShops: number, productsInShop: number, shopIsBuildableUnderCurrentConditions: boolean): number {

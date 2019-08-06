@@ -5,7 +5,7 @@ import {Skills} from '../../source/lib/types/skills'
 
 import {PURCHASING_FACTOR} from '../../source/lib/game-math/constants'
 
-import {costForAdditionalShop, costForAdditionalProduct, moneyForShopClosure, buyAllCostFactor, buyAllCost} from '../../source/lib/game-math/shop'
+import {costForAdditionalShop, addProductToShopCost, moneyForShopClosure, buyAllCostFactor, buyAllCost} from '../../source/lib/game-math/shop'
 import {productBasePrice} from '../../source/lib/game-math/product'
 
 function costForAdditionalShopMacro(t: ExecutionContext, existingShops: number, expectedCost: number): void {
@@ -17,21 +17,21 @@ test('costForAdditionalShop 1 shops', costForAdditionalShopMacro, 1, 1000)
 test('costForAdditionalShop 2 shops', costForAdditionalShopMacro, 2, 10000)
 test('costForAdditionalShop 3 shops', costForAdditionalShopMacro, 3, 100000)
 
-function costForAdditionalProductMacro(t: ExecutionContext, existingShops: number, existingProducts: number, expectedCost: number): void {
-	t.is(costForAdditionalProduct(existingShops, existingProducts), expectedCost)
+function addProductToShopCostMacro(t: ExecutionContext, existingShops: number, existingProducts: number, expectedCost: number): void {
+	t.is(addProductToShopCost(existingShops, existingProducts), expectedCost)
 }
 
-test('costForAdditionalProduct 1 shops 0 products', costForAdditionalProductMacro, 1, 0, 0)
-test('costForAdditionalProduct 2 shops 0 products', costForAdditionalProductMacro, 2, 0, 0)
-test('costForAdditionalProduct 3 shops 0 products', costForAdditionalProductMacro, 3, 0, 0)
+test('addProductToShopCost first shop 0 products', addProductToShopCostMacro, 0, 0, 0)
+test('addProductToShopCost second shop 0 products', addProductToShopCostMacro, 1, 0, 0)
+test('addProductToShopCost third shop 0 products', addProductToShopCostMacro, 2, 0, 0)
 
-test('costForAdditionalProduct 1 shops 1 products', costForAdditionalProductMacro, 1, 1, 100)
-test('costForAdditionalProduct 2 shops 1 products', costForAdditionalProductMacro, 2, 1, 1000)
-test('costForAdditionalProduct 3 shops 1 products', costForAdditionalProductMacro, 3, 1, 10000)
+test('addProductToShopCost first shop 1 products', addProductToShopCostMacro, 0, 1, 100)
+test('addProductToShopCost second shop 1 products', addProductToShopCostMacro, 1, 1, 1000)
+test('addProductToShopCost third shop 1 products', addProductToShopCostMacro, 2, 1, 10000)
 
-test('costForAdditionalProduct 1 shops 4 products', costForAdditionalProductMacro, 1, 4, 400)
-test('costForAdditionalProduct 2 shops 4 products', costForAdditionalProductMacro, 2, 4, 4000)
-test('costForAdditionalProduct 3 shops 4 products', costForAdditionalProductMacro, 3, 4, 40000)
+test('addProductToShopCost first shop 4 products', addProductToShopCostMacro, 0, 4, 400)
+test('addProductToShopCost second shop 4 products', addProductToShopCostMacro, 1, 4, 4000)
+test('addProductToShopCost third shop 4 products', addProductToShopCostMacro, 2, 4, 40000)
 
 function moneyForShopClosureMacro(t: ExecutionContext, existingShops: number, productsInShop: number, isBuildable: boolean, expectedMoney: number): void {
 	t.is(moneyForShopClosure(existingShops, productsInShop, isBuildable), expectedMoney)
