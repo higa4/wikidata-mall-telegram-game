@@ -28,6 +28,7 @@ const emojis: Dictionary<string> = {
 	shopProductsEmpty: '🥺',
 	skill: '⚗️',
 	skillFinished: '✅',
+	stats: '📊',
 	storage: '📦',
 	underConstruction: '🚧',
 	warning: '⚠️',

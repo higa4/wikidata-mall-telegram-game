@@ -82,6 +82,10 @@ export function allShops(): readonly string[] {
 	return Object.keys(shopsWithProducts)
 }
 
+export function allProductsAmount(): number {
+	return Object.values(shopsWithProducts).flat().length
+}
+
 export function products(shop: string): readonly string[] | undefined {
 	return shopsWithProducts[shop]
 }

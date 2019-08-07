@@ -60,3 +60,10 @@ other:
 unit:
   day: Q573
   second: Q11574
+stat:
+  game: Q11410
+  player: Q4197743
+  stats: Q35308049
+  name:
+    given: Q3409032
+    family: Q101352

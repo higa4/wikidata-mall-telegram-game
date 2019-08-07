@@ -8,6 +8,7 @@ import emoji from '../lib/interface/emojis'
 
 import achievements from './achievements'
 import applicants from './applicants'
+import botStats from './bot-stats'
 import employees from './employees'
 import languages from './languages'
 import shops from './shops'
@@ -66,9 +67,13 @@ menu.submenu(buttonText(emoji.skill, 'menu.skill'), 'skill', skills, {
 	}
 })
 
+menu.submenu(buttonText(emoji.achievement, 'menu.achievement'), 'achievements', achievements, {
+	joinLastRow: true
+})
+
 menu.submenu(buttonText(emoji.language, 'menu.language'), 'lang', languages)
 
-menu.submenu(buttonText(emoji.achievement, 'menu.achievement'), 'achievements', achievements, {
+menu.submenu(buttonText(emoji.stats, 'stat.stats'), 'botStats', botStats, {
 	joinLastRow: true
 })
 
