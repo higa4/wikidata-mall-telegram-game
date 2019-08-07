@@ -7,9 +7,9 @@ import * as userShops from '../lib/data/shops'
 import * as wdNames from '../lib/wikidata/name'
 import * as wdShops from '../lib/wikidata/shops'
 
+import {buttonText, menuPhoto} from '../lib/interface/menu'
 import {formatInt} from '../lib/interface/format-number'
 import {infoHeader} from '../lib/interface/formatted-strings'
-import {menuPhoto} from '../lib/interface/menu'
 import emojis from '../lib/interface/emojis'
 
 function entryLine(ctx: any, resourceKey: string, value: string): string {
@@ -59,5 +59,10 @@ async function menuText(ctx: any): Promise<string> {
 const menu = new TelegrafInlineMenu(menuText, {
 	photo: menuPhoto('stat.stats')
 })
+
+menu.urlButton(
+	buttonText(emojis.wikidataItem, 'menu.wikidataItem'),
+	(ctx: any) => ctx.wd.r('stat.stats').url()
+)
 
 export default menu
