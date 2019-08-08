@@ -80,7 +80,6 @@ function menuText(ctx: any): string {
 	const reader = ctx.wd.r(product.id) as WikidataEntityReader
 
 	const capacity = storageCapacity(shop, persist.skills)
-	const freeCapacity = capacity - product.itemsInStore
 	const basePrice = productBasePrice(product, persist.skills)
 	const purchaseCostPerItem = purchasingCost(shop, product, persist.skills)
 	const sellingCostPerItem = sellingCost(shop, product, persist.skills)
@@ -132,18 +131,6 @@ function menuText(ctx: any): string {
 	text += bonusPerson(shop, 'selling')
 	text += bonusSkill(ctx, shop, persist.skills, 'packaging', sellingCostPackagingBonus)
 	text += '\n'
-
-	if (freeCapacity > 0) {
-		text += '\n'
-		text += emoji.purchasing
-		text += '*'
-		text += ctx.wd.r('person.talents.purchasing').label()
-		text += '*'
-		text += ` (${freeCapacity})`
-		text += '\n'
-		text += labeledFloat(ctx.wd.r('other.cost'), purchaseCostPerItem * freeCapacity, emoji.currency)
-		text += '\n'
-	}
 
 	return text
 }
