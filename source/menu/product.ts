@@ -6,7 +6,7 @@ import {Shop, Product} from '../lib/types/shop'
 import {Skills} from '../lib/types/skills'
 import {TalentName} from '../lib/types/people'
 
-import {collectorTotalLevel, currentLevel} from '../lib/game-math/skill'
+import {collectorTotalLevel, currentLevel, isSimpleSkill} from '../lib/game-math/skill'
 import {sellingCost, purchasingCost, productBasePrice, productBasePriceCollectorFactor, sellingCostPackagingBonus, purchasingCostScissorsBonus} from '../lib/game-math/product'
 import {storageCapacity} from '../lib/game-math/shop'
 
@@ -36,7 +36,7 @@ function bonusPerson(shop: Shop, talent: TalentName): string {
 }
 
 function bonusSkill(ctx: any, shop: Shop, skills: Skills, skill: keyof Skills, bonusFunc: (level: number) => number): string {
-	const level = currentLevel(skills, skill, shop.id)
+	const level = isSimpleSkill(skill) ? currentLevel(skills, skill) : currentLevel(skills, skill, shop.id)
 	const bonus = bonusFunc(level)
 	if (bonus === 1) {
 		return ''

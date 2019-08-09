@@ -1,4 +1,4 @@
-import {Skills} from '../types/skills'
+import {Skills, CategorySkill, SimpleSkill, SIMPLE_SKILLS, Skill, CATEGORY_SKILLS} from '../types/skills'
 
 import * as fibonacci from '../math/fibonacci'
 
@@ -6,7 +6,17 @@ type Dictionary<T> = {[key: string]: T}
 
 const SECONDS_IN_HOUR = 60 * 60
 
-export function currentLevel(skills: Skills, skill: keyof Skills, category?: string): number {
+export function isSimpleSkill(skill: Skill): skill is SimpleSkill {
+	return (SIMPLE_SKILLS as string[]).includes(skill)
+}
+
+export function isCategorySkill(skill: Skill): skill is CategorySkill {
+	return (CATEGORY_SKILLS as string[]).includes(skill)
+}
+
+export function currentLevel(skills: Skills, skill: CategorySkill, category: string): number
+export function currentLevel(skills: Skills, skill: SimpleSkill): number
+export function currentLevel(skills: Skills, skill: SimpleSkill | CategorySkill, category?: string): number {
 	const content = skills[skill]
 
 	if (!content) {

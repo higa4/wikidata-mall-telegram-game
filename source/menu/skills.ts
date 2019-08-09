@@ -1,7 +1,7 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
 import {Session, Persist} from '../lib/types'
-import {Skills, SIMPLE_SKILLS, CATEGORY_SKILLS} from '../lib/types/skills'
+import {Skills, CategorySkill, SimpleSkill, SIMPLE_SKILLS, CATEGORY_SKILLS} from '../lib/types/skills'
 
 import {currentLevel} from '../lib/game-math/skill'
 
@@ -13,7 +13,7 @@ import emoji from '../lib/interface/emojis'
 import skillMenu from './skill'
 import skillSelectCategory from './skill-select-category'
 
-function simpleSkillPart(ctx: any, skills: Skills, skill: keyof Skills): string {
+function simpleSkillPart(ctx: any, skills: Skills, skill: SimpleSkill): string {
 	if (!skills[skill]) {
 		return ''
 	}
@@ -26,7 +26,7 @@ function simpleSkillPart(ctx: any, skills: Skills, skill: keyof Skills): string 
 	return text
 }
 
-function productSkillPart(ctx: any, skills: Skills, skill: keyof Skills): string {
+function productSkillPart(ctx: any, skills: Skills, skill: CategorySkill): string {
 	if (!skills[skill]) {
 		return ''
 	}
@@ -47,7 +47,7 @@ function productSkillPart(ctx: any, skills: Skills, skill: keyof Skills): string
 	return text
 }
 
-function productSkillPartLine(ctx: any, skills: Skills, skill: keyof Skills, product: string): string {
+function productSkillPartLine(ctx: any, skills: Skills, skill: CategorySkill, product: string): string {
 	let text = ''
 	text += ctx.wd.r(product).label()
 	text += ': '

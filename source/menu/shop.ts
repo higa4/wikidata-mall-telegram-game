@@ -33,7 +33,7 @@ function fromCtx(ctx: any): {shop: Shop; indexOfShop: number} {
 }
 
 function canAddProductTechnically(shop: Shop, skills: Skills): boolean {
-	const logisticsLevel = currentLevel(skills, 'logistics', shop.id)
+	const logisticsLevel = currentLevel(skills, 'logistics')
 	const possibleProducts = shopProductsPossible(logisticsLevel)
 
 	const currentProductsAmount = shop.products.length
@@ -104,7 +104,7 @@ function productsPart(ctx: any, shop: Shop, skills: Skills): string {
 		return ''
 	}
 
-	const logisticsLevel = currentLevel(skills, 'logistics', shop.id)
+	const logisticsLevel = currentLevel(skills, 'logistics')
 	const productsPossible = shopProductsPossible(logisticsLevel)
 	const allAvailableProductsForShop = (wdShop.products(shop.id) || []).length
 

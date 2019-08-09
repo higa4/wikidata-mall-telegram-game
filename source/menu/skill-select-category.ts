@@ -3,7 +3,7 @@ import TelegrafInlineMenu from 'telegraf-inline-menu'
 import {Session, Persist} from '../lib/types'
 import {Skills} from '../lib/types/skills'
 
-import {currentLevel} from '../lib/game-math/skill'
+import {currentLevel, isSimpleSkill} from '../lib/game-math/skill'
 
 import {infoHeader} from '../lib/interface/formatted-strings'
 import {menuPhoto, buttonText} from '../lib/interface/menu'
@@ -24,7 +24,7 @@ function productSkillLine(ctx: any, skills: Skills, skill: keyof Skills, product
 	let text = ''
 	text += ctx.wd.r(product).label()
 	text += ': '
-	text += currentLevel(skills, skill, product)
+	text += isSimpleSkill(skill) ? currentLevel(skills, skill) : currentLevel(skills, skill, product)
 	return text
 }
 

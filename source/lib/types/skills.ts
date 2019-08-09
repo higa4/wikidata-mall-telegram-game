@@ -4,7 +4,7 @@ type SkillCategorySet = Dictionary<number>
 /**
  * Contains Skill Levels
  */
-export interface Skills {
+export interface SimpleSkills {
 	/**
 	 * Speed increase of
 	 */
@@ -30,6 +30,9 @@ export interface Skills {
 	 */
 	metalScissors?: number;
 
+}
+
+export interface CategorySkills {
 	/**
 	 * Skill Level per Shop a player ever had
 	 */
@@ -46,15 +49,20 @@ export interface Skills {
 	packaging?: SkillCategorySet;
 }
 
+export interface Skills extends SimpleSkills, CategorySkills {
+}
+
 export interface SkillInTraining {
 	skill: keyof Skills;
 	category?: string;
 	endTimestamp: number;
 }
 
-type Skill = keyof Skills
+export type SimpleSkill = keyof SimpleSkills
+export type CategorySkill = keyof CategorySkills
+export type Skill = SimpleSkill | CategorySkill
 
-export const SIMPLE_SKILLS: Skill[] = [
+export const SIMPLE_SKILLS: SimpleSkill[] = [
 	'applicantSpeed',
 	'healthCare',
 	'logistics',
@@ -62,7 +70,7 @@ export const SIMPLE_SKILLS: Skill[] = [
 	'metalScissors'
 ]
 
-export const CATEGORY_SKILLS: Skill[] = [
+export const CATEGORY_SKILLS: CategorySkill[] = [
 	'collector',
 	'machinePress',
 	'packaging'
