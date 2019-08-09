@@ -34,7 +34,7 @@ test('currentLevel correct on category skill', t => {
 })
 
 test('currentLevel throws error when required category is not specified', t => {
-	t.throws(() => currentLevel(exampleSkills, 'collector'), /category has to be specified/)
+	t.throws(() => currentLevel(exampleSkills, 'collector' as any), /category has to be specified/)
 })
 
 test('collectorTotalLevel no collector yet', t => {
