@@ -26,32 +26,32 @@ function simpleSkillPart(ctx: any, skills: Skills, skill: SimpleSkill): string {
 	return text
 }
 
-function productSkillPart(ctx: any, skills: Skills, skill: CategorySkill): string {
+function categorySkillPart(ctx: any, skills: Skills, skill: CategorySkill): string {
 	if (!skills[skill]) {
 		return ''
 	}
 
-	const products = Object.keys(skills[skill]!)
-	if (products.length === 0) {
+	const categories = Object.keys(skills[skill]!)
+	if (categories.length === 0) {
 		return ''
 	}
 
 	let text = ''
 	text += ctx.wd.r(`skill.${skill}`).label()
 	text += '\n'
-	text += products
-		.map(o => productSkillPartLine(ctx, skills, skill, o))
+	text += categories
+		.map(o => categorySkillPartLine(ctx, skills, skill, o))
 		.map(o => `  ${o}`)
 		.join('\n')
 
 	return text
 }
 
-function productSkillPartLine(ctx: any, skills: Skills, skill: CategorySkill, product: string): string {
+function categorySkillPartLine(ctx: any, skills: Skills, skill: CategorySkill, category: string): string {
 	let text = ''
-	text += ctx.wd.r(product).label()
+	text += ctx.wd.r(category).label()
 	text += ': '
-	text += currentLevel(skills, skill, product)
+	text += currentLevel(skills, skill, category)
 	return text
 }
 
@@ -67,11 +67,11 @@ function menuText(ctx: any): string {
 		.map(o => simpleSkillPart(ctx, persist.skills, o))
 		.filter(o => o)
 
-	const productSkillParts = CATEGORY_SKILLS
-		.map(o => productSkillPart(ctx, persist.skills, o))
+	const categorySkillParts = CATEGORY_SKILLS
+		.map(o => categorySkillPart(ctx, persist.skills, o))
 		.filter(o => o)
 
-	if (simpleSkillParts.length + productSkillParts.length > 0) {
+	if (simpleSkillParts.length + categorySkillParts.length > 0) {
 		text += '*'
 		text += ctx.wd.r('skill.level').label()
 		text += '*'
@@ -81,9 +81,9 @@ function menuText(ctx: any): string {
 			text += simpleSkillParts.join('\n')
 		}
 
-		if (productSkillParts.length > 0) {
+		if (categorySkillParts.length > 0) {
 			text += '\n\n'
-			text += productSkillParts.join('\n\n')
+			text += categorySkillParts.join('\n\n')
 		}
 
 		text += '\n\n'

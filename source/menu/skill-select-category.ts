@@ -20,7 +20,7 @@ function fromCtx(ctx: any): {skill: keyof Skills} {
 	}
 }
 
-function productSkillLine(ctx: any, skills: Skills, skill: keyof Skills, product: string): string {
+function categorySkillLine(ctx: any, skills: Skills, skill: keyof Skills, product: string): string {
 	let text = ''
 	text += ctx.wd.r(product).label()
 	text += ': '
@@ -37,15 +37,15 @@ function menuText(ctx: any): string {
 	text += infoHeader(ctx.wd.r(`skill.${skill}`), {titlePrefix: emojis.skill})
 	text += '\n\n'
 
-	const products = Object.keys(persist.skills[skill] || {})
-	if (products.length > 0) {
+	const categories = Object.keys(persist.skills[skill] || {})
+	if (categories.length > 0) {
 		text += '*'
 		text += ctx.wd.r('skill.level').label()
 		text += '*'
 		text += '\n'
 
-		text +=	products
-			.map(o => productSkillLine(ctx, persist.skills, skill, o))
+		text +=	categories
+			.map(o => categorySkillLine(ctx, persist.skills, skill, o))
 			.join('\n')
 
 		text += '\n\n'
