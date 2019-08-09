@@ -36,5 +36,5 @@ export function purchasingCostScissorsBonus(scissorsLevel: number): number {
 }
 
 export function sellingCostPackagingBonus(packagingLevel: number): number {
-	return 1 + (packagingLevel * 0.1)
+	return 1 + (packagingLevel * 0.05)
 }

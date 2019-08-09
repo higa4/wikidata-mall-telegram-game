@@ -28,7 +28,7 @@ export function storageCapacity(shop: Shop, skills: Skills): number {
 }
 
 export function storageCapactiyPressBonus(pressLevel: number): number {
-	return 1 + (pressLevel * 0.1)
+	return 1 + (pressLevel * 0.05)
 }
 
 /**
