@@ -60,13 +60,14 @@ export function skillUpgradeEndTimestamp(currentLevel: number, startTimestamp: n
 
 /**
  * Increases the given skills level in `skills`.
- * Ensure category is set or not based on the `skill`!
  */
-export function increaseLevelByOne(skills: Skills, skill: keyof Skills, category?: string): void {
+export function increaseLevelByOne(skills: Skills, skill: SimpleSkill): void
+export function increaseLevelByOne(skills: Skills, skill: CategorySkill, category: string): void
+export function increaseLevelByOne(skills: Skills, skill: SimpleSkill | CategorySkill, category?: string): void {
 	if (!skills[skill]) {
-		if (category) {
+		if (isCategorySkill(skill)) {
 			const initialContent: Dictionary<number> = {}
-			initialContent[category] = 0
+			initialContent[category!] = 0
 			skills[skill] = initialContent as any
 		} else {
 			const initialContent = 0
@@ -74,12 +75,12 @@ export function increaseLevelByOne(skills: Skills, skill: keyof Skills, category
 		}
 	}
 
-	if (typeof skills[skill] === 'number') {
-		(skills[skill] as any) += 1
+	if (isSimpleSkill(skill)) {
+		skills[skill]! += 1
 		return
 	}
 
-	const content = skills[skill] as Dictionary<number>
+	const content = skills[skill]!
 
 	if (!content[category!]) {
 		content[category!] = 0

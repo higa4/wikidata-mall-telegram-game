@@ -52,7 +52,7 @@ export interface Skills extends SimpleSkills, CategorySkills {
 }
 
 export interface SkillInTraining {
-	skill: keyof Skills;
+	skill: Skill;
 	category?: string;
 	endTimestamp: number;
 }

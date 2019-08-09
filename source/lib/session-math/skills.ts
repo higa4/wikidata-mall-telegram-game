@@ -1,5 +1,5 @@
 import {Session, Persist} from '../types'
-import {increaseLevelByOne} from '../game-math/skill'
+import {increaseLevelByOne, isSimpleSkill} from '../game-math/skill'
 
 export default function applySkills(session: Session, persist: Persist, now: number): void {
 	if (session.skillInTraining) {
@@ -25,7 +25,12 @@ function applySkillWhenFinished(session: Session, persist: Persist, now: number)
 
 	// SkillInTraining had startTimestamp and no endTimestamp -> undefined -> just skill it now as part of migration
 	if (now > (endTimestamp || 0)) {
-		increaseLevelByOne(persist.skills, skill, category)
+		if (isSimpleSkill(skill)) {
+			increaseLevelByOne(persist.skills, skill)
+		} else {
+			increaseLevelByOne(persist.skills, skill, category!)
+		}
+
 		delete session.skillInTraining
 	}
 }
