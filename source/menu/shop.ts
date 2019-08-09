@@ -62,8 +62,7 @@ function openingPart(ctx: any, shop: Shop): string {
 	let text = ''
 	text += emoji.opening
 	text += ctx.wd.r('shop.opening').label()
-	text += '\n'
-	text += '  '
+	text += ':\n  '
 	text += humanReadableTimestamp(shop.opening, locale)
 	text += '\n\n'
 
@@ -155,7 +154,6 @@ function addProductPart(ctx: any, shop: Shop): string {
 	text += ctx.wd.r('other.assortment').label()
 	text += '*'
 	text += '\n'
-	text += '  '
 	text += labeledFloat(ctx.wd.r('other.cost'), cost, emoji.currency)
 	text += '\n\n'
 	return text

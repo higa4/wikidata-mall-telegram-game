@@ -30,7 +30,8 @@ export function personMarkdown(ctx: any, person: Person): string {
 	text += emojis.retirement
 	text += '*'
 	text += ctx.wd.r('person.retirement').label()
-	text += '*\n  '
+	text += '*'
+	text += ':\n  '
 	text += humanReadableTimestamp(retirementTimestamp, locale)
 	text += '\n'
 
