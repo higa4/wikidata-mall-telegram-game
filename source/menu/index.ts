@@ -34,7 +34,19 @@ function menuText(ctx: any): string {
 const menu = new TelegrafInlineMenu(menuText)
 menu.setCommand('start')
 
-menu.submenu(buttonText(emoji.shop, 'menu.shop'), 'shops', shops)
+function shopsButtonText(ctx: any): string {
+	const persist = ctx.persist as Persist
+	let text = ''
+	text += emoji.shop
+	text += ctx.wd.r('menu.shop').label()
+	text += ' ('
+	text += persist.shops.length
+	text += ')'
+
+	return text
+}
+
+menu.submenu(shopsButtonText, 'shops', shops)
 
 menu.simpleButton(buttonText(emoji.mall + emoji.underConstruction, 'menu.mall'), 'mall', {
 	doFunc: async ctx => ctx.answerCbQuery(emoji.underConstruction + 'soon…')
