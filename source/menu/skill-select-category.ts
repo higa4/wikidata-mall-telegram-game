@@ -1,3 +1,4 @@
+import arrayFilterUnique from 'array-filter-unique'
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
 import {Session, Persist} from '../lib/types'
@@ -31,13 +32,20 @@ function categorySkillLine(ctx: any, skills: Skills, skill: keyof Skills, produc
 function menuText(ctx: any): string {
 	const session = ctx.session as Session
 	const persist = ctx.persist as Persist
+	const {__wikibase_language_code: locale} = session
 	const {skill} = fromCtx(ctx)
 
 	let text = ''
 	text += infoHeader(ctx.wd.r(`skill.${skill}`), {titlePrefix: emojis.skill})
 	text += '\n\n'
 
-	const categories = Object.keys(persist.skills[skill] || {})
+	const skillCategories = Object.keys(persist.skills[skill] || {})
+	const shops = persist.shops.map(o => o.id)
+	const categories = [
+		...skillCategories,
+		...shops
+	].filter(arrayFilterUnique())
+
 	if (categories.length > 0) {
 		text += '*'
 		text += ctx.wd.r('skill.level').label()
@@ -46,6 +54,7 @@ function menuText(ctx: any): string {
 
 		text +=	categories
 			.map(o => categorySkillLine(ctx, persist.skills, skill, o))
+			.sort((a, b) => a.localeCompare(b, locale))
 			.join('\n')
 
 		text += '\n\n'

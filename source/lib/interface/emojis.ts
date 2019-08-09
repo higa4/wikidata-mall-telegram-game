@@ -7,6 +7,7 @@ const emojis: Dictionary<string> = {
 	applicantsEmpty: '📭',
 	chat: '💭',
 	close: '🛑',
+	collector: '🧳',
 	construction: '🏗',
 	countdown: '⏲',
 	currency: '📎',

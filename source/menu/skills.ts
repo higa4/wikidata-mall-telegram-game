@@ -1,7 +1,9 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
 import {Session, Persist} from '../lib/types'
-import {Skills, CategorySkill, SimpleSkill, SIMPLE_SKILLS, CATEGORY_SKILLS} from '../lib/types/skills'
+import {Skills, CategorySkill, SimpleSkill, SIMPLE_SKILLS, CATEGORY_SKILLS, Skill} from '../lib/types/skills'
+
+import {sortDictByValue} from '../lib/js-helper/dictionary'
 
 import {currentLevel} from '../lib/game-math/skill'
 
@@ -12,6 +14,8 @@ import emoji from '../lib/interface/emojis'
 
 import skillMenu from './skill'
 import skillSelectCategory from './skill-select-category'
+
+type Dictionary<T> = {[key: string]: T}
 
 function simpleSkillPart(ctx: any, skills: Skills, skill: SimpleSkill): string {
 	if (!skills[skill]) {
@@ -27,6 +31,7 @@ function simpleSkillPart(ctx: any, skills: Skills, skill: SimpleSkill): string {
 }
 
 function categorySkillPart(ctx: any, skills: Skills, skill: CategorySkill): string {
+	const {__wikibase_language_code: locale} = ctx.session as Session
 	if (!skills[skill]) {
 		return ''
 	}
@@ -41,6 +46,7 @@ function categorySkillPart(ctx: any, skills: Skills, skill: CategorySkill): stri
 	text += '\n'
 	text += categories
 		.map(o => categorySkillPartLine(ctx, skills, skill, o))
+		.sort((a, b) => a.localeCompare(b, locale))
 		.map(o => `  ${o}`)
 		.join('\n')
 
@@ -58,6 +64,7 @@ function categorySkillPartLine(ctx: any, skills: Skills, skill: CategorySkill, c
 function menuText(ctx: any): string {
 	const session = ctx.session as Session
 	const persist = ctx.persist as Persist
+	const {__wikibase_language_code: locale} = session
 
 	let text = ''
 	text += infoHeader(ctx.wd.r('menu.skill'), {titlePrefix: emoji.skill})
@@ -65,6 +72,7 @@ function menuText(ctx: any): string {
 
 	const simpleSkillParts = SIMPLE_SKILLS
 		.map(o => simpleSkillPart(ctx, persist.skills, o))
+		.sort((a, b) => a.localeCompare(b, locale))
 		.filter(o => o)
 
 	const categorySkillParts = CATEGORY_SKILLS
@@ -101,14 +109,22 @@ const menu = new TelegrafInlineMenu(menuText, {
 	photo: menuPhoto('menu.skill')
 })
 
-menu.selectSubmenu('simple', SIMPLE_SKILLS, skillMenu, {
-	columns: 2,
-	textFunc: (ctx: any, key) => ctx.wd.r(`skill.${key}`).label()
+function skillOptions(ctx: any, skills: Skill[]): Dictionary<string> {
+	const {__wikibase_language_code: locale} = ctx.session as Session
+	const labels: Dictionary<string> = {}
+	for (const key of skills) {
+		labels[key] = ctx.wd.r(`skill.${key}`).label()
+	}
+
+	return sortDictByValue(labels, locale)
+}
+
+menu.selectSubmenu('simple', ctx => skillOptions(ctx, SIMPLE_SKILLS), skillMenu, {
+	columns: 2
 })
 
-menu.selectSubmenu('c', CATEGORY_SKILLS, skillSelectCategory, {
-	columns: 2,
-	textFunc: (ctx: any, key) => ctx.wd.r(`skill.${key}`).label()
+menu.selectSubmenu('c', ctx => skillOptions(ctx, CATEGORY_SKILLS), skillSelectCategory, {
+	columns: 2
 })
 
 menu.urlButton(
