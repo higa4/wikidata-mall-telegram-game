@@ -36,7 +36,9 @@ function menuText(ctx: any): string {
 	const {skill} = fromCtx(ctx)
 
 	let text = ''
-	text += infoHeader(ctx.wd.r(`skill.${skill}`), {titlePrefix: emojis.skill})
+	text += infoHeader(ctx.wd.r(`skill.${skill}`), {
+		titlePrefix: emojis.skill + (emojis[skill] || '')
+	})
 	text += '\n\n'
 
 	const skillCategories = Object.keys(persist.skills[skill] || {})

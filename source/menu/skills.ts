@@ -23,6 +23,7 @@ function simpleSkillPart(ctx: any, skills: Skills, skill: SimpleSkill): string {
 	}
 
 	let text = ''
+	text += emoji[skill] || ''
 	text += ctx.wd.r(`skill.${skill}`).label()
 	text += ': '
 	text += currentLevel(skills, skill)
@@ -42,6 +43,7 @@ function categorySkillPart(ctx: any, skills: Skills, skill: CategorySkill): stri
 	}
 
 	let text = ''
+	text += emoji[skill] || ''
 	text += ctx.wd.r(`skill.${skill}`).label()
 	text += '\n'
 	text += categories
@@ -116,7 +118,15 @@ function skillOptions(ctx: any, skills: Skill[]): Dictionary<string> {
 		labels[key] = ctx.wd.r(`skill.${key}`).label()
 	}
 
-	return sortDictByValue(labels, locale)
+	const sortedDict = sortDictByValue(labels, locale)
+
+	for (const key of skills) {
+		if (emoji[key]) {
+			sortedDict[key] = emoji[key] + sortedDict[key]
+		}
+	}
+
+	return sortedDict
 }
 
 menu.selectSubmenu('simple', ctx => skillOptions(ctx, SIMPLE_SKILLS), skillMenu, {

@@ -29,7 +29,9 @@ function menuText(ctx: any): string {
 	const level = isSimpleSkill(skill) ? currentLevel(persist.skills, skill) : currentLevel(persist.skills, skill, category!)
 
 	let text = ''
-	text += infoHeader(ctx.wd.r(`skill.${skill}`), {titlePrefix: emoji.skill})
+	text += infoHeader(ctx.wd.r(`skill.${skill}`), {
+		titlePrefix: emoji.skill + (emoji[skill] || '')
+	})
 	text += '\n\n'
 
 	if (category) {
