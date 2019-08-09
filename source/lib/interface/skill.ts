@@ -28,6 +28,8 @@ export function skillInTrainingString(ctx: any, skillInTraining: SkillInTraining
 	text += '\n'
 	text += emojis.countdown
 	text += countdownHourMinute(endTimestamp - now)
+	text += ' '
+	text += ctx.wd.r('unit.hour').label()
 
 	return text
 }

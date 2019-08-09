@@ -45,6 +45,8 @@ function menuText(ctx: any): string {
 	text += ctx.wd.r('action.research').label()
 	text += ': '
 	text += countdownHourMinute(skillUpgradeEndTimestamp(level, 0))
+	text += ' '
+	text += ctx.wd.r('unit.hour').label()
 	text += '\n'
 
 	if (session.skillInTraining) {
