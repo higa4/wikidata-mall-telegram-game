@@ -7,7 +7,7 @@ import {Skills} from '../lib/types/skills'
 
 import {randomUnusedEntry} from '../lib/js-helper/array'
 
-import {addProductToShopCost, storageCapacity, customerInterval, moneyForShopClosure, buyAllCost, buyAllCostFactor, storageCapactiyPressBonus, shopProductsPossible} from '../lib/game-math/shop'
+import {addProductToShopCost, storageCapacity, customerInterval, buyAllCost, buyAllCostFactor, storageCapactiyPressBonus, shopProductsPossible} from '../lib/game-math/shop'
 import {currentLevel} from '../lib/game-math/skill'
 
 import * as wdShop from '../lib/wikidata/shops'
@@ -20,6 +20,7 @@ import {percentBonusString} from '../lib/interface/format-percent'
 import {personInShopLine} from '../lib/interface/person'
 import emoji from '../lib/interface/emojis'
 
+import closureConfirmMenu from './shop-closure-confirm'
 import employeeMenu from './shop-employees'
 import productMenu from './product'
 
@@ -299,35 +300,10 @@ menu.button((ctx: any) => `${emoji.magnet} ${ctx.wd.r('person.talents.purchasing
 
 menu.submenu(buttonText(emoji.person, 'menu.employee'), 'e', employeeMenu)
 
-menu.simpleButton(buttonText(emoji.close, 'action.close'), 'remove-not-possible', {
+menu.submenu(buttonText(emoji.close, 'action.close'), 'remove', closureConfirmMenu, {
 	hide: (ctx: any) => {
 		const persist = ctx.persist as Persist
-		const {shop} = fromCtx(ctx)
-		const itemsInStore = shop.products.map(o => o.itemsInStore).reduce((a, b) => a + b, 0)
-		return persist.shops.length <= 1 || itemsInStore === 0
-	},
-	doFunc: async ctx => ctx.answerCbQuery(emoji.warning + emoji.storage)
-})
-
-menu.button(buttonText(emoji.close, 'action.close'), 'remove', {
-	setParentMenuAfter: true,
-	hide: (ctx: any) => {
-		const persist = ctx.persist as Persist
-		const {shop} = fromCtx(ctx)
-		const itemsInStore = shop.products.map(o => o.itemsInStore).reduce((a, b) => a + b, 0)
-		return persist.shops.length <= 1 || itemsInStore > 0
-	},
-	doFunc: (ctx: any) => {
-		const {shop} = fromCtx(ctx)
-		const session = ctx.session as Session
-		const persist = ctx.persist as Persist
-
-		const isBuildable = wdShop.allShops().includes(shop.id)
-
-		const reward = moneyForShopClosure(persist.shops.length, shop.products.length, isBuildable)
-
-		persist.shops = persist.shops.filter(o => o.id !== shop.id)
-		session.money += reward
+		return persist.shops.length <= 1
 	}
 })
 

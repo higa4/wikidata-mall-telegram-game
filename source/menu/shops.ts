@@ -92,3 +92,5 @@ menu.urlButton(
 )
 
 export default menu
+
+export const replyMenu = menu.replyMenuMiddleware()
