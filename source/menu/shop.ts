@@ -81,7 +81,7 @@ function storageCapacityPart(ctx: any, shop: Shop, skills: Skills): string {
 		text += personInShopLine(shop, 'storage')
 	}
 
-	const pressLevel = currentLevel(skills, 'machinePress', shop.id)
+	const pressLevel = currentLevel(skills, 'machinePress')
 	const pressBonus = storageCapactiyPressBonus(pressLevel)
 	if (pressBonus !== 1) {
 		text += '\n'

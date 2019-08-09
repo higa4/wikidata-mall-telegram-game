@@ -21,6 +21,11 @@ export interface SimpleSkills {
 	logistics?: number;
 
 	/**
+	 * Improve storage capacity for the category
+	 */
+	machinePress?: number;
+
+	/**
 	 * Allows for 'Buy all' and reduces its additional cost
 	 */
 	magnetism?: number;
@@ -30,6 +35,10 @@ export interface SimpleSkills {
 	 */
 	metalScissors?: number;
 
+	/**
+	 * Improve product sell price for the category
+	 */
+	packaging?: number;
 }
 
 export interface CategorySkills {
@@ -37,16 +46,6 @@ export interface CategorySkills {
 	 * Skill Level per Shop a player ever had
 	 */
 	collector?: SkillCategorySet;
-
-	/**
-	 * Improve storage capacity for the category
-	 */
-	machinePress?: SkillCategorySet;
-
-	/**
-	 * Improve product sell price for the category
-	 */
-	packaging?: SkillCategorySet;
 }
 
 export interface Skills extends SimpleSkills, CategorySkills {
@@ -66,12 +65,12 @@ export const SIMPLE_SKILLS: SimpleSkill[] = [
 	'applicantSpeed',
 	'healthCare',
 	'logistics',
+	'machinePress',
 	'magnetism',
-	'metalScissors'
+	'metalScissors',
+	'packaging'
 ]
 
 export const CATEGORY_SKILLS: CategorySkill[] = [
-	'collector',
-	'machinePress',
-	'packaging'
+	'collector'
 ]

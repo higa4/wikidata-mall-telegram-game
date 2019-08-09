@@ -15,7 +15,7 @@ export function purchasingCost(shop: Shop, product: Product, skills: Skills): nu
 
 export function sellingCost(shop: Shop, product: Product, skills: Skills): number {
 	const personal = personalBonus(shop, 'selling')
-	const packagingLevel = currentLevel(skills, 'packaging', shop.id)
+	const packagingLevel = currentLevel(skills, 'packaging')
 	const packagingBonus = sellingCostPackagingBonus(packagingLevel)
 	return productBasePrice(product, skills) * personal * packagingBonus
 }

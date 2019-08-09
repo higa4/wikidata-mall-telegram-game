@@ -22,7 +22,7 @@ export function moneyForShopClosure(existingShops: number, productsInShop: numbe
 
 export function storageCapacity(shop: Shop, skills: Skills): number {
 	const personal = personalBonus(shop, 'storage')
-	const pressLevel = currentLevel(skills, 'machinePress', shop.id)
+	const pressLevel = currentLevel(skills, 'machinePress')
 	const press = storageCapactiyPressBonus(pressLevel)
 	return Math.round(100 * personal * press)
 }
