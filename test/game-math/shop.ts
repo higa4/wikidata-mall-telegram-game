@@ -53,7 +53,7 @@ test('totalCostOfShopWithProducts 0 shops, 3 products', totalCostOfShopWithProdu
 test('totalCostOfShopWithProducts 1 shops, 3 products', totalCostOfShopWithProductsMacro, 1, 3, 4000)
 test('totalCostOfShopWithProducts 2 shops, 3 products', totalCostOfShopWithProductsMacro, 2, 3, 40000)
 
-function closureIsNotProfitableMacro(t: ExecutionContext, shopsAtStart: number, products: number): void {
+function buyShopForClosureIsNotProfitableMacro(t: ExecutionContext, shopsAtStart: number, products: number): void {
 	const totalCost = totalCostOfShopWithProducts(shopsAtStart, products)
 
 	const closureMoney = moneyForShopClosure(shopsAtStart + 1, products, true)
@@ -62,12 +62,12 @@ function closureIsNotProfitableMacro(t: ExecutionContext, shopsAtStart: number, 
 }
 
 for (let shops = 1; shops <= 10; shops += 3) {
-	for (let products = 0; products < 10; products++) {
-		test(`shop closure is not profitable having ${shops} shop, buying ${products} products`, closureIsNotProfitableMacro, shops, products)
+	for (let products = 0; products <= 10; products++) {
+		test(`buy shop for closure is not profitable having ${shops} shop, buying ${products} products`, buyShopForClosureIsNotProfitableMacro, shops, products)
 	}
 }
 
-test('shop closure for insane players is not profitable', closureIsNotProfitableMacro, 12, 30)
+test('buy shop for closure for insane players is not profitable', buyShopForClosureIsNotProfitableMacro, 12, 30)
 
 function buyAllCostFactorMacro(t: ExecutionContext, magnetismLevel: number, expected: number): void {
 	const skills: Skills = {magnetism: magnetismLevel}
