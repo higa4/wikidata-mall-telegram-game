@@ -13,6 +13,16 @@ export function addProductToShopCost(indexOfShop: number, existingProducts: numb
 	return costForAdditionalShop(indexOfShop) * existingProducts
 }
 
+export function totalCostOfShopWithProducts(shopsBefore: number, productsToAdd: number): number {
+	const buildCost = costForAdditionalShop(shopsBefore)
+	let totalCost = buildCost
+	for (let i = 0; i < productsToAdd; i++) {
+		totalCost += addProductToShopCost(shopsBefore, i)
+	}
+
+	return totalCost
+}
+
 export function moneyForShopClosure(existingShops: number, productsInShop: number, shopIsBuildableUnderCurrentConditions: boolean): number {
 	const lastBuildCost = costForAdditionalShop(existingShops - 1)
 	const factor = shopIsBuildableUnderCurrentConditions ? 0.5 : 1

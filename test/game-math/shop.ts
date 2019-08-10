@@ -5,7 +5,7 @@ import {Skills} from '../../source/lib/types/skills'
 
 import {PURCHASING_FACTOR} from '../../source/lib/game-math/constants'
 
-import {costForAdditionalShop, addProductToShopCost, moneyForShopClosure, buyAllCostFactor, buyAllCost} from '../../source/lib/game-math/shop'
+import {costForAdditionalShop, addProductToShopCost, moneyForShopClosure, buyAllCostFactor, buyAllCost, totalCostOfShopWithProducts} from '../../source/lib/game-math/shop'
 import {productBasePrice} from '../../source/lib/game-math/product'
 
 function costForAdditionalShopMacro(t: ExecutionContext, existingShops: number, expectedCost: number): void {
@@ -33,12 +33,28 @@ test('addProductToShopCost first shop 4 products', addProductToShopCostMacro, 0,
 test('addProductToShopCost second shop 4 products', addProductToShopCostMacro, 1, 4, 4000)
 test('addProductToShopCost third shop 4 products', addProductToShopCostMacro, 2, 4, 40000)
 
+function totalCostOfShopWithProductsMacro(t: ExecutionContext, shopsBefore: number, products: number, expectedCost: number): void {
+	t.is(totalCostOfShopWithProducts(shopsBefore, products), expectedCost)
+}
+
+test('totalCostOfShopWithProducts 0 shops, 0 products', totalCostOfShopWithProductsMacro, 0, 0, 100)
+test('totalCostOfShopWithProducts 1 shops, 0 products', totalCostOfShopWithProductsMacro, 1, 0, 1000)
+test('totalCostOfShopWithProducts 2 shops, 0 products', totalCostOfShopWithProductsMacro, 2, 0, 10000)
+
+test('totalCostOfShopWithProducts 0 shops, 1 products', totalCostOfShopWithProductsMacro, 0, 1, 100)
+test('totalCostOfShopWithProducts 1 shops, 1 products', totalCostOfShopWithProductsMacro, 1, 1, 1000)
+test('totalCostOfShopWithProducts 2 shops, 1 products', totalCostOfShopWithProductsMacro, 2, 1, 10000)
+
+test('totalCostOfShopWithProducts 0 shops, 2 products', totalCostOfShopWithProductsMacro, 0, 2, 200)
+test('totalCostOfShopWithProducts 1 shops, 2 products', totalCostOfShopWithProductsMacro, 1, 2, 2000)
+test('totalCostOfShopWithProducts 2 shops, 2 products', totalCostOfShopWithProductsMacro, 2, 2, 20000)
+
+test('totalCostOfShopWithProducts 0 shops, 3 products', totalCostOfShopWithProductsMacro, 0, 3, 400)
+test('totalCostOfShopWithProducts 1 shops, 3 products', totalCostOfShopWithProductsMacro, 1, 3, 4000)
+test('totalCostOfShopWithProducts 2 shops, 3 products', totalCostOfShopWithProductsMacro, 2, 3, 40000)
+
 function closureIsNotProfitableMacro(t: ExecutionContext, shopsAtStart: number, products: number): void {
-	const buildCost = costForAdditionalShop(shopsAtStart)
-	let totalCost = buildCost
-	for (let i = 0; i < products; i++) {
-		totalCost += addProductToShopCost(shopsAtStart, i)
-	}
+	const totalCost = totalCostOfShopWithProducts(shopsAtStart, products)
 
 	const closureMoney = moneyForShopClosure(shopsAtStart + 1, products, true)
 	t.log(totalCost, closureMoney, closureMoney / totalCost)
