@@ -23,7 +23,7 @@ function simpleSkillPart(ctx: any, skills: Skills, skill: SimpleSkill): string {
 	}
 
 	let text = ''
-	text += emoji[skill] || ''
+	text += emoji[skill] || ''
 	text += ctx.wd.r(`skill.${skill}`).label()
 	text += ': '
 	text += currentLevel(skills, skill)
@@ -43,7 +43,7 @@ function categorySkillPart(ctx: any, skills: Skills, skill: CategorySkill): stri
 	}
 
 	let text = ''
-	text += emoji[skill] || ''
+	text += emoji[skill] || ''
 	text += ctx.wd.r(`skill.${skill}`).label()
 	text += '\n'
 	text += categories

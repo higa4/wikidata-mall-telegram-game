@@ -37,7 +37,7 @@ function menuText(ctx: any): string {
 
 	let text = ''
 	text += infoHeader(ctx.wd.r(`skill.${skill}`), {
-		titlePrefix: emojis.skill + (emojis[skill] || '')
+		titlePrefix: emojis.skill + (emojis[skill] || '')
 	})
 	text += '\n\n'
 
