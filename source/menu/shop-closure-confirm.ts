@@ -66,7 +66,6 @@ const menu = new TelegrafInlineMenu(menuText, {
 
 menu.simpleButton(buttonText(emojis.yes + emojis.close, 'action.close'), 'remove', {
 	doFunc: async (ctx: any) => {
-		console.log('pressed')
 		const {shop} = fromCtx(ctx)
 		const session = ctx.session as Session
 		const persist = ctx.persist as Persist
