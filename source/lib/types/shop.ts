@@ -18,3 +18,7 @@ export interface Shop {
 	personal: Personal;
 	products: Product[];
 }
+
+export interface Construction {
+	possibleShops: string[];
+}

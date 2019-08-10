@@ -1,11 +1,6 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
 import {Session, Persist} from '../lib/types'
-import {Shop} from '../lib/types/shop'
-
-import {randomUnusedEntry} from '../lib/js-helper/array'
-
-import * as wdShops from '../lib/wikidata/shops'
 
 import {costForAdditionalShop} from '../lib/game-math/shop'
 
@@ -13,6 +8,7 @@ import {buttonText, menuPhoto} from '../lib/interface/menu'
 import {infoHeader, labeledFloat} from '../lib/interface/formatted-strings'
 import emoji from '../lib/interface/emojis'
 
+import constructionMenu from './shops-construction'
 import shopMenu from './shop'
 
 function menuText(ctx: any): string {
@@ -55,34 +51,12 @@ menu.selectSubmenu('s', userShops, shopMenu, {
 	textFunc: (ctx: any, key) => ctx.wd.r(key).label()
 })
 
-menu.button(buttonText(emoji.construction, 'action.construction'), 'build', {
+menu.submenu(buttonText(emoji.construction, 'action.construction'), 'build', constructionMenu, {
 	hide: (ctx: any) => {
 		const session = ctx.session as Session
 		const persist = ctx.persist as Persist
 		const cost = costForAdditionalShop(persist.shops.length)
 		return cost > session.money
-	},
-	doFunc: (ctx: any) => {
-		const session = ctx.session as Session
-		const persist = ctx.persist as Persist
-
-		const cost = costForAdditionalShop(persist.shops.length)
-		if (session.money < cost) {
-			// Fishy
-			return
-		}
-
-		const now = Math.floor(Date.now() / 1000)
-		const newShopId = randomUnusedEntry(wdShops.allShops(), userShops(ctx))
-		const newShop: Shop = {
-			id: newShopId,
-			opening: now,
-			personal: {},
-			products: []
-		}
-
-		session.money -= cost
-		persist.shops.push(newShop)
 	}
 })
 
