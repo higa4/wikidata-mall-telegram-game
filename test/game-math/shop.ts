@@ -69,6 +69,19 @@ for (let shops = 1; shops <= 10; shops += 3) {
 
 test('buy shop for closure for insane players is not profitable', buyShopForClosureIsNotProfitableMacro, 12, 30)
 
+function closureBringsNotMoreMoneyThenNewShopBuildCosts(t: ExecutionContext, currentShops: number, products: number): void {
+	const buildCost = costForAdditionalShop(currentShops - 1)
+	const closureMoney = moneyForShopClosure(currentShops, products, true)
+	t.log(buildCost, closureMoney)
+	t.true(buildCost * 3 > closureMoney, 'closure should not bring much more money than building a shop')
+}
+
+for (let shops = 1; shops <= 10; shops += 3) {
+	for (let products = 0; products <= 10; products++) {
+		test(`closure brings not more money then new shop build cost having ${shops} shop, buying ${products} products`, closureBringsNotMoreMoneyThenNewShopBuildCosts, shops, products)
+	}
+}
+
 function buyAllCostFactorMacro(t: ExecutionContext, magnetismLevel: number, expected: number): void {
 	const skills: Skills = {magnetism: magnetismLevel}
 	t.is(buyAllCostFactor(skills), expected)

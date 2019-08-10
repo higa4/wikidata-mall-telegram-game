@@ -26,7 +26,7 @@ export function totalCostOfShopWithProducts(shopsBefore: number, productsToAdd: 
 export function moneyForShopClosure(existingShops: number, productsInShop: number, shopIsBuildableUnderCurrentConditions: boolean): number {
 	const lastBuildCost = costForAdditionalShop(existingShops - 1)
 	const factor = shopIsBuildableUnderCurrentConditions ? 0.5 : 1
-	const productsInShopBonus = 1 + (Math.max(0, productsInShop - 1) ** 2)
+	const productsInShopBonus = 1 + (Math.max(0, productsInShop - 1) * 0.4)
 	return Math.ceil(factor * lastBuildCost * productsInShopBonus)
 }
 
