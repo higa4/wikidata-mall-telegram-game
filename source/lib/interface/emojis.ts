@@ -46,5 +46,3 @@ export const emojis: Dictionary<string> = {
 	metalScissors: basic.purchasing,
 	packaging: basic.selling
 }
-
-export default emojis

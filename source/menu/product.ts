@@ -10,12 +10,12 @@ import {collectorTotalLevel, currentLevel, isSimpleSkill} from '../lib/game-math
 import {sellingCost, purchasingCost, productBasePrice, productBasePriceCollectorFactor, sellingCostPackagingBonus, purchasingCostScissorsBonus} from '../lib/game-math/product'
 import {storageCapacity} from '../lib/game-math/shop'
 
+import {emojis} from '../lib/interface/emojis'
 import {formatInt} from '../lib/interface/format-number'
 import {infoHeader, labeledInt, labeledFloat} from '../lib/interface/formatted-strings'
 import {menuPhoto} from '../lib/interface/menu'
 import {percentBonusString} from '../lib/interface/format-percent'
 import {personInShopLine} from '../lib/interface/person'
-import emoji from '../lib/interface/emojis'
 
 function fromCtx(ctx: any): {shop: Shop; product: Product} {
 	const shopType = ctx.match[1]
@@ -32,7 +32,7 @@ function bonusPerson(shop: Shop, talent: TalentName): string {
 		return ''
 	}
 
-	return '\n  ' + emoji.person + personInShopLine(shop, talent)
+	return '\n  ' + emojis.person + personInShopLine(shop, talent)
 }
 
 function bonusSkill(ctx: any, shop: Shop, skills: Skills, skill: keyof Skills, bonusFunc: (level: number) => number): string {
@@ -45,7 +45,7 @@ function bonusSkill(ctx: any, shop: Shop, skills: Skills, skill: keyof Skills, b
 	let text = ''
 	text += '\n'
 	text += '  '
-	text += emoji.skill
+	text += emojis.skill
 	text += percentBonusString(bonus)
 	text += ' '
 	text += ctx.wd.r(`skill.${skill}`).label()
@@ -90,10 +90,10 @@ function menuText(ctx: any): string {
 	text += infoHeader(reader)
 	text += '\n\n'
 
-	text += labeledFloat(ctx.wd.r('other.money'), session.money, emoji.currency)
+	text += labeledFloat(ctx.wd.r('other.money'), session.money, emojis.currency)
 	text += '\n\n'
 
-	text += emoji.storage
+	text += emojis.storage
 	text += labeledInt(ctx.wd.r('product.storage'), product.itemsInStore)
 	text += ' / '
 	text += formatInt(capacity)
@@ -105,11 +105,11 @@ function menuText(ctx: any): string {
 	text += '*'
 	text += '\n'
 
-	text += labeledFloat(ctx.wd.r('product.listprice'), basePrice, emoji.currency)
+	text += labeledFloat(ctx.wd.r('product.listprice'), basePrice, emojis.currency)
 	text += '\n'
 	if (collectorLevel > 0) {
 		text += '  '
-		text += emoji.skill
+		text += emojis.skill
 		text += percentBonusString(productBasePriceCollectorFactor(persist.skills))
 		text += ' '
 		text += ctx.wd.r('skill.collector').label()
@@ -119,14 +119,14 @@ function menuText(ctx: any): string {
 		text += '\n'
 	}
 
-	text += emoji.purchasing
-	text += labeledFloat(ctx.wd.r('person.talents.purchasing'), purchaseCostPerItem, emoji.currency)
+	text += emojis.purchasing
+	text += labeledFloat(ctx.wd.r('person.talents.purchasing'), purchaseCostPerItem, emojis.currency)
 	text += bonusPerson(shop, 'purchasing')
 	text += bonusSkill(ctx, shop, persist.skills, 'metalScissors', purchasingCostScissorsBonus)
 	text += '\n'
 
-	text += emoji.selling
-	text += labeledFloat(ctx.wd.r('person.talents.selling'), sellingCostPerItem, emoji.currency)
+	text += emojis.selling
+	text += labeledFloat(ctx.wd.r('person.talents.selling'), sellingCostPerItem, emojis.currency)
 	text += bonusPerson(shop, 'selling')
 	text += bonusSkill(ctx, shop, persist.skills, 'packaging', sellingCostPackagingBonus)
 	text += '\n'
@@ -156,7 +156,7 @@ function buyAmount(ctx: any, amount: number, now: number): void {
 	session.stats.productsBought += buyItems
 }
 
-menu.button((ctx: any) => `${emoji.purchasing} ${ctx.wd.r('person.talents.purchasing').label()} (${itemsPurchasableCtx(ctx)})`, 'fill', {
+menu.button((ctx: any) => `${emojis.purchasing} ${ctx.wd.r('person.talents.purchasing').label()} (${itemsPurchasableCtx(ctx)})`, 'fill', {
 	hide: ctx => itemsPurchasableCtx(ctx) < 1,
 	doFunc: (ctx: any) => {
 		const now = Math.floor(Date.now() / 1000)
@@ -167,7 +167,7 @@ menu.button((ctx: any) => `${emoji.purchasing} ${ctx.wd.r('person.talents.purcha
 menu.select('buy', [1, 5, 10, 42, 50, 100, 250, 500].map(o => String(o)), {
 	columns: 4,
 	hide: (ctx, key) => itemsPurchasableCtx(ctx) < Number(key),
-	textFunc: (_, key) => `${emoji.purchasing}${key}`,
+	textFunc: (_, key) => `${emojis.purchasing}${key}`,
 	setFunc: (ctx, key) => {
 		const now = Math.floor(Date.now() / 1000)
 		buyAmount(ctx, Number(key), now)
@@ -175,7 +175,7 @@ menu.select('buy', [1, 5, 10, 42, 50, 100, 250, 500].map(o => String(o)), {
 })
 
 menu.urlButton(
-	(ctx: any) => `${emoji.wikidataItem} ${ctx.wd.r('menu.wikidataItem').label()}`,
+	(ctx: any) => `${emojis.wikidataItem} ${ctx.wd.r('menu.wikidataItem').label()}`,
 	(ctx: any) => ctx.wd.r(fromCtx(ctx).product.id).url()
 )
 

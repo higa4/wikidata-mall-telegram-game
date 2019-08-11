@@ -1,7 +1,7 @@
 import {Notification} from '../types/notification'
 
 import {countdownHourMinute} from './formatted-time'
-import emojis from './emojis'
+import {emojis} from './emojis'
 
 export function notificationText(notification: Notification, fireDate: Date): string {
 	const millisecondsUntil = notification.date.getTime() - fireDate.getTime()

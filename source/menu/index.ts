@@ -3,8 +3,8 @@ import TelegrafInlineMenu from 'telegraf-inline-menu'
 import {Session, Persist} from '../lib/types'
 
 import {buttonText} from '../lib/interface/menu'
+import {emojis} from '../lib/interface/emojis'
 import {infoHeader, labeledFloat} from '../lib/interface/formatted-strings'
-import emoji from '../lib/interface/emojis'
 
 import achievements from './achievements'
 import applicants from './applicants'
@@ -21,7 +21,7 @@ function menuText(ctx: any): string {
 	text += infoHeader(ctx.wd.r('menu.menu'))
 	text += '\n\n'
 
-	text += labeledFloat(ctx.wd.r('other.money'), session.money, emoji.currency)
+	text += labeledFloat(ctx.wd.r('other.money'), session.money, emojis.currency)
 	text += '\n\n'
 
 	text += '⚠️*BETA*\n'
@@ -37,7 +37,7 @@ menu.setCommand('start')
 function shopsButtonText(ctx: any): string {
 	const persist = ctx.persist as Persist
 	let text = ''
-	text += emoji.shop
+	text += emojis.shop
 	text += ctx.wd.r('menu.shop').label()
 	text += ' ('
 	text += persist.shops.length
@@ -48,13 +48,13 @@ function shopsButtonText(ctx: any): string {
 
 menu.submenu(shopsButtonText, 'shops', shops)
 
-menu.simpleButton(buttonText(emoji.mall + emoji.underConstruction, 'menu.mall'), 'mall', {
-	doFunc: async ctx => ctx.answerCbQuery(emoji.underConstruction + 'soon…')
+menu.simpleButton(buttonText(emojis.mall + emojis.underConstruction, 'menu.mall'), 'mall', {
+	doFunc: async ctx => ctx.answerCbQuery(emojis.underConstruction + 'soon…')
 })
 
 function applicantEmoji(ctx: any): string {
 	const session = ctx.session as Session
-	return session.applicants.length > 0 ? emoji.applicantsAvailable : emoji.applicantsEmpty
+	return session.applicants.length > 0 ? emojis.applicantsAvailable : emojis.applicantsEmpty
 }
 
 menu.submenu(buttonText(applicantEmoji, 'menu.applicant'), 'applicants', applicants, {
@@ -64,7 +64,7 @@ menu.submenu(buttonText(applicantEmoji, 'menu.applicant'), 'applicants', applica
 	}
 })
 
-menu.submenu(buttonText(emoji.person, 'menu.employee'), 'employees', employees, {
+menu.submenu(buttonText(emojis.person, 'menu.employee'), 'employees', employees, {
 	joinLastRow: true,
 	hide: (ctx: any) => {
 		const persist = ctx.persist as Persist
@@ -72,24 +72,24 @@ menu.submenu(buttonText(emoji.person, 'menu.employee'), 'employees', employees, 
 	}
 })
 
-menu.submenu(buttonText(emoji.skill, 'menu.skill'), 'skill', skills, {
+menu.submenu(buttonText(emojis.skill, 'menu.skill'), 'skill', skills, {
 	hide: (ctx: any) => {
 		const persist = ctx.persist as Persist
 		return persist.shops.length === 0
 	}
 })
 
-menu.submenu(buttonText(emoji.achievement, 'menu.achievement'), 'achievements', achievements, {
+menu.submenu(buttonText(emojis.achievement, 'menu.achievement'), 'achievements', achievements, {
 	joinLastRow: true
 })
 
-menu.submenu(buttonText(emoji.language, 'menu.language'), 'lang', languages)
+menu.submenu(buttonText(emojis.language, 'menu.language'), 'lang', languages)
 
-menu.submenu(buttonText(emoji.stats, 'stat.stats'), 'botStats', botStats, {
+menu.submenu(buttonText(emojis.stats, 'stat.stats'), 'botStats', botStats, {
 	joinLastRow: true
 })
 
-menu.urlButton(buttonText(emoji.chat, 'menu.chat'), 'https://t.me/WikidataMallChat')
+menu.urlButton(buttonText(emojis.chat, 'menu.chat'), 'https://t.me/WikidataMallChat')
 
 menu.urlButton(buttonText('🦑', 'other.github'), 'https://github.com/EdJoPaTo/wikidata-mall-telegram-game', {
 	joinLastRow: true

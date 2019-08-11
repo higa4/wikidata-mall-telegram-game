@@ -4,10 +4,10 @@ import WikidataEntityReader from 'wikidata-entity-reader'
 import {Achievements, AchievementSet} from '../lib/types/achievements'
 import {Session} from '../lib/types'
 
+import {emojis} from '../lib/interface/emojis'
 import {humanReadableTimestamp} from '../lib/interface/formatted-time'
 import {infoHeader} from '../lib/interface/formatted-strings'
 import {menuPhoto, buttonText} from '../lib/interface/menu'
-import emojis from '../lib/interface/emojis'
 
 function achievementSetPart(topic: WikidataEntityReader, set: AchievementSet | undefined, locale: string): string {
 	if (!set || Object.keys(set).length === 0) {

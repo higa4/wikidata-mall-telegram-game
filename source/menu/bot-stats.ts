@@ -8,9 +8,9 @@ import * as wdNames from '../lib/wikidata/name'
 import * as wdShops from '../lib/wikidata/shops'
 
 import {buttonText, menuPhoto} from '../lib/interface/menu'
+import {emojis} from '../lib/interface/emojis'
 import {formatInt} from '../lib/interface/format-number'
 import {infoHeader} from '../lib/interface/formatted-strings'
-import emojis from '../lib/interface/emojis'
 
 function entryLine(ctx: any, resourceKey: string, value: string): string {
 	let text = ''

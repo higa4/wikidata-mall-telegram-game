@@ -5,9 +5,9 @@ import {Shop} from '../lib/types/shop'
 import {TalentName, Person} from '../lib/types/people'
 
 import {buttonText} from '../lib/interface/menu'
+import {emojis} from '../lib/interface/emojis'
 import {infoHeader} from '../lib/interface/formatted-strings'
 import {personMarkdown} from '../lib/interface/person'
-import emojis from '../lib/interface/emojis'
 
 function fromCtx(ctx: any): {shop: Shop; talent: TalentName; employee?: Person; applicantId: number; applicant: Person} {
 	const shopType = ctx.match[1]

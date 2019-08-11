@@ -13,12 +13,12 @@ import {currentLevel} from '../lib/game-math/skill'
 import * as wdShop from '../lib/wikidata/shops'
 
 import {buttonText, menuPhoto} from '../lib/interface/menu'
+import {emojis} from '../lib/interface/emojis'
 import {formatInt} from '../lib/interface/format-number'
 import {humanReadableTimestamp} from '../lib/interface/formatted-time'
 import {infoHeader, labeledFloat, labeledInt} from '../lib/interface/formatted-strings'
 import {percentBonusString} from '../lib/interface/format-percent'
 import {personInShopLine} from '../lib/interface/person'
-import emoji from '../lib/interface/emojis'
 
 import closureConfirmMenu from './shop-closure-confirm'
 import employeeMenu from './shop-employees'
@@ -52,7 +52,7 @@ function canAddProductTechnically(shop: Shop, skills: Skills): boolean {
 
 function productLine(ctx: any, product: Product): string {
 	let text = ''
-	text += labeledInt(ctx.wd.r(product.id), product.itemsInStore, emoji.storage)
+	text += labeledInt(ctx.wd.r(product.id), product.itemsInStore, emojis.storage)
 
 	return text
 }
@@ -61,7 +61,7 @@ function openingPart(ctx: any, shop: Shop): string {
 	const {__wikibase_language_code: locale} = ctx.session as Session
 
 	let text = ''
-	text += emoji.opening
+	text += emojis.opening
 	text += ctx.wd.r('shop.opening').label()
 	text += ':\n  '
 	text += humanReadableTimestamp(shop.opening, locale)
@@ -72,12 +72,12 @@ function openingPart(ctx: any, shop: Shop): string {
 
 function storageCapacityPart(ctx: any, shop: Shop, skills: Skills): string {
 	let text = ''
-	text += emoji.storage
+	text += emojis.storage
 	text += labeledInt(ctx.wd.r('product.storageCapacity'), storageCapacity(shop, skills))
 	if (shop.personal.storage) {
 		text += '\n'
 		text += '  '
-		text += emoji.person
+		text += emojis.person
 		text += personInShopLine(shop, 'storage')
 	}
 
@@ -86,7 +86,7 @@ function storageCapacityPart(ctx: any, shop: Shop, skills: Skills): string {
 	if (pressBonus !== 1) {
 		text += '\n'
 		text += '  '
-		text += emoji.skill
+		text += emojis.skill
 		text += percentBonusString(pressBonus)
 		text += ' '
 		text += ctx.wd.r('skill.machinePress').label()
@@ -121,7 +121,7 @@ function productsPart(ctx: any, shop: Shop, skills: Skills): string {
 
 	if (logisticsLevel > 0) {
 		text += '  '
-		text += emoji.skill
+		text += emojis.skill
 		text += '+'
 		text += logisticsLevel
 		text += ' '
@@ -150,12 +150,12 @@ function addProductPart(ctx: any, shop: Shop): string {
 	const cost = addProductToShopCost(indexOfShop, shop.products.length)
 
 	let text = ''
-	text += emoji.add
+	text += emojis.add
 	text += '*'
 	text += ctx.wd.r('other.assortment').label()
 	text += '*'
 	text += '\n'
-	text += labeledFloat(ctx.wd.r('other.cost'), cost, emoji.currency)
+	text += labeledFloat(ctx.wd.r('other.cost'), cost, emojis.currency)
 	text += '\n\n'
 	return text
 }
@@ -189,10 +189,10 @@ function menuText(ctx: any): string {
 	const persist = ctx.persist as Persist
 
 	let text = ''
-	text += infoHeader(reader, {titlePrefix: emoji.shop})
+	text += infoHeader(reader, {titlePrefix: emojis.shop})
 	text += '\n\n'
 
-	text += labeledFloat(ctx.wd.r('other.money'), session.money, emoji.currency)
+	text += labeledFloat(ctx.wd.r('other.money'), session.money, emojis.currency)
 	text += '\n\n'
 
 	text += openingPart(ctx, shop)
@@ -218,7 +218,7 @@ menu.selectSubmenu('p', userProducts, productMenu, {
 	textFunc: (ctx: any, key) => ctx.wd.r(key).label()
 })
 
-menu.button(buttonText(emoji.add, 'other.assortment'), 'addProduct', {
+menu.button(buttonText(emojis.add, 'other.assortment'), 'addProduct', {
 	hide: (ctx: any) => {
 		const session = ctx.session as Session
 		const persist = ctx.persist as Persist
@@ -260,10 +260,10 @@ menu.button(buttonText(emoji.add, 'other.assortment'), 'addProduct', {
 function buyAllAdditionalCostString(ctx: any): string {
 	const persist = ctx.persist as Persist
 	const factor = buyAllCostFactor(persist.skills)
-	return percentBonusString(factor) + emoji.currency
+	return percentBonusString(factor) + emojis.currency
 }
 
-menu.button((ctx: any) => `${emoji.magnetism} ${ctx.wd.r('person.talents.purchasing').label()} (${buyAllAdditionalCostString(ctx)})`, 'buy-all', {
+menu.button((ctx: any) => `${emojis.magnetism} ${ctx.wd.r('person.talents.purchasing').label()} (${buyAllAdditionalCostString(ctx)})`, 'buy-all', {
 	hide: (ctx: any) => {
 		const {shop} = fromCtx(ctx)
 		const session = ctx.session as Session
@@ -298,9 +298,9 @@ menu.button((ctx: any) => `${emoji.magnetism} ${ctx.wd.r('person.talents.purchas
 	}
 })
 
-menu.submenu(buttonText(emoji.person, 'menu.employee'), 'e', employeeMenu)
+menu.submenu(buttonText(emojis.person, 'menu.employee'), 'e', employeeMenu)
 
-menu.submenu(buttonText(emoji.close, 'action.close'), 'remove', closureConfirmMenu, {
+menu.submenu(buttonText(emojis.close, 'action.close'), 'remove', closureConfirmMenu, {
 	hide: (ctx: any) => {
 		const persist = ctx.persist as Persist
 		return persist.shops.length <= 1
@@ -308,7 +308,7 @@ menu.submenu(buttonText(emoji.close, 'action.close'), 'remove', closureConfirmMe
 })
 
 menu.urlButton(
-	buttonText(emoji.wikidataItem, 'menu.wikidataItem'),
+	buttonText(emojis.wikidataItem, 'menu.wikidataItem'),
 	(ctx: any) => ctx.wd.r(fromCtx(ctx).shop.id).url()
 )
 

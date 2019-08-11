@@ -7,10 +7,10 @@ import {TalentName, Person} from '../lib/types/people'
 import {personalBonusWhenEmployed} from '../lib/game-math/personal'
 
 import {buttonText} from '../lib/interface/menu'
+import {emojis} from '../lib/interface/emojis'
 import {infoHeader} from '../lib/interface/formatted-strings'
 import {percentBonusString} from '../lib/interface/format-percent'
 import {personMarkdown} from '../lib/interface/person'
-import emojis from '../lib/interface/emojis'
 
 import confirmEmployee from './shop-employee-confirm-applicant'
 

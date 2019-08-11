@@ -4,7 +4,7 @@ import WikidataEntityStore from 'wikidata-entity-store'
 import {SkillInTraining} from '../types/skills'
 
 import {countdownHourMinute} from './formatted-time'
-import emojis from './emojis'
+import {emojis} from './emojis'
 
 export function skillInTrainingString(ctx: any, skillInTraining: SkillInTraining): string {
 	const {skill, category, endTimestamp} = skillInTraining

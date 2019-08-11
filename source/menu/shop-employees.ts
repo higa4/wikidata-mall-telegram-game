@@ -5,9 +5,9 @@ import {Shop} from '../lib/types/shop'
 import {TALENTS, TalentName} from '../lib/types/people'
 
 import {buttonText, menuPhoto} from '../lib/interface/menu'
+import {emojis} from '../lib/interface/emojis'
 import {infoHeader} from '../lib/interface/formatted-strings'
 import {personInShopLine} from '../lib/interface/person'
-import emojis from '../lib/interface/emojis'
 
 import employee from './shop-employee'
 

@@ -5,10 +5,10 @@ import {Skills} from '../lib/types/skills'
 
 import {currentLevel, isSimpleSkill} from '../lib/game-math/skill'
 
+import {emojis} from '../lib/interface/emojis'
 import {infoHeader} from '../lib/interface/formatted-strings'
 import {menuPhoto, buttonText} from '../lib/interface/menu'
 import {skillInTrainingString} from '../lib/interface/skill'
-import emojis from '../lib/interface/emojis'
 
 import skillMenu from './skill'
 

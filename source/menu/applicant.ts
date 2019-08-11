@@ -4,8 +4,8 @@ import {Person} from '../lib/types/people'
 import {Session} from '../lib/types'
 
 import {buttonText, menuPhoto} from '../lib/interface/menu'
+import {emojis} from '../lib/interface/emojis'
 import {personMarkdown} from '../lib/interface/person'
-import emoji from '../lib/interface/emojis'
 
 function fromCtx(ctx: any): {applicantId: number; applicant: Person} {
 	const applicantId = Number(ctx.match[1])
@@ -28,11 +28,11 @@ const menu = new TelegrafInlineMenu(menuText, {
 })
 
 menu.urlButton(
-	(ctx: any) => `${emoji.wikidataItem}${emoji.hobby} ${ctx.wd.r('person.hobby').label()} ${ctx.wd.r(fromCtx(ctx).applicant.hobby).label()}`,
+	(ctx: any) => `${emojis.wikidataItem}${emojis.hobby} ${ctx.wd.r('person.hobby').label()} ${ctx.wd.r(fromCtx(ctx).applicant.hobby).label()}`,
 	(ctx: any) => ctx.wd.r(fromCtx(ctx).applicant.hobby).url()
 )
 
-menu.button(buttonText(emoji.employmentTermination, 'action.employmentTermination'), 'remove', {
+menu.button(buttonText(emojis.employmentTermination, 'action.employmentTermination'), 'remove', {
 	setParentMenuAfter: true,
 	doFunc: (ctx: any) => {
 		const {applicantId} = fromCtx(ctx)

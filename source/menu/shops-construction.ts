@@ -11,8 +11,8 @@ import * as wdShops from '../lib/wikidata/shops'
 import {costForAdditionalShop} from '../lib/game-math/shop'
 
 import {buttonText, menuPhoto} from '../lib/interface/menu'
+import {emojis} from '../lib/interface/emojis'
 import {infoHeader, labeledFloat} from '../lib/interface/formatted-strings'
-import emoji from '../lib/interface/emojis'
 
 function getConstruction(ctx: any): Construction {
 	const session = ctx.session as Session
@@ -45,18 +45,18 @@ function menuText(ctx: any): string {
 
 	let text = ''
 	text += infoHeader(ctx.wd.r('action.construction'), {
-		titlePrefix: emoji.construction
+		titlePrefix: emojis.construction
 	})
 	text += '\n\n'
 
-	text += labeledFloat(ctx.wd.r('other.money'), session.money, emoji.currency)
+	text += labeledFloat(ctx.wd.r('other.money'), session.money, emojis.currency)
 	text += '\n'
-	text += labeledFloat(ctx.wd.r('other.cost'), cost, emoji.currency)
+	text += labeledFloat(ctx.wd.r('other.cost'), cost, emojis.currency)
 	text += '\n\n'
 
 	if (cost < session.money) {
 		text += Object.keys(constructionOptions(ctx))
-			.map(o => infoHeader(ctx.wd.r(o), {titlePrefix: emoji.shop}))
+			.map(o => infoHeader(ctx.wd.r(o), {titlePrefix: emojis.shop}))
 			.join('\n\n')
 	}
 
@@ -82,7 +82,7 @@ function constructionOptions(ctx: any): Dictionary<string> {
 menu.select('s', constructionOptions, {
 	columns: 1,
 	setParentMenuAfter: true,
-	prefixFunc: () => emoji.construction + emoji.shop,
+	prefixFunc: () => emojis.construction + emojis.shop,
 	setFunc: (ctx: any, key) => {
 		const session = ctx.session as Session
 		const persist = ctx.persist as Persist
@@ -108,7 +108,7 @@ menu.select('s', constructionOptions, {
 })
 
 menu.urlButton(
-	buttonText(emoji.wikidataItem, 'menu.wikidataItem'),
+	buttonText(emojis.wikidataItem, 'menu.wikidataItem'),
 	(ctx: any) => ctx.wd.r('action.construction').url()
 )
 

@@ -7,10 +7,10 @@ import {sortDictByValue} from '../lib/js-helper/dictionary'
 
 import {currentLevel} from '../lib/game-math/skill'
 
+import {emojis} from '../lib/interface/emojis'
 import {infoHeader} from '../lib/interface/formatted-strings'
 import {menuPhoto, buttonText} from '../lib/interface/menu'
 import {skillInTrainingString} from '../lib/interface/skill'
-import emoji from '../lib/interface/emojis'
 
 import skillMenu from './skill'
 import skillSelectCategory from './skill-select-category'
@@ -23,7 +23,7 @@ function simpleSkillPart(ctx: any, skills: Skills, skill: SimpleSkill): string {
 	}
 
 	let text = ''
-	text += emoji[skill] || ''
+	text += emojis[skill] || ''
 	text += ctx.wd.r(`skill.${skill}`).label()
 	text += ': '
 	text += currentLevel(skills, skill)
@@ -43,7 +43,7 @@ function categorySkillPart(ctx: any, skills: Skills, skill: CategorySkill): stri
 	}
 
 	let text = ''
-	text += emoji[skill] || ''
+	text += emojis[skill] || ''
 	text += ctx.wd.r(`skill.${skill}`).label()
 	text += '\n'
 	text += categories
@@ -69,7 +69,7 @@ function menuText(ctx: any): string {
 	const {__wikibase_language_code: locale} = session
 
 	let text = ''
-	text += infoHeader(ctx.wd.r('menu.skill'), {titlePrefix: emoji.skill})
+	text += infoHeader(ctx.wd.r('menu.skill'), {titlePrefix: emojis.skill})
 	text += '\n\n'
 
 	const simpleSkillParts = SIMPLE_SKILLS
@@ -123,16 +123,16 @@ function skillOptions(ctx: any, skills: Skill[]): Dictionary<string> {
 
 menu.selectSubmenu('simple', ctx => skillOptions(ctx, SIMPLE_SKILLS), skillMenu, {
 	columns: 2,
-	prefixFunc: (_, key) => emoji[key] || ''
+	prefixFunc: (_, key) => emojis[key] || ''
 })
 
 menu.selectSubmenu('c', ctx => skillOptions(ctx, CATEGORY_SKILLS), skillSelectCategory, {
 	columns: 2,
-	prefixFunc: (_, key) => emoji[key] || ''
+	prefixFunc: (_, key) => emojis[key] || ''
 })
 
 menu.urlButton(
-	buttonText(emoji.wikidataItem, 'menu.wikidataItem'),
+	buttonText(emojis.wikidataItem, 'menu.wikidataItem'),
 	(ctx: any) => ctx.wd.r('menu.skill').url()
 )
 

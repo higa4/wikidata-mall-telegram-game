@@ -4,11 +4,11 @@ import {Session, Persist} from '../lib/types'
 import {Shop} from '../lib/types/shop'
 import {TalentName, TALENTS} from '../lib/types/people'
 
+import {emojis} from '../lib/interface/emojis'
 import {humanReadableTimestamp} from '../lib/interface/formatted-time'
 import {infoHeader} from '../lib/interface/formatted-strings'
 import {menuPhoto, buttonText} from '../lib/interface/menu'
 import {personInShopLine} from '../lib/interface/person'
-import emojis from '../lib/interface/emojis'
 
 function employeeEntry(ctx: any, shop: Shop, talent: TalentName): string {
 	const {__wikibase_language_code: locale} = ctx.session as Session

@@ -5,8 +5,8 @@ import {Session, Persist} from '../lib/types'
 import {costForAdditionalShop} from '../lib/game-math/shop'
 
 import {buttonText, menuPhoto} from '../lib/interface/menu'
+import {emojis} from '../lib/interface/emojis'
 import {infoHeader, labeledFloat} from '../lib/interface/formatted-strings'
-import emoji from '../lib/interface/emojis'
 
 import constructionMenu from './shops-construction'
 import shopMenu from './shop'
@@ -17,22 +17,22 @@ function menuText(ctx: any): string {
 
 	let text = ''
 	text += infoHeader(ctx.wd.r('menu.shop'), {
-		titlePrefix: emoji.shop,
+		titlePrefix: emojis.shop,
 		titleSuffix: `(${persist.shops.length})`
 	})
 	text += '\n\n'
 
-	text += labeledFloat(ctx.wd.r('other.money'), session.money, emoji.currency)
+	text += labeledFloat(ctx.wd.r('other.money'), session.money, emojis.currency)
 	text += '\n\n'
 
 	const cost = costForAdditionalShop(persist.shops.length)
 
-	text += emoji.construction
+	text += emojis.construction
 	text += '*'
 	text += ctx.wd.r('action.construction').label()
 	text += '*'
 	text += '\n'
-	text += labeledFloat(ctx.wd.r('other.cost'), cost, emoji.currency)
+	text += labeledFloat(ctx.wd.r('other.cost'), cost, emojis.currency)
 
 	return text
 }
@@ -51,7 +51,7 @@ menu.selectSubmenu('s', userShops, shopMenu, {
 	textFunc: (ctx: any, key) => ctx.wd.r(key).label()
 })
 
-menu.submenu(buttonText(emoji.construction, 'action.construction'), 'build', constructionMenu, {
+menu.submenu(buttonText(emojis.construction, 'action.construction'), 'build', constructionMenu, {
 	hide: (ctx: any) => {
 		const session = ctx.session as Session
 		const persist = ctx.persist as Persist
@@ -61,7 +61,7 @@ menu.submenu(buttonText(emoji.construction, 'action.construction'), 'build', con
 })
 
 menu.urlButton(
-	buttonText(emoji.wikidataItem, 'menu.wikidataItem'),
+	buttonText(emojis.wikidataItem, 'menu.wikidataItem'),
 	(ctx: any) => ctx.wd.r('menu.shop').url()
 )
 

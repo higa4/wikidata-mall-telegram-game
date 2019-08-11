@@ -6,10 +6,9 @@ import {Shop} from '../types/shop'
 
 import {personalBonus} from '../game-math/personal'
 
-import {percentBonusString} from './format-percent'
+import {emojis} from './emojis'
 import {humanReadableTimestamp} from './formatted-time'
-
-import emojis from './emojis'
+import {percentBonusString} from './format-percent'
 
 export function personMarkdown(ctx: any, person: Person): string {
 	const {__wikibase_language_code: locale} = ctx.session as Session

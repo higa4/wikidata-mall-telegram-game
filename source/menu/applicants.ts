@@ -5,10 +5,10 @@ import {Session, Persist} from '../lib/types'
 import {currentLevel} from '../lib/game-math/skill'
 import {secondsBetweenApplicants, maxDaysUntilRetirement} from '../lib/game-math/applicant'
 
+import {emojis} from '../lib/interface/emojis'
 import {formatInt} from '../lib/interface/format-number'
 import {infoHeader} from '../lib/interface/formatted-strings'
 import {menuPhoto, buttonText} from '../lib/interface/menu'
-import emojis from '../lib/interface/emojis'
 
 import applicantMenu from './applicant'
 

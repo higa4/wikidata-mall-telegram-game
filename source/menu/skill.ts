@@ -6,10 +6,10 @@ import {Skill} from '../lib/types/skills'
 import {currentLevel, skillUpgradeEndTimestamp, isSimpleSkill} from '../lib/game-math/skill'
 
 import {countdownHourMinute} from '../lib/interface/formatted-time'
+import {emojis} from '../lib/interface/emojis'
 import {infoHeader} from '../lib/interface/formatted-strings'
 import {menuPhoto, buttonText} from '../lib/interface/menu'
 import {skillInTrainingString} from '../lib/interface/skill'
-import emoji from '../lib/interface/emojis'
 
 function fromCtx(ctx: any): {skill: Skill; category?: string} {
 	const skill = ctx.match[1]
@@ -30,7 +30,7 @@ function menuText(ctx: any): string {
 
 	let text = ''
 	text += infoHeader(ctx.wd.r(`skill.${skill}`), {
-		titlePrefix: emoji.skill + (emoji[skill] || '')
+		titlePrefix: emojis.skill + (emojis[skill] || '')
 	})
 	text += '\n\n'
 
@@ -64,7 +64,7 @@ const menu = new TelegrafInlineMenu(menuText, {
 	photo: menuPhoto(ctx => `skill.${fromCtx(ctx).skill}`)
 })
 
-menu.button(buttonText(emoji.skill, 'action.research'), 'research', {
+menu.button(buttonText(emojis.skill, 'action.research'), 'research', {
 	hide: (ctx: any) => {
 		const session = ctx.session as Session
 		return Boolean(session.skillInTraining)
@@ -89,7 +89,7 @@ menu.button(buttonText(emoji.skill, 'action.research'), 'research', {
 })
 
 menu.urlButton(
-	buttonText(emoji.wikidataItem, 'menu.wikidataItem'),
+	buttonText(emojis.wikidataItem, 'menu.wikidataItem'),
 	(ctx: any) => ctx.wd.r(`skill.${fromCtx(ctx).skill}`).url()
 )
 

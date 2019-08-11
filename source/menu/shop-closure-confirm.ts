@@ -9,9 +9,9 @@ import {moneyForShopClosure} from '../lib/game-math/shop'
 import * as wdShop from '../lib/wikidata/shops'
 
 import {buttonText, menuPhoto} from '../lib/interface/menu'
+import {emojis} from '../lib/interface/emojis'
 import {formatFloat, formatInt} from '../lib/interface/format-number'
 import {infoHeader, labeledFloat} from '../lib/interface/formatted-strings'
-import emojis from '../lib/interface/emojis'
 
 import {replyMenu} from './shops'
 
