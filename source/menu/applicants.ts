@@ -84,8 +84,11 @@ menu.selectSubmenu('a', availableApplicants, applicantMenu, {
 	columns: 2,
 	textFunc: (ctx: any, key) => {
 		const session = ctx.session as Session
-		const {name} = session.applicants[Number(key)]
-		return `${name.given} ${name.family}`
+		const persist = ctx.persist as Persist
+		const {name, hobby} = session.applicants[Number(key)]
+		const hasShopOfHobby = persist.shops.some(o => o.id === hobby)
+		const hasShopOfHobbyString = hasShopOfHobby ? emojis.hobby : ''
+		return `${hasShopOfHobbyString}${name.given} ${name.family}`
 	}
 })
 
