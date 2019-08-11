@@ -118,23 +118,17 @@ function skillOptions(ctx: any, skills: Skill[]): Dictionary<string> {
 		labels[key] = ctx.wd.r(`skill.${key}`).label()
 	}
 
-	const sortedDict = sortDictByValue(labels, locale)
-
-	for (const key of skills) {
-		if (emoji[key]) {
-			sortedDict[key] = emoji[key] + sortedDict[key]
-		}
-	}
-
-	return sortedDict
+	return sortDictByValue(labels, locale)
 }
 
 menu.selectSubmenu('simple', ctx => skillOptions(ctx, SIMPLE_SKILLS), skillMenu, {
-	columns: 2
+	columns: 2,
+	prefixFunc: (_, key) => emoji[key] || ''
 })
 
 menu.selectSubmenu('c', ctx => skillOptions(ctx, CATEGORY_SKILLS), skillSelectCategory, {
-	columns: 2
+	columns: 2,
+	prefixFunc: (_, key) => emoji[key] || ''
 })
 
 menu.urlButton(
