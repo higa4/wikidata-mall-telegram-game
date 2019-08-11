@@ -16,6 +16,7 @@ export function skillInTrainingString(ctx: any, skillInTraining: SkillInTraining
 	text += '*'
 	text += '\n'
 
+	text += emojis[skill] || ''
 	text += ctx.wd.r(`skill.${skill}`).label()
 
 	if (category) {
@@ -38,6 +39,7 @@ export function skillFinishedNotificationString(skillInTraining: SkillInTraining
 	const {skill, category} = skillInTraining
 
 	let text = ''
+	text += emojis[skill] || ''
 	text += new WikidataEntityReader(entityStore.entity(`skill.${skill}`), locale).label()
 
 	if (category) {

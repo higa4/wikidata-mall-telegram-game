@@ -263,7 +263,7 @@ function buyAllAdditionalCostString(ctx: any): string {
 	return percentBonusString(factor) + emoji.currency
 }
 
-menu.button((ctx: any) => `${emoji.magnet} ${ctx.wd.r('person.talents.purchasing').label()} (${buyAllAdditionalCostString(ctx)})`, 'buy-all', {
+menu.button((ctx: any) => `${emoji.magnetism} ${ctx.wd.r('person.talents.purchasing').label()} (${buyAllAdditionalCostString(ctx)})`, 'buy-all', {
 	hide: (ctx: any) => {
 		const {shop} = fromCtx(ctx)
 		const session = ctx.session as Session

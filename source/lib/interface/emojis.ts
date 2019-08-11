@@ -1,6 +1,6 @@
 type Dictionary<T> = {[key: string]: T}
 
-const emojis: Dictionary<string> = {
+const basic: Dictionary<string> = {
 	achievement: '🏅',
 	add: '➕',
 	applicantsAvailable: '📬',
@@ -15,7 +15,7 @@ const emojis: Dictionary<string> = {
 	hobby: '💚',
 	income: '📈',
 	language: '🏳️‍🌈',
-	magnet: '🧲',
+	magnetism: '🧲',
 	mall: '🏬',
 	noPerson: '🕳',
 	opening: '🎈',
@@ -35,6 +35,16 @@ const emojis: Dictionary<string> = {
 	warning: '⚠️',
 	wikidataItem: 'ℹ️',
 	yes: '👍'
+}
+
+export const emojis: Dictionary<string> = {
+	...basic,
+	applicantSpeed: basic.applicantsAvailable,
+	healthCare: basic.retirement,
+	logistics: basic.shop,
+	machinePress: basic.storage,
+	metalScissors: basic.purchasing,
+	packaging: basic.selling
 }
 
 export default emojis
