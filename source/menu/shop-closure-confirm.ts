@@ -50,11 +50,23 @@ function menuText(ctx: any): string {
 	text += emojis.currency
 	text += '\n\n'
 
+	const warnings: string[] = []
+
+	const employeeCount = Object.values(shop.personal).length
+	if (employeeCount > 0) {
+		warnings.push(`${formatInt(employeeCount)}${emojis.person}`)
+	}
+
 	const itemsInStore = shop.products.map(o => o.itemsInStore).reduce((a, b) => a + b, 0)
-	if (itemsInStore) {
-		text += emojis.warning
-		text += formatInt(itemsInStore)
-		text += emojis.storage
+	if (itemsInStore > 0) {
+		warnings.push(`${formatInt(itemsInStore)}${emojis.storage}`)
+	}
+
+	if (warnings.length > 0) {
+		text += warnings
+			.map(o => `${emojis.warning}${o}`)
+			.join('\n')
+		text += '\n\n'
 	}
 
 	return text
