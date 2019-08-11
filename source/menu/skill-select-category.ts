@@ -1,4 +1,3 @@
-import arrayFilterUnique from 'array-filter-unique'
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
 import {Session, Persist} from '../lib/types'
@@ -41,25 +40,28 @@ function menuText(ctx: any): string {
 	})
 	text += '\n\n'
 
-	const skillCategories = Object.keys(persist.skills[skill] || {})
 	const shops = persist.shops.map(o => o.id)
-	const categories = [
-		...skillCategories,
-		...shops
-	].filter(arrayFilterUnique())
+	const skillCategories = Object.keys(persist.skills[skill] || {})
+		.filter(o => !shops.includes(o))
 
-	if (categories.length > 0) {
+	if (shops.length + skillCategories.length > 0) {
 		text += '*'
 		text += ctx.wd.r('skill.level').label()
 		text += '*'
 		text += '\n'
 
-		text +=	categories
+		text +=	shops
 			.map(o => categorySkillLine(ctx, persist.skills, skill, o))
-			.sort((a, b) => a.localeCompare(b, locale))
 			.join('\n')
-
 		text += '\n\n'
+
+		if (skillCategories.length > 0) {
+			text +=	skillCategories
+				.map(o => categorySkillLine(ctx, persist.skills, skill, o))
+				.sort((a, b) => a.localeCompare(b, locale))
+				.join('\n')
+			text += '\n\n'
+		}
 	}
 
 	if (session.skillInTraining) {
