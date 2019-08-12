@@ -4,11 +4,16 @@ import {Product, Shop} from '../../source/lib/types/shop'
 
 import {
 	customerInterval,
+	customerPerMinute,
 	shopProductsEmptyTimestamps
 } from '../../source/lib/game-math/shop-time'
 
 test('customerInterval', t => {
 	t.is(customerInterval(), 30)
+})
+
+test('customerPerMinute', t => {
+	t.is(customerPerMinute(), 2)
 })
 
 test('shopProductsEmptyTimestamps', t => {

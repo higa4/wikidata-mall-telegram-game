@@ -18,6 +18,7 @@ import {buttonText, menuPhoto} from '../lib/interface/menu'
 import {emojis} from '../lib/interface/emojis'
 import {formatInt} from '../lib/interface/format-number'
 import {humanReadableTimestamp} from '../lib/interface/formatted-time'
+import {incomePart} from '../lib/interface/shop'
 import {infoHeader, labeledFloat, labeledInt} from '../lib/interface/formatted-strings'
 import {percentBonusString} from '../lib/interface/format-percent'
 import {personInShopLine} from '../lib/interface/person'
@@ -199,6 +200,7 @@ function menuText(ctx: any): string {
 
 	text += openingPart(ctx, shop)
 	text += customerIntervalPart(ctx, shop)
+	text += incomePart(ctx, [shop], persist.skills)
 	text += storageCapacityPart(ctx, shop, persist.skills)
 	text += productsPart(ctx, shop, persist.skills)
 	text += addProductPart(ctx, shop)

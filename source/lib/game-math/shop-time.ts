@@ -7,6 +7,10 @@ export function customerInterval(): number {
 	return 30
 }
 
+export function customerPerMinute(): number {
+	return 60 / customerInterval()
+}
+
 export function shopProductsEmptyTimestamps(shop: Shop): readonly number[] {
 	const interval = customerInterval()
 

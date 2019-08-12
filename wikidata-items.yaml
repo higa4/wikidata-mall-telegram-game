@@ -56,10 +56,12 @@ other:
   github: Q364
   income: Q1527264
   money: Q1368
+  returnOnInvestment: Q939134
   seat: Q2207370
 unit:
   day: Q573
   hour: Q25235
+  minute: Q7727
   second: Q11574
 stat:
   game: Q11410

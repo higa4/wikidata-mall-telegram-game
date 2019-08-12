@@ -10,6 +10,7 @@ import {storageCapacity, storageFilledPercentage} from '../lib/game-math/shop-ca
 
 import {buttonText, menuPhoto} from '../lib/interface/menu'
 import {emojis} from '../lib/interface/emojis'
+import {incomePart} from '../lib/interface/shop'
 import {infoHeader, labeledFloat} from '../lib/interface/formatted-strings'
 import {percentBonusString, percentString} from '../lib/interface/format-percent'
 
@@ -41,6 +42,8 @@ function menuText(ctx: any): string {
 
 	text += labeledFloat(ctx.wd.r('other.money'), session.money, emojis.currency)
 	text += '\n\n'
+
+	text += incomePart(ctx, persist.shops, persist.skills)
 
 	if (persist.shops.length > 0) {
 		text += persist.shops

@@ -12,6 +12,8 @@ import {
 	buyAllCostFactor,
 	costForAdditionalShop,
 	moneyForShopClosure,
+	returnOfInvest,
+	sellPerMinute,
 	shopTotalPurchaseCost,
 	totalCostOfShopWithProducts
 } from '../../source/lib/game-math/shop-cost'
@@ -167,3 +169,99 @@ test('buyAllCost', t => {
 
 	t.is(Math.round(buyAllCost(shops, skills)), Math.round(expectedCost))
 })
+
+test('returnOfInvest without skills or personal', t => {
+	const skills: Skills = {}
+	const shop: Shop = {
+		id: 'Q5',
+		opening: 0,
+		personal: {},
+		products: [{
+			id: 'Q42',
+			itemTimestamp: 0,
+			itemsInStore: 0
+		}]
+	}
+
+	t.is(returnOfInvest([shop], skills), 1 / PURCHASING_FACTOR)
+})
+
+test('returnOfInvest without skills or personal and magnet', t => {
+	const skills: Skills = {}
+	const shop: Shop = {
+		id: 'Q5',
+		opening: 0,
+		personal: {},
+		products: [{
+			id: 'Q42',
+			itemTimestamp: 0,
+			itemsInStore: 0
+		}]
+	}
+
+	t.is(returnOfInvest([shop], skills, 1.5), 1 / (PURCHASING_FACTOR * 1.5))
+})
+
+test('returnOfInvest with personal without skills', t => {
+	const skills: Skills = {}
+	const shop: Shop = {
+		id: 'Q5',
+		opening: 0,
+		personal: {
+			selling: {
+				hobby: 'Q2',
+				name: {
+					given: '',
+					family: ''
+				},
+				retirementTimestamp: 0,
+				talents: {
+					purchasing: 1,
+					selling: 1.5,
+					storage: 1
+				}
+			}
+		},
+		products: [{
+			id: 'Q42',
+			itemTimestamp: 0,
+			itemsInStore: 0
+		}]
+	}
+
+	t.is(returnOfInvest([shop], skills), 1.5 / PURCHASING_FACTOR)
+})
+
+test('returnOfInvest without products', t => {
+	const skills: Skills = {}
+	const shop: Shop = {
+		id: 'Q5',
+		opening: 0,
+		personal: {},
+		products: []
+	}
+
+	t.is(returnOfInvest([shop], skills), NaN)
+})
+
+function sellPerMinuteMacro(t: ExecutionContext, amounts: number[], expected: number): void {
+	const skills: Skills = {}
+	const products: Product[] = amounts.map(o => ({id: 'Q42', itemTimestamp: 0, itemsInStore: o}))
+	const shop: Shop = {
+		id: 'Q5',
+		opening: 0,
+		personal: {},
+		products
+	}
+
+	const basePrice = productBasePrice({id: 'Q42', itemTimestamp: 0, itemsInStore: 0}, skills)
+	t.is(basePrice, 8, 'sanity check')
+
+	t.is(sellPerMinute(shop, skills), expected)
+}
+
+test('sellPerMinute nothing', sellPerMinuteMacro, [], 0)
+test('sellPerMinute 0', sellPerMinuteMacro, [0], 0)
+test('sellPerMinute 0, 0', sellPerMinuteMacro, [0, 0], 0)
+test('sellPerMinute 1', sellPerMinuteMacro, [1], 8 * 2)
+test('sellPerMinute 1, 1', sellPerMinuteMacro, [1, 1], 8 * 2 * 2)
