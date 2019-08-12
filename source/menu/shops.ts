@@ -70,6 +70,25 @@ function buyAllAdditionalCostString(ctx: any): string {
 	return percentBonusString(factor) + emojis.currency
 }
 
+function userShops(ctx: any): string[] {
+	const persist = ctx.persist as Persist
+	return persist.shops.map(o => o.id)
+}
+
+menu.selectSubmenu('s', userShops, shopMenu, {
+	columns: 2,
+	textFunc: (ctx: any, key) => ctx.wd.r(key).label()
+})
+
+menu.submenu(buttonText(emojis.construction, 'action.construction'), 'build', constructionMenu, {
+	hide: (ctx: any) => {
+		const session = ctx.session as Session
+		const persist = ctx.persist as Persist
+		const cost = costForAdditionalShop(persist.shops.length)
+		return cost > session.money
+	}
+})
+
 menu.button(buttonText(emojis.magnetism, 'person.talents.purchasing', ctx => `(${buyAllAdditionalCostString(ctx)})`), 'buy-all', {
 	hide: (ctx: any) => {
 		const session = ctx.session as Session
@@ -101,25 +120,6 @@ menu.button(buttonText(emojis.magnetism, 'person.talents.purchasing', ctx => `($
 		}
 
 		session.money -= cost
-	}
-})
-
-function userShops(ctx: any): string[] {
-	const persist = ctx.persist as Persist
-	return persist.shops.map(o => o.id)
-}
-
-menu.selectSubmenu('s', userShops, shopMenu, {
-	columns: 2,
-	textFunc: (ctx: any, key) => ctx.wd.r(key).label()
-})
-
-menu.submenu(buttonText(emojis.construction, 'action.construction'), 'build', constructionMenu, {
-	hide: (ctx: any) => {
-		const session = ctx.session as Session
-		const persist = ctx.persist as Persist
-		const cost = costForAdditionalShop(persist.shops.length)
-		return cost > session.money
 	}
 })
 
