@@ -2,11 +2,13 @@ import TelegrafInlineMenu from 'telegraf-inline-menu'
 
 import {Session, Persist} from '../lib/types'
 
-import {costForAdditionalShop} from '../lib/game-math/shop'
+import {costForAdditionalShop, storageCapacity, buyAllCost, buyAllCostFactor} from '../lib/game-math/shop'
+import {currentLevel} from '../lib/game-math/skill'
 
 import {buttonText, menuPhoto} from '../lib/interface/menu'
 import {emojis} from '../lib/interface/emojis'
 import {infoHeader, labeledFloat} from '../lib/interface/formatted-strings'
+import {percentBonusString} from '../lib/interface/format-percent'
 
 import constructionMenu from './shops-construction'
 import shopMenu from './shop'
@@ -39,6 +41,46 @@ function menuText(ctx: any): string {
 
 const menu = new TelegrafInlineMenu(menuText, {
 	photo: menuPhoto('menu.shop')
+})
+
+function buyAllAdditionalCostString(ctx: any): string {
+	const persist = ctx.persist as Persist
+	const factor = buyAllCostFactor(persist.skills, persist.shops.length)
+	return percentBonusString(factor) + emojis.currency
+}
+
+menu.button(buttonText(emojis.magnetism, 'person.talents.purchasing', ctx => `(${buyAllAdditionalCostString(ctx)})`), 'buy-all', {
+	hide: (ctx: any) => {
+		const session = ctx.session as Session
+		const persist = ctx.persist as Persist
+
+		const magnetismLevel = currentLevel(persist.skills, 'magnetism')
+		const cost = buyAllCost(persist.shops, persist.skills)
+
+		return magnetismLevel === 0 || session.money < cost || cost < 1
+	},
+	doFunc: (ctx: any) => {
+		const session = ctx.session as Session
+		const persist = ctx.persist as Persist
+		const now = Math.floor(Date.now() / 1000)
+
+		const cost = buyAllCost(persist.shops, persist.skills)
+
+		if (cost > session.money) {
+			// What?
+			return
+		}
+
+		for (const shop of persist.shops) {
+			const storage = storageCapacity(shop, persist.skills)
+			for (const product of shop.products) {
+				product.itemsInStore = storage
+				product.itemTimestamp = now
+			}
+		}
+
+		session.money -= cost
+	}
 })
 
 function userShops(ctx: any): string[] {

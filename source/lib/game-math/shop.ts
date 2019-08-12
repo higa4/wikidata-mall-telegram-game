@@ -48,15 +48,25 @@ export function customerInterval(): number {
 	return 30
 }
 
-export function buyAllCostFactor(skills: Skills): number {
+export function buyAllCostFactor(skills: Skills, shopsToBuyIn: number): number {
 	const magnetismLevel = currentLevel(skills, 'magnetism')
 	// This would require someone to have magnetism level 25 for factor 1 -> Fib 25 alone is 75025 which equals 8.5 Years
-	return 1.5 - (0.02 * magnetismLevel)
+	const reductionByLevel = magnetismLevel * 0.02
+	const base = shopsToBuyIn > 1 ? 2.5 : 1.5
+	return base - reductionByLevel
 }
 
-export function buyAllCost(shop: Shop, skills: Skills): number {
+export function buyAllCost(shops: readonly Shop[], skills: Skills): number {
+	const factor = buyAllCostFactor(skills, shops.length)
+	const cost = shops
+		.map(o => shopTotalPurchaseCost(o, skills))
+		.reduce((a, b) => a + b, 0)
+
+	return cost * factor
+}
+
+export function shopTotalPurchaseCost(shop: Shop, skills: Skills): number {
 	const storage = storageCapacity(shop, skills)
-	const factor = buyAllCostFactor(skills)
 	const cost = shop.products
 		.map(product => {
 			const oneCost = purchasingCost(shop, product, skills)
@@ -65,7 +75,7 @@ export function buyAllCost(shop: Shop, skills: Skills): number {
 		})
 		.reduce((a, b) => a + b, 0)
 
-	return cost * factor
+	return cost
 }
 
 export function shopProductsEmptyTimestamps(shop: Shop): readonly number[] {

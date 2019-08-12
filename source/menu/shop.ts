@@ -259,7 +259,7 @@ menu.button(buttonText(emojis.add, 'other.assortment'), 'addProduct', {
 
 function buyAllAdditionalCostString(ctx: any): string {
 	const persist = ctx.persist as Persist
-	const factor = buyAllCostFactor(persist.skills)
+	const factor = buyAllCostFactor(persist.skills, 1)
 	return percentBonusString(factor) + emojis.currency
 }
 
@@ -270,8 +270,7 @@ menu.button(buttonText(emojis.magnetism, 'person.talents.purchasing', ctx => `($
 		const persist = ctx.persist as Persist
 
 		const magnetismLevel = currentLevel(persist.skills, 'magnetism')
-
-		const cost = buyAllCost(shop, persist.skills)
+		const cost = buyAllCost([shop], persist.skills)
 
 		return magnetismLevel === 0 || shop.products.length === 0 || session.money < cost || cost < 1
 	},
@@ -281,7 +280,7 @@ menu.button(buttonText(emojis.magnetism, 'person.talents.purchasing', ctx => `($
 		const persist = ctx.persist as Persist
 		const now = Math.floor(Date.now() / 1000)
 
-		const cost = buyAllCost(shop, persist.skills)
+		const cost = buyAllCost([shop], persist.skills)
 		const storage = storageCapacity(shop, persist.skills)
 
 		if (cost > session.money) {
