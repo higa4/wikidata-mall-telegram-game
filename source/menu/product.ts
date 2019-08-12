@@ -13,7 +13,7 @@ import {storageCapacity} from '../lib/game-math/shop'
 import {emojis} from '../lib/interface/emojis'
 import {formatInt} from '../lib/interface/format-number'
 import {infoHeader, labeledInt, labeledFloat} from '../lib/interface/formatted-strings'
-import {menuPhoto} from '../lib/interface/menu'
+import {menuPhoto, buttonText} from '../lib/interface/menu'
 import {percentBonusString} from '../lib/interface/format-percent'
 import {personInShopLine} from '../lib/interface/person'
 
@@ -156,7 +156,7 @@ function buyAmount(ctx: any, amount: number, now: number): void {
 	session.stats.productsBought += buyItems
 }
 
-menu.button((ctx: any) => `${emojis.purchasing} ${ctx.wd.r('person.talents.purchasing').label()} (${itemsPurchasableCtx(ctx)})`, 'fill', {
+menu.button(buttonText(emojis.purchasing, 'person.talents.purchasing', ctx => `(${itemsPurchasableCtx(ctx)})`), 'fill', {
 	hide: ctx => itemsPurchasableCtx(ctx) < 1,
 	doFunc: (ctx: any) => {
 		const now = Math.floor(Date.now() / 1000)
