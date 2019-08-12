@@ -5,8 +5,18 @@ import {Skills} from '../../source/lib/types/skills'
 
 import {PURCHASING_FACTOR} from '../../source/lib/game-math/constants'
 
-import {costForAdditionalShop, addProductToShopCost, moneyForShopClosure, buyAllCostFactor, buyAllCost, totalCostOfShopWithProducts, shopTotalPurchaseCost, storageFilledPercentage} from '../../source/lib/game-math/shop'
 import {productBasePrice} from '../../source/lib/game-math/product'
+import {
+	addProductToShopCost,
+	buyAllCost,
+	buyAllCostFactor,
+	costForAdditionalShop,
+	moneyForShopClosure,
+	shopProductsPossible,
+	shopTotalPurchaseCost,
+	storageFilledPercentage,
+	totalCostOfShopWithProducts
+} from '../../source/lib/game-math/shop'
 
 function costForAdditionalShopMacro(t: ExecutionContext, existingShops: number, expectedCost: number): void {
 	t.is(costForAdditionalShop(existingShops), expectedCost)
@@ -180,3 +190,12 @@ test('buyAllCost', t => {
 
 	t.is(Math.round(buyAllCost(shops, skills)), Math.round(expectedCost))
 })
+
+function shopProductsPossibleMacro(t: ExecutionContext, level: number, expected: number): void {
+	t.is(shopProductsPossible(level), expected)
+}
+
+test('shopProductsPossible 0', shopProductsPossibleMacro, 0, 2)
+test('shopProductsPossible 1', shopProductsPossibleMacro, 1, 3)
+test('shopProductsPossible 2', shopProductsPossibleMacro, 2, 4)
+test('shopProductsPossible 4', shopProductsPossibleMacro, 4, 6)
