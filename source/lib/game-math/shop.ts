@@ -55,13 +55,6 @@ export function storageFilledPercentage(shop: Shop, skills: Skills): number {
 	return itemsInStore / totalCapacity
 }
 
-/**
- * Returns the interval in seconds between two customers in a given shop
- */
-export function customerInterval(): number {
-	return 30
-}
-
 export function buyAllCostFactor(skills: Skills, shopsToBuyIn: number): number {
 	const magnetismLevel = currentLevel(skills, 'magnetism')
 	// This would require someone to have magnetism level 25 for factor 1 -> Fib 25 alone is 75025 which equals 8.5 Years
@@ -90,16 +83,6 @@ export function shopTotalPurchaseCost(shop: Shop, skills: Skills): number {
 		.reduce((a, b) => a + b, 0)
 
 	return cost
-}
-
-export function shopProductsEmptyTimestamps(shop: Shop): readonly number[] {
-	const interval = customerInterval()
-
-	const emptyTimestamps = shop.products.map(p =>
-		p.itemTimestamp + (interval * p.itemsInStore)
-	)
-
-	return emptyTimestamps
 }
 
 export function shopProductsPossible(logisticsLevel: number): number {

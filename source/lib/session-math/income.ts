@@ -1,7 +1,7 @@
 import {Session, Persist} from '../types'
 import {Shop, Product} from '../types/shop'
 
-import {customerInterval} from '../game-math/shop'
+import {customerInterval} from '../game-math/shop-time'
 import {sellingCost} from '../game-math/product'
 
 export default function calcIncome(session: Session, persist: Persist, now: number): void {

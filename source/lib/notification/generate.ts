@@ -5,7 +5,7 @@ import {Notification} from '../types/notification'
 import {Session, Persist} from '../types'
 import {Shop} from '../types/shop'
 
-import {shopProductsEmptyTimestamps} from '../game-math/shop'
+import {shopProductsEmptyTimestamps} from '../game-math/shop-time'
 
 import {nameMarkdown} from '../interface/person'
 import {skillFinishedNotificationString} from '../interface/skill'
