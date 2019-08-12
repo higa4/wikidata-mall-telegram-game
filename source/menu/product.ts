@@ -8,7 +8,7 @@ import {TalentName} from '../lib/types/people'
 
 import {collectorTotalLevel, currentLevel, isSimpleSkill} from '../lib/game-math/skill'
 import {sellingCost, purchasingCost, productBasePrice, productBasePriceCollectorFactor, sellingCostPackagingBonus, purchasingCostScissorsBonus} from '../lib/game-math/product'
-import {storageCapacity} from '../lib/game-math/shop'
+import {storageCapacity} from '../lib/game-math/shop-capacity'
 
 import {emojis} from '../lib/interface/emojis'
 import {formatInt} from '../lib/interface/format-number'

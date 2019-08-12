@@ -4,7 +4,7 @@ import WikidataEntityReader from 'wikidata-entity-reader'
 import {Session, Persist} from '../lib/types'
 import {Shop} from '../lib/types/shop'
 
-import {moneyForShopClosure} from '../lib/game-math/shop'
+import {moneyForShopClosure} from '../lib/game-math/shop-cost'
 
 import * as wdShop from '../lib/wikidata/shops'
 

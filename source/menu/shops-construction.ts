@@ -8,7 +8,7 @@ import {Dictionary, sortDictByValue} from '../lib/js-helper/dictionary'
 
 import * as wdShops from '../lib/wikidata/shops'
 
-import {costForAdditionalShop} from '../lib/game-math/shop'
+import {costForAdditionalShop} from '../lib/game-math/shop-cost'
 
 import {buttonText, menuPhoto} from '../lib/interface/menu'
 import {emojis} from '../lib/interface/emojis'

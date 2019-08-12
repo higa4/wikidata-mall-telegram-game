@@ -7,9 +7,10 @@ import {Skills} from '../lib/types/skills'
 
 import {randomUnusedEntry} from '../lib/js-helper/array'
 
-import {addProductToShopCost, storageCapacity, buyAllCost, buyAllCostFactor, storageCapactiyPressBonus, shopProductsPossible} from '../lib/game-math/shop'
-import {customerInterval} from '../lib/game-math/shop-time'
+import {addProductToShopCost, buyAllCost, buyAllCostFactor} from '../lib/game-math/shop-cost'
 import {currentLevel} from '../lib/game-math/skill'
+import {customerInterval} from '../lib/game-math/shop-time'
+import {storageCapacity, storageCapactiyPressBonus, shopProductsPossible} from '../lib/game-math/shop-capacity'
 
 import * as wdShop from '../lib/wikidata/shops'
 

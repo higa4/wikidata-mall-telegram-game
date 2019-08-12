@@ -4,8 +4,9 @@ import {Session, Persist} from '../lib/types'
 import {Shop} from '../lib/types/shop'
 import {Skills} from '../lib/types/skills'
 
-import {costForAdditionalShop, storageCapacity, buyAllCost, buyAllCostFactor, storageFilledPercentage} from '../lib/game-math/shop'
+import {costForAdditionalShop, buyAllCost, buyAllCostFactor} from '../lib/game-math/shop-cost'
 import {currentLevel} from '../lib/game-math/skill'
+import {storageCapacity, storageFilledPercentage} from '../lib/game-math/shop-capacity'
 
 import {buttonText, menuPhoto} from '../lib/interface/menu'
 import {emojis} from '../lib/interface/emojis'
