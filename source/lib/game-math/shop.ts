@@ -41,6 +41,20 @@ export function storageCapactiyPressBonus(pressLevel: number): number {
 	return 1 + (pressLevel * 0.05)
 }
 
+export function storageFilledPercentage(shop: Shop, skills: Skills): number {
+	if (shop.products.length === 0) {
+		return 0
+	}
+
+	const capacity = storageCapacity(shop, skills)
+	const totalCapacity = capacity * shop.products.length
+	const itemsInStore = shop.products
+		.map(o => o.itemsInStore)
+		.reduce((a, b) => a + b, 0)
+
+	return itemsInStore / totalCapacity
+}
+
 /**
  * Returns the interval in seconds between two customers in a given shop
  */

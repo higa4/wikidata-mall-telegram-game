@@ -1,17 +1,31 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
 import {Session, Persist} from '../lib/types'
+import {Shop} from '../lib/types/shop'
+import {Skills} from '../lib/types/skills'
 
-import {costForAdditionalShop, storageCapacity, buyAllCost, buyAllCostFactor} from '../lib/game-math/shop'
+import {costForAdditionalShop, storageCapacity, buyAllCost, buyAllCostFactor, storageFilledPercentage} from '../lib/game-math/shop'
 import {currentLevel} from '../lib/game-math/skill'
 
 import {buttonText, menuPhoto} from '../lib/interface/menu'
 import {emojis} from '../lib/interface/emojis'
 import {infoHeader, labeledFloat} from '../lib/interface/formatted-strings'
-import {percentBonusString} from '../lib/interface/format-percent'
+import {percentBonusString, percentString} from '../lib/interface/format-percent'
 
 import constructionMenu from './shops-construction'
 import shopMenu from './shop'
+
+function shopLine(ctx: any, shop: Shop, skills: Skills): string {
+	const percentageFilled = storageFilledPercentage(shop, skills)
+
+	let text = ''
+	text += ctx.wd.r(shop.id).label()
+	text += ': '
+	text += percentString(percentageFilled)
+	text += emojis.storage
+
+	return text
+}
 
 function menuText(ctx: any): string {
 	const session = ctx.session as Session
@@ -27,8 +41,14 @@ function menuText(ctx: any): string {
 	text += labeledFloat(ctx.wd.r('other.money'), session.money, emojis.currency)
 	text += '\n\n'
 
-	const cost = costForAdditionalShop(persist.shops.length)
+	if (persist.shops.length > 0) {
+		text += persist.shops
+			.map(o => shopLine(ctx, o, persist.skills))
+			.join('\n')
+		text += '\n\n'
+	}
 
+	const cost = costForAdditionalShop(persist.shops.length)
 	text += emojis.construction
 	text += '*'
 	text += ctx.wd.r('action.construction').label()

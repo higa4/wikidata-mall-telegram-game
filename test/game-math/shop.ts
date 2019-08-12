@@ -5,7 +5,7 @@ import {Skills} from '../../source/lib/types/skills'
 
 import {PURCHASING_FACTOR} from '../../source/lib/game-math/constants'
 
-import {costForAdditionalShop, addProductToShopCost, moneyForShopClosure, buyAllCostFactor, buyAllCost, totalCostOfShopWithProducts, shopTotalPurchaseCost} from '../../source/lib/game-math/shop'
+import {costForAdditionalShop, addProductToShopCost, moneyForShopClosure, buyAllCostFactor, buyAllCost, totalCostOfShopWithProducts, shopTotalPurchaseCost, storageFilledPercentage} from '../../source/lib/game-math/shop'
 import {productBasePrice} from '../../source/lib/game-math/product'
 
 function costForAdditionalShopMacro(t: ExecutionContext, existingShops: number, expectedCost: number): void {
@@ -81,6 +81,27 @@ for (let shops = 1; shops <= 10; shops += 3) {
 		test(`closure brings not more money then new shop build cost having ${shops} shop, buying ${products} products`, closureBringsNotMoreMoneyThenNewShopBuildCosts, shops, products)
 	}
 }
+
+function storageFilledPercentageMacro(t: ExecutionContext, amounts: number[], expected: number): void {
+	const skills: Skills = {}
+	const products: Product[] = amounts.map(o => ({id: 'Q42', itemTimestamp: 0, itemsInStore: o}))
+	const shop: Shop = {
+		id: 'Q5',
+		opening: 0,
+		personal: {},
+		products
+	}
+
+	t.is(storageFilledPercentage(shop, skills), expected)
+}
+
+test('storageFilledPercentage without products', storageFilledPercentageMacro, [], 0)
+test('storageFilledPercentage one product empty', storageFilledPercentageMacro, [0], 0)
+test('storageFilledPercentage one product full', storageFilledPercentageMacro, [100], 1)
+test('storageFilledPercentage two product empty', storageFilledPercentageMacro, [0, 0], 0)
+test('storageFilledPercentage two product full', storageFilledPercentageMacro, [100, 100], 1)
+test('storageFilledPercentage two product empty and full', storageFilledPercentageMacro, [0, 100], 0.5)
+test('storageFilledPercentage two product half full', storageFilledPercentageMacro, [50, 50], 0.5)
 
 function buyAllCostFactorMacro(t: ExecutionContext, magnetismLevel: number, shops: number, expected: number): void {
 	const skills: Skills = {magnetism: magnetismLevel}
