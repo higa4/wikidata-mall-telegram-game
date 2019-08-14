@@ -17,18 +17,12 @@ import skillSelectCategory from './skill-select-category'
 
 type Dictionary<T> = {[key: string]: T}
 
-function simpleSkillPart(ctx: any, skills: Skills, skill: SimpleSkill): string {
-	if (!skills[skill]) {
-		return ''
+function simpleSkillInfo(ctx: any, skills: Skills, skill: SimpleSkill): {emoji: string; label: string; level: number} {
+	return {
+		emoji: emojis[skill],
+		label: ctx.wd.r(`skill.${skill}`).label(),
+		level: currentLevel(skills, skill)
 	}
-
-	let text = ''
-	text += emojis[skill] || ''
-	text += ctx.wd.r(`skill.${skill}`).label()
-	text += ': '
-	text += currentLevel(skills, skill)
-
-	return text
 }
 
 function categorySkillPart(ctx: any, skills: Skills, skill: CategorySkill): string {
@@ -73,9 +67,9 @@ function menuText(ctx: any): string {
 	text += '\n\n'
 
 	const simpleSkillParts = SIMPLE_SKILLS
-		.map(o => simpleSkillPart(ctx, persist.skills, o))
-		.sort((a, b) => a.localeCompare(b, locale))
-		.filter(o => o)
+		.map(o => simpleSkillInfo(ctx, persist.skills, o))
+		.sort((a, b) => a.label.localeCompare(b.label, locale))
+		.map(o => `${o.emoji}${o.label}: ${o.level}`)
 
 	const categorySkillParts = CATEGORY_SKILLS
 		.map(o => categorySkillPart(ctx, persist.skills, o))
