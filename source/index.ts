@@ -55,8 +55,8 @@ bot.use(async (ctx, next) => {
 			return
 		}
 
-		if (error.message.includes('MEDIA_EMPTY')) {
-			console.warn('MEDIA_EMPTY', ctx.from!.id, ctx.callbackQuery && ctx.callbackQuery.data)
+		if (error.message.includes('MEDIA_EMPTY') || error.message.includes('WEBPAGE_CURL_FAILED')) {
+			console.warn('Probably Wikimedia Commons fail', ctx.from!.id, ctx.callbackQuery && ctx.callbackQuery.data, error.message)
 		} else {
 			console.error('try to send error to user', ctx.update, error, error && error.on && error.on.payload)
 		}
