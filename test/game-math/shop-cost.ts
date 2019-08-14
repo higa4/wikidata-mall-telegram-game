@@ -1,6 +1,6 @@
 import test, {ExecutionContext} from 'ava'
 
-import {Shop, Product} from '../../source/lib/types/shop'
+import {Shop} from '../../source/lib/types/shop'
 import {Skills} from '../../source/lib/types/skills'
 
 import {PURCHASING_FACTOR} from '../../source/lib/game-math/constants'
@@ -17,6 +17,8 @@ import {
 	shopTotalPurchaseCost,
 	totalCostOfShopWithProducts
 } from '../../source/lib/game-math/shop-cost'
+
+import {generateShop} from './_shop'
 
 function costForAdditionalShopMacro(t: ExecutionContext, existingShops: number, expectedCost: number): void {
 	t.is(costForAdditionalShop(existingShops), expectedCost)
@@ -113,13 +115,7 @@ function shopTotalPurchaseCostMacro(t: ExecutionContext, amounts: number[], expe
 	const expectedCostForItemsAlone = basePrice * expectedItemsToPayFor
 	const expectedCost = expectedCostForItemsAlone * PURCHASING_FACTOR
 
-	const products: Product[] = amounts.map(o => ({id: 'Q42', itemTimestamp: 0, itemsInStore: o}))
-	const shop: Shop = {
-		id: 'Q5',
-		opening: 0,
-		personal: {},
-		products
-	}
+	const shop = generateShop(amounts)
 
 	t.is(shopTotalPurchaseCost(shop, skills), expectedCost)
 }
@@ -246,13 +242,7 @@ test('returnOfInvest without products', t => {
 
 function sellPerMinuteMacro(t: ExecutionContext, amounts: number[], expected: number): void {
 	const skills: Skills = {}
-	const products: Product[] = amounts.map(o => ({id: 'Q42', itemTimestamp: 0, itemsInStore: o}))
-	const shop: Shop = {
-		id: 'Q5',
-		opening: 0,
-		personal: {},
-		products
-	}
+	const shop = generateShop(amounts)
 
 	const basePrice = productBasePrice({id: 'Q42', itemTimestamp: 0, itemsInStore: 0}, skills)
 	t.is(basePrice, 8, 'sanity check')

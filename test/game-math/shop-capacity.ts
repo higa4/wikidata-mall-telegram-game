@@ -1,6 +1,5 @@
 import test, {ExecutionContext} from 'ava'
 
-import {Shop, Product} from '../../source/lib/types/shop'
 import {Skills} from '../../source/lib/types/skills'
 
 import {
@@ -8,16 +7,11 @@ import {
 	storageFilledPercentage
 } from '../../source/lib/game-math/shop-capacity'
 
+import {generateShop} from './_shop'
+
 function storageFilledPercentageMacro(t: ExecutionContext, amounts: number[], expected: number): void {
 	const skills: Skills = {}
-	const products: Product[] = amounts.map(o => ({id: 'Q42', itemTimestamp: 0, itemsInStore: o}))
-	const shop: Shop = {
-		id: 'Q5',
-		opening: 0,
-		personal: {},
-		products
-	}
-
+	const shop = generateShop(amounts)
 	t.is(storageFilledPercentage(shop, skills), expected)
 }
 
