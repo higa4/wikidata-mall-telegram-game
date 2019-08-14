@@ -11,6 +11,7 @@ import {
 	buyAllCost,
 	buyAllCostFactor,
 	costForAdditionalShop,
+	magnetEnabled,
 	moneyForShopClosure,
 	returnOfInvest,
 	sellPerMinute,
@@ -255,3 +256,58 @@ test('sellPerMinute 0', sellPerMinuteMacro, [0], 0)
 test('sellPerMinute 0, 0', sellPerMinuteMacro, [0, 0], 0)
 test('sellPerMinute 1', sellPerMinuteMacro, [1], 8 * 2)
 test('sellPerMinute 1, 1', sellPerMinuteMacro, [1, 1], 8 * 2 * 2)
+
+test('magnetEnabled is enabled', t => {
+	const skills: Skills = {magnetism: 1}
+	const money = 1000000
+	const shops = [
+		generateShop([100], {purchasing: 3, selling: 3, storage: 3}),
+		generateShop([100], {purchasing: 3, selling: 3, storage: 3})
+	]
+
+	t.true(magnetEnabled(shops, skills, money))
+})
+
+test('magnetEnabled not skilled', t => {
+	const skills: Skills = {}
+	const money = 1000000
+	const shops = [
+		generateShop([100], {purchasing: 3, selling: 3, storage: 3}),
+		generateShop([100], {purchasing: 3, selling: 3, storage: 3})
+	]
+
+	t.false(magnetEnabled(shops, skills, money))
+})
+
+test('magnetEnabled too expensive', t => {
+	const skills: Skills = {magnetism: 1}
+	const money = 0
+	const shops = [
+		generateShop([100], {purchasing: 3, selling: 3, storage: 3}),
+		generateShop([100], {purchasing: 3, selling: 3, storage: 3})
+	]
+
+	t.false(magnetEnabled(shops, skills, money))
+})
+
+test('magnetEnabled nothing to buy', t => {
+	const skills: Skills = {magnetism: 1}
+	const money = 1000000
+	const shops = [
+		generateShop([300], {purchasing: 3, selling: 3, storage: 3}),
+		generateShop([300], {purchasing: 3, selling: 3, storage: 3})
+	]
+
+	t.false(magnetEnabled(shops, skills, money))
+})
+
+test('magnetEnabled ROI negative', t => {
+	const skills: Skills = {magnetism: 1}
+	const money = 1000000
+	const shops = [
+		generateShop([100], {purchasing: 0.3, selling: 0.3, storage: 3}),
+		generateShop([100], {purchasing: 0.3, selling: 0.3, storage: 3})
+	]
+
+	t.false(magnetEnabled(shops, skills, money))
+})

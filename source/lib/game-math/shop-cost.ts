@@ -82,3 +82,11 @@ export function sellPerMinute(shop: Shop, skills: Skills): number {
 		.map(o => sellingCost(shop, o, skills) * itemsPerMinute)
 		.reduce((a, b) => a + b, 0)
 }
+
+export function magnetEnabled(shops: readonly Shop[], skills: Skills, currentMoney: number): boolean {
+	const magnetismLevel = currentLevel(skills, 'magnetism')
+	const cost = buyAllCost(shops, skills)
+	const factor = buyAllCostFactor(skills, shops.length)
+	const magnetROI = returnOfInvest(shops, skills, factor)
+	return magnetismLevel > 0 && cost < currentMoney && cost > 1 && magnetROI > 1
+}

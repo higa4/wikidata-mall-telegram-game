@@ -4,8 +4,7 @@ import {Session, Persist} from '../lib/types'
 import {Shop} from '../lib/types/shop'
 import {Skills} from '../lib/types/skills'
 
-import {costForAdditionalShop, buyAllCost, buyAllCostFactor} from '../lib/game-math/shop-cost'
-import {currentLevel} from '../lib/game-math/skill'
+import {costForAdditionalShop, buyAllCost, buyAllCostFactor, magnetEnabled} from '../lib/game-math/shop-cost'
 import {storageCapacity, storageFilledPercentage} from '../lib/game-math/shop-capacity'
 
 import {buttonText, menuPhoto} from '../lib/interface/menu'
@@ -97,10 +96,7 @@ menu.button(buttonText(emojis.magnetism, 'person.talents.purchasing', ctx => `($
 		const session = ctx.session as Session
 		const persist = ctx.persist as Persist
 
-		const magnetismLevel = currentLevel(persist.skills, 'magnetism')
-		const cost = buyAllCost(persist.shops, persist.skills)
-
-		return magnetismLevel === 0 || session.money < cost || cost < 1
+		return persist.shops.length < 2 || !magnetEnabled(persist.shops, persist.skills, session.money)
 	},
 	doFunc: (ctx: any) => {
 		const session = ctx.session as Session

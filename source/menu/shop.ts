@@ -7,7 +7,7 @@ import {Skills} from '../lib/types/skills'
 
 import {randomUnusedEntry} from '../lib/js-helper/array'
 
-import {addProductToShopCost, buyAllCost, buyAllCostFactor} from '../lib/game-math/shop-cost'
+import {addProductToShopCost, buyAllCost, buyAllCostFactor, magnetEnabled} from '../lib/game-math/shop-cost'
 import {currentLevel} from '../lib/game-math/skill'
 import {customerInterval} from '../lib/game-math/shop-time'
 import {storageCapacity, storageCapactiyPressBonus, shopProductsPossible} from '../lib/game-math/shop-capacity'
@@ -273,10 +273,7 @@ menu.button(buttonText(emojis.magnetism, 'person.talents.purchasing', ctx => `($
 		const session = ctx.session as Session
 		const persist = ctx.persist as Persist
 
-		const magnetismLevel = currentLevel(persist.skills, 'magnetism')
-		const cost = buyAllCost([shop], persist.skills)
-
-		return magnetismLevel === 0 || shop.products.length === 0 || session.money < cost || cost < 1
+		return !magnetEnabled([shop], persist.skills, session.money)
 	},
 	doFunc: (ctx: any) => {
 		const {shop} = fromCtx(ctx)
