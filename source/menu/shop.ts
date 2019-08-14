@@ -73,11 +73,11 @@ function openingPart(ctx: any, shop: Shop): string {
 	return text
 }
 
-function storageCapacityPart(ctx: any, shop: Shop, skills: Skills): string {
+function storageCapacityPart(ctx: any, shop: Shop, skills: Skills, showExplanation: boolean): string {
 	let text = ''
 	text += emojis.storage
 	text += labeledInt(ctx.wd.r('product.storageCapacity'), storageCapacity(shop, skills))
-	if (shop.personal.storage) {
+	if (showExplanation && shop.personal.storage) {
 		text += '\n'
 		text += '  '
 		text += emojis.person
@@ -86,7 +86,7 @@ function storageCapacityPart(ctx: any, shop: Shop, skills: Skills): string {
 
 	const pressLevel = currentLevel(skills, 'machinePress')
 	const pressBonus = storageCapactiyPressBonus(pressLevel)
-	if (pressBonus !== 1) {
+	if (showExplanation && pressBonus !== 1) {
 		text += '\n'
 		text += '  '
 		text += emojis.skill
@@ -102,7 +102,7 @@ function storageCapacityPart(ctx: any, shop: Shop, skills: Skills): string {
 	return text
 }
 
-function productsPart(ctx: any, shop: Shop, skills: Skills): string {
+function productsPart(ctx: any, shop: Shop, skills: Skills, showExplanation: boolean): string {
 	if (shop.products.length === 0) {
 		return ''
 	}
@@ -122,7 +122,7 @@ function productsPart(ctx: any, shop: Shop, skills: Skills): string {
 	text += ')'
 	text += '\n'
 
-	if (logisticsLevel > 0) {
+	if (showExplanation && logisticsLevel > 0) {
 		text += '  '
 		text += emojis.skill
 		text += '+'
@@ -201,8 +201,8 @@ function menuText(ctx: any): string {
 	text += openingPart(ctx, shop)
 	text += customerIntervalPart(ctx, shop)
 	text += incomePart(ctx, [shop], persist.skills)
-	text += storageCapacityPart(ctx, shop, persist.skills)
-	text += productsPart(ctx, shop, persist.skills)
+	text += storageCapacityPart(ctx, shop, persist.skills, !session.hideExplanationMath)
+	text += productsPart(ctx, shop, persist.skills, !session.hideExplanationMath)
 	text += addProductPart(ctx, shop)
 
 	return text

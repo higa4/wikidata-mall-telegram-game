@@ -33,7 +33,7 @@ function menuText(ctx: any): string {
 	text += ' '
 	text += ctx.wd.r('unit.second').label()
 	text += '\n'
-	if (applicantSpeedLevel > 0) {
+	if (!session.hideExplanationMath && applicantSpeedLevel > 0) {
 		text += '  '
 		text += emojis.skill
 		text += ctx.wd.r('skill.applicantSpeed').label()
@@ -50,7 +50,7 @@ function menuText(ctx: any): string {
 	text += ' '
 	text += ctx.wd.r('unit.day').label()
 	text += '\n'
-	if (healthCareLevel > 0) {
+	if (!session.hideExplanationMath && healthCareLevel > 0) {
 		text += '  '
 		text += emojis.skill
 		text += ctx.wd.r('skill.healthCare').label()

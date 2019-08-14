@@ -105,31 +105,36 @@ function menuText(ctx: any): string {
 	text += '*'
 	text += '\n'
 
-	text += labeledFloat(ctx.wd.r('product.listprice'), basePrice, emojis.currency)
-	text += '\n'
-	if (collectorLevel > 0) {
-		text += '  '
-		text += emojis.skill
-		text += percentBonusString(productBasePriceCollectorFactor(persist.skills))
-		text += ' '
-		text += ctx.wd.r('skill.collector').label()
-		text += ' ('
-		text += collectorLevel
-		text += ')'
+	if (!session.hideExplanationMath) {
+		text += labeledFloat(ctx.wd.r('product.listprice'), basePrice, emojis.currency)
 		text += '\n'
+		if (collectorLevel > 0) {
+			text += '  '
+			text += emojis.skill
+			text += percentBonusString(productBasePriceCollectorFactor(persist.skills))
+			text += ' '
+			text += ctx.wd.r('skill.collector').label()
+			text += ' ('
+			text += collectorLevel
+			text += ')'
+			text += '\n'
+		}
 	}
 
 	text += emojis.purchasing
 	text += labeledFloat(ctx.wd.r('person.talents.purchasing'), purchaseCostPerItem, emojis.currency)
-	text += bonusPerson(shop, 'purchasing')
-	text += bonusSkill(ctx, shop, persist.skills, 'metalScissors', purchasingCostScissorsBonus)
-	text += '\n'
+	if (!session.hideExplanationMath) {
+		text += bonusPerson(shop, 'purchasing')
+		text += bonusSkill(ctx, shop, persist.skills, 'metalScissors', purchasingCostScissorsBonus)
+	}
 
+	text += '\n'
 	text += emojis.selling
 	text += labeledFloat(ctx.wd.r('person.talents.selling'), sellingCostPerItem, emojis.currency)
-	text += bonusPerson(shop, 'selling')
-	text += bonusSkill(ctx, shop, persist.skills, 'packaging', sellingCostPackagingBonus)
-	text += '\n'
+	if (!session.hideExplanationMath) {
+		text += bonusPerson(shop, 'selling')
+		text += bonusSkill(ctx, shop, persist.skills, 'packaging', sellingCostPackagingBonus)
+	}
 
 	return text
 }

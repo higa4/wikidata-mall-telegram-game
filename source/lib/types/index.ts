@@ -12,6 +12,7 @@ export interface Session {
 	applicants: Person[];
 	applicantTimestamp: number;
 	construction?: Construction;
+	hideExplanationMath: boolean;
 	money: number;
 	page: number;
 	skillInTraining?: SkillInTraining;

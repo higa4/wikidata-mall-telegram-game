@@ -10,7 +10,7 @@ import achievements from './achievements'
 import applicants from './applicants'
 import botStats from './bot-stats'
 import employees from './employees'
-import languages from './languages'
+import settings from './settings'
 import shops from './shops'
 import skills from './skills'
 
@@ -83,7 +83,7 @@ menu.submenu(buttonText(emojis.achievement, 'menu.achievement'), 'achievements',
 	joinLastRow: true
 })
 
-menu.submenu(buttonText(emojis.language, 'menu.language'), 'lang', languages)
+menu.submenu(buttonText(emojis.settings, 'menu.settings'), 'settings', settings)
 
 menu.submenu(buttonText(emojis.stats, 'stat.stats'), 'botStats', botStats, {
 	joinLastRow: true

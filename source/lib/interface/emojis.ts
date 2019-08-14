@@ -25,6 +25,7 @@ const basic: Dictionary<string> = {
 	retirement: '👻',
 	seat: '💺',
 	selling: '🤝',
+	settings: '⚙️',
 	shop: '🏪',
 	shopProductsEmpty: '🥺',
 	skill: '⚗️',

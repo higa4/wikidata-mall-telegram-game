@@ -8,7 +8,7 @@ import {infoHeader} from '../lib/interface/formatted-strings'
 const localeEmoji = require('locale-emoji')
 
 const menu = new TelegrafInlineMenu(ctx => languageMenuText(ctx))
-menu.setCommand(['language', 'settings'])
+menu.setCommand('language')
 
 menu.button(`${emojis.language} Wikidatanish`, 'wikidata', {
 	doFunc: (ctx: any) => {

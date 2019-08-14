@@ -6,6 +6,7 @@ menu:
   language: Q315
   mall: Q11315
   menu: Q846925
+  settings: Q18357227
   shop: Q213441
   skill: Q205961
   wikidata: Q2013
@@ -55,6 +56,7 @@ other:
   customer: Q852835
   github: Q364
   income: Q1527264
+  math: Q395
   money: Q1368
   returnOnInvestment: Q939134
   seat: Q2207370
