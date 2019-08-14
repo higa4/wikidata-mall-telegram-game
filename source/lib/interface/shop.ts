@@ -8,7 +8,7 @@ import {emojis} from './emojis'
 import {formatFloat} from './format-number'
 import {percentBonusString} from './format-percent'
 
-export function incomePart(ctx: any, shops: readonly Shop[], skills: Skills): string {
+export function incomePart(ctx: any, shops: readonly Shop[], skills: Skills, showExplanation: boolean): string {
 	const magnetismLevel = currentLevel(skills, 'magnetism')
 	const factor = buyAllCostFactor(skills, shops.length)
 	const income = returnOfInvest(shops, skills)
@@ -33,16 +33,18 @@ export function incomePart(ctx: any, shops: readonly Shop[], skills: Skills): st
 	text += ' / '
 	text += ctx.wd.r('unit.minute').label()
 
-	text += '\n'
-	text += ctx.wd.r('other.returnOnInvestment').label()
-	text += ': '
-	text += percentBonusString(income)
+	if (showExplanation) {
+		text += '\n'
+		text += ctx.wd.r('other.returnOnInvestment').label()
+		text += ': '
+		text += percentBonusString(income)
 
-	if (magnetismLevel > 0) {
-		text += ' ('
-		text += emojis.magnetism
-		text += percentBonusString(magnetIncome)
-		text += ')'
+		if (magnetismLevel > 0) {
+			text += ' ('
+			text += emojis.magnetism
+			text += percentBonusString(magnetIncome)
+			text += ')'
+		}
 	}
 
 	text += '\n\n'

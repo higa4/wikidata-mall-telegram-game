@@ -200,7 +200,7 @@ function menuText(ctx: any): string {
 
 	text += openingPart(ctx, shop)
 	text += customerIntervalPart(ctx, shop)
-	text += incomePart(ctx, [shop], persist.skills)
+	text += incomePart(ctx, [shop], persist.skills, !session.hideExplanationMath)
 	text += storageCapacityPart(ctx, shop, persist.skills, !session.hideExplanationMath)
 	text += productsPart(ctx, shop, persist.skills, !session.hideExplanationMath)
 	text += addProductPart(ctx, shop)

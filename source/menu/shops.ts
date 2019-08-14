@@ -42,7 +42,7 @@ function menuText(ctx: any): string {
 	text += labeledFloat(ctx.wd.r('other.money'), session.money, emojis.currency)
 	text += '\n\n'
 
-	text += incomePart(ctx, persist.shops, persist.skills)
+	text += incomePart(ctx, persist.shops, persist.skills, !session.hideExplanationMath)
 
 	if (persist.shops.length > 0) {
 		text += persist.shops
