@@ -58,7 +58,7 @@ function menuText(ctx: any): string {
 		if (skillCategories.length > 0) {
 			text +=	skillCategories
 				.map(o => categorySkillLine(ctx, persist.skills, skill, o))
-				.sort((a, b) => a.localeCompare(b, locale))
+				.sort((a, b) => a.localeCompare(b, locale === 'wikidatanish' ? 'en' : locale))
 				.join('\n')
 			text += '\n\n'
 		}

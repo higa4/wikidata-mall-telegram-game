@@ -76,7 +76,7 @@ function constructionOptions(ctx: any): Dictionary<string> {
 		labels[shopId] = ctx.wd.r(shopId).label()
 	}
 
-	return sortDictByValue(labels, locale)
+	return sortDictByValue(labels, locale === 'wikidatanish' ? 'en' : locale)
 }
 
 menu.select('s', constructionOptions, {

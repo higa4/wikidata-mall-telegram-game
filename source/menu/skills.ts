@@ -42,7 +42,7 @@ function categorySkillPart(ctx: any, skills: Skills, skill: CategorySkill): stri
 	text += '\n'
 	text += categories
 		.map(o => categorySkillPartLine(ctx, skills, skill, o))
-		.sort((a, b) => a.localeCompare(b, locale))
+		.sort((a, b) => a.localeCompare(b, locale === 'wikidatanish' ? 'en' : locale))
 		.map(o => `  ${o}`)
 		.join('\n')
 
@@ -68,7 +68,7 @@ function menuText(ctx: any): string {
 
 	const simpleSkillParts = SIMPLE_SKILLS
 		.map(o => simpleSkillInfo(ctx, persist.skills, o))
-		.sort((a, b) => a.label.localeCompare(b.label, locale))
+		.sort((a, b) => a.label.localeCompare(b.label, locale === 'wikidatanish' ? 'en' : locale))
 		.map(o => `${o.emoji}${o.label}: ${o.level}`)
 
 	const categorySkillParts = CATEGORY_SKILLS
@@ -112,7 +112,7 @@ function skillOptions(ctx: any, skills: Skill[]): Dictionary<string> {
 		labels[key] = ctx.wd.r(`skill.${key}`).label()
 	}
 
-	return sortDictByValue(labels, locale)
+	return sortDictByValue(labels, locale === 'wikidatanish' ? 'en' : locale)
 }
 
 menu.selectSubmenu('simple', ctx => skillOptions(ctx, SIMPLE_SKILLS), skillMenu, {
