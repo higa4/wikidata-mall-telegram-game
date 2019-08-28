@@ -63,7 +63,7 @@ function addWaitingApplicants(session: Session, persist: Persist, now: number): 
 }
 
 const MINIMAL_TALENT = 0.001
-const talentDistribution = gaussian(1, 0.05)
+const talentDistribution = gaussian(1.05, 0.045)
 /* DEBUG
 console.log('talentDistribution', talentDistribution.mean, talentDistribution.variance)
 console.log('talentDistribution probability', '<0  :', talentDistribution.cdf(MINIMAL_TALENT))
