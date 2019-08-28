@@ -4,7 +4,7 @@ import {currentLevel} from './skill'
 
 export function secondsBetweenApplicants(skills: Skills): number {
 	const applicantSpeedLevel = currentLevel(skills, 'applicantSpeed')
-	return 60 - (applicantSpeedLevel * 2)
+	return 300 / (applicantSpeedLevel + 1)
 }
 
 export function maxDaysUntilRetirement(skills: Skills): number {
