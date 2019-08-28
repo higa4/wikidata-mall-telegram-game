@@ -20,6 +20,8 @@ function maxDaysUntilRetirementMacro(t: ExecutionContext, healthCareLevel: numbe
 	t.is(maxDaysUntilRetirement(skills), expected)
 }
 
-test('maxDaysUntilRetirement level 0', maxDaysUntilRetirementMacro, 0, 14)
-test('maxDaysUntilRetirement level 5', maxDaysUntilRetirementMacro, 5, 19)
-test('maxDaysUntilRetirement level 10', maxDaysUntilRetirementMacro, 10, 24)
+test('maxDaysUntilRetirement level 0', maxDaysUntilRetirementMacro, 0, 6)
+test('maxDaysUntilRetirement level 5', maxDaysUntilRetirementMacro, 5, 16)
+test('maxDaysUntilRetirement level 10', maxDaysUntilRetirementMacro, 10, 26)
+test('maxDaysUntilRetirement level 15', maxDaysUntilRetirementMacro, 15, 36)
+test('maxDaysUntilRetirement level 25', maxDaysUntilRetirementMacro, 25, 56)
