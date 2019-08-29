@@ -71,13 +71,11 @@ function entryLine(index: number, info: User | undefined, formattedValue: string
 
 async function generateTable(entries: LeaderboardEntries, forPlayerId: number, formatNumberFunc: (num: number) => string): Promise<string> {
 	const allPlayerInfos = await userInfo.getAll()
-	const playerIdFromEntryIdFunc = (entryId: string): number => Number(entryId.slice(2))
 
 	const lines = await Promise.all(
-		entries.order.map((entryId, i) => {
-			const playerId = playerIdFromEntryIdFunc(entryId)
-			if (i < 10 || playerId === forPlayerId) {
-				return entryLine(i, allPlayerInfos[playerId], formatNumberFunc(entries.values[entryId]))
+		entries.order.map((playerId, i) => {
+			if (i < 10 || Number(playerId) === forPlayerId) {
+				return entryLine(i, allPlayerInfos[playerId], formatNumberFunc(entries.values[playerId]))
 			}
 
 			return undefined
