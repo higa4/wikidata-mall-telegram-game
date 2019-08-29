@@ -3,7 +3,7 @@ import TelegrafInlineMenu from 'telegraf-inline-menu'
 import {Session, Persist} from '../lib/types'
 import {Skills, CategorySkill, SimpleSkill, SIMPLE_SKILLS, CATEGORY_SKILLS, Skill} from '../lib/types/skills'
 
-import {sortDictByValue} from '../lib/js-helper/dictionary'
+import {sortDictByStringValue} from '../lib/js-helper/dictionary'
 
 import {currentLevel} from '../lib/game-math/skill'
 
@@ -112,7 +112,7 @@ function skillOptions(ctx: any, skills: Skill[]): Dictionary<string> {
 		labels[key] = ctx.wd.r(`skill.${key}`).label()
 	}
 
-	return sortDictByValue(labels, locale === 'wikidatanish' ? 'en' : locale)
+	return sortDictByStringValue(labels, locale === 'wikidatanish' ? 'en' : locale)
 }
 
 menu.selectSubmenu('simple', ctx => skillOptions(ctx, SIMPLE_SKILLS), skillMenu, {
