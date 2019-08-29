@@ -4,9 +4,12 @@ import {Session, Persist} from '../lib/types'
 import {Shop} from '../lib/types/shop'
 import {TalentName, Person} from '../lib/types/people'
 
+import {personalBonusWhenEmployed} from '../lib/game-math/personal'
+
 import {buttonText} from '../lib/interface/menu'
 import {emojis} from '../lib/interface/emojis'
 import {infoHeader} from '../lib/interface/formatted-strings'
+import {percentBonusString} from '../lib/interface/format-percent'
 import {personMarkdown} from '../lib/interface/person'
 
 function fromCtx(ctx: any): {shop: Shop; talent: TalentName; employee?: Person; applicantId: number; applicant: Person} {
@@ -28,13 +31,21 @@ function fromCtx(ctx: any): {shop: Shop; talent: TalentName; employee?: Person; 
 }
 
 function menuText(ctx: any): string {
-	const {talent, applicant} = fromCtx(ctx)
+	const {shop, talent, applicant} = fromCtx(ctx)
+	const bonusWhenEmployed = personalBonusWhenEmployed(shop, talent, applicant)
 
 	let text = ''
 	text += infoHeader(ctx.wd.r(`person.talents.${talent}`), {titlePrefix: emojis[talent]})
 	text += '\n\n'
 
 	text += personMarkdown(ctx, applicant)
+	text += '\n\n'
+
+	if (bonusWhenEmployed < 1) {
+		text += emojis.warning
+		text += emojis[talent]
+		text += percentBonusString(bonusWhenEmployed)
+	}
 
 	return text
 }
@@ -43,6 +54,11 @@ const menu = new TelegrafInlineMenu(menuText)
 
 menu.button(buttonText(emojis.yes + emojis.recruitment, 'action.recruitment'), 'recruit', {
 	setParentMenuAfter: true,
+	hide: (ctx: any) => {
+		const {shop, talent, applicant} = fromCtx(ctx)
+		const bonusWhenEmployed = personalBonusWhenEmployed(shop, talent, applicant)
+		return bonusWhenEmployed < 1
+	},
 	doFunc: (ctx: any) => {
 		const now = Date.now() / 1000
 		const {shop, talent, employee, applicantId, applicant} = fromCtx(ctx)
