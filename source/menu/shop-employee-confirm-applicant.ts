@@ -20,6 +20,10 @@ function fromCtx(ctx: any): {shop: Shop; talent: TalentName; employee?: Person; 
 	const employee = shop.personal[talent]
 	const applicant = session.applicants[applicantId]
 
+	if (!applicant) {
+		throw new Error('These aren\'t the applicants you are looking for')
+	}
+
 	return {shop, talent, employee, applicantId, applicant}
 }
 
