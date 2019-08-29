@@ -4,7 +4,7 @@ import {Session, Persist} from '../lib/types'
 import {Shop, Construction} from '../lib/types/shop'
 
 import {randomUnusedEntry} from '../lib/js-helper/array'
-import {Dictionary, sortDictByStringValue} from '../lib/js-helper/dictionary'
+import {Dictionary, sortDictKeysByStringValues, recreateDictWithGivenKeyOrder} from '../lib/js-helper/dictionary'
 
 import * as wdShops from '../lib/wikidata/shops'
 
@@ -76,7 +76,8 @@ function constructionOptions(ctx: any): Dictionary<string> {
 		labels[shopId] = ctx.wd.r(shopId).label()
 	}
 
-	return sortDictByStringValue(labels, locale === 'wikidatanish' ? 'en' : locale)
+	const orderedKeys = sortDictKeysByStringValues(labels, locale === 'wikidatanish' ? 'en' : locale)
+	return recreateDictWithGivenKeyOrder(labels, orderedKeys)
 }
 
 menu.select('s', constructionOptions, {

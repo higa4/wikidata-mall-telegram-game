@@ -1,8 +1,8 @@
 import test from 'ava'
 
-import {sortDictByNumericValue, sortDictByStringValue} from '../../source/lib/js-helper/dictionary'
+import {sortDictKeysByNumericValues, sortDictKeysByStringValues, recreateDictWithGivenKeyOrder} from '../../source/lib/js-helper/dictionary'
 
-test('sortDictByNumericValue', t => {
+test('sortDictKeysByNumericValues', t => {
 	const input = {
 		a: 5,
 		b: 2,
@@ -10,84 +10,73 @@ test('sortDictByNumericValue', t => {
 		d: 0
 	}
 
-	const result = sortDictByNumericValue(input)
-	t.log(JSON.stringify(result))
+	const result = sortDictKeysByNumericValues(input)
+	t.deepEqual(result, ['d', 'b', 'a', 'c'])
+})
+
+test('sortDictKeysByNumericValues reversed', t => {
+	const input = {
+		a: 5,
+		b: 2,
+		c: 8,
+		d: 0
+	}
+
+	const result = sortDictKeysByNumericValues(input, true)
+	t.deepEqual(result, ['c', 'a', 'b', 'd'])
+})
+
+test('sortDictKeysByStringValues', t => {
+	const input = {
+		a: 'Baum',
+		b: 'Tisch',
+		c: 'Stuhl',
+		d: 'Apfel'
+	}
+
+	const result = sortDictKeysByStringValues(input)
+	t.deepEqual(result, ['d', 'a', 'c', 'b'])
+})
+
+test('sortDictKeysByStringValues locale de', t => {
+	const input = {
+		a: 'Baum',
+		b: 'Tisch',
+		c: 'Stuhl',
+		d: 'Apfel'
+	}
+
+	const result = sortDictKeysByStringValues(input, 'de')
+	t.deepEqual(result, ['d', 'a', 'c', 'b'])
+})
+
+test('recreateDictWithGivenKeyOrder', t => {
+	const input = {
+		a: 5,
+		b: 2,
+		c: 8,
+		d: 0
+	}
+
+	const result = recreateDictWithGivenKeyOrder(input, ['d', 'b', 'a', 'c'])
+	t.log(result)
+	t.deepEqual(result, input)
 	t.deepEqual(Object.keys(result), ['d', 'b', 'a', 'c'])
 })
 
-test('sortDictByNumericValue reversed', t => {
+test('recreateDictWithGivenKeyOrder fails on numeric keys', t => {
 	const input = {
-		a: 5,
-		b: 2,
-		c: 8,
-		d: 0
+		5: 5,
+		2: 2,
+		8: 8,
+		0: 0
 	}
 
-	const result = sortDictByNumericValue(input, true)
-	t.log(JSON.stringify(result))
-	t.deepEqual(Object.keys(result), ['c', 'a', 'b', 'd'])
-})
+	t.log(input)
+	t.log(JSON.stringify(input))
 
-test('sortDictByNumericValue values correct', t => {
-	const input = {
-		a: 5,
-		b: 2,
-		c: 8,
-		d: 0
-	}
-
-	const result = sortDictByNumericValue(input)
-	t.log(JSON.stringify(result))
-	// Ava compares without respecting order
-	t.deepEqual(result, {
-		a: 5,
-		b: 2,
-		c: 8,
-		d: 0
-	})
-})
-
-test('sortDictByStringValue', t => {
-	const input = {
-		a: 'Baum',
-		b: 'Tisch',
-		c: 'Stuhl',
-		d: 'Apfel'
-	}
-
-	const result = sortDictByStringValue(input)
-	t.log(JSON.stringify(result))
-	t.deepEqual(Object.keys(result), ['d', 'a', 'c', 'b'])
-})
-
-test('sortDictByStringValue locale de', t => {
-	const input = {
-		a: 'Baum',
-		b: 'Tisch',
-		c: 'Stuhl',
-		d: 'Apfel'
-	}
-
-	const result = sortDictByStringValue(input, 'de')
-	t.log(JSON.stringify(result))
-	t.deepEqual(Object.keys(result), ['d', 'a', 'c', 'b'])
-})
-
-test('sortDictByStringValue values correct', t => {
-	const input = {
-		a: 'Baum',
-		b: 'Tisch',
-		c: 'Stuhl',
-		d: 'Apfel'
-	}
-
-	const result = sortDictByStringValue(input)
-	t.log(JSON.stringify(result))
-	// Ava compares without respecting order
-	t.deepEqual(result, {
-		a: 'Baum',
-		b: 'Tisch',
-		c: 'Stuhl',
-		d: 'Apfel'
-	})
+	t.throws(
+		() => recreateDictWithGivenKeyOrder(input, ['8', '5', '2', '0']),
+		/numbers.+optimization/
+	)
 })

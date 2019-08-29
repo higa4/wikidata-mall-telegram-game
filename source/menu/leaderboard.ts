@@ -1,7 +1,7 @@
 import {User} from 'telegram-typings'
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
-import {Dictionary, sortDictByNumericValue} from '../lib/js-helper/dictionary'
+import {Dictionary, sortDictKeysByNumericValues} from '../lib/js-helper/dictionary'
 
 import {Skills} from '../lib/types/skills'
 import {Session, LeaderboardView, LEADERBOARD_VIEWS} from '../lib/types'
@@ -20,12 +20,17 @@ import {collectorTotalLevel} from '../lib/game-math/skill'
 
 const DEFAULT_VIEW: LeaderboardView = 'returnOnInvestment'
 
-async function getROITable(): Promise<Dictionary<number>> {
+interface LeaderboardEntries {
+	order: string[];
+	values: Dictionary<number>;
+}
+
+async function getROITable(): Promise<LeaderboardEntries> {
 	const allUserShops = await userShops.getAllShops()
 	const allUserSkills = await userSkills.getAllSkills()
 	const playerIds = Object.keys(allUserShops)
 
-	const roiTable: Dictionary<number> = {}
+	const values: Dictionary<number> = {}
 	for (const playerId of playerIds) {
 		const shops = allUserShops[playerId]
 		const skills: Skills = allUserSkills[playerId] || {}
@@ -35,22 +40,27 @@ async function getROITable(): Promise<Dictionary<number>> {
 		}
 
 		// This stupid javascript sorts numberic strings by number
-		roiTable[`id${playerId}`] = roi
+		values[playerId] = roi
 	}
 
-	return sortDictByNumericValue(roiTable, true)
+	return {
+		values,
+		order: sortDictKeysByNumericValues(values, true)
+	}
 }
 
-async function getCollectorTable(): Promise<Dictionary<number>> {
+async function getCollectorTable(): Promise<LeaderboardEntries> {
 	const allUserSkills = await userSkills.getAllSkills()
-	const table: Dictionary<number> = {}
+	const values: Dictionary<number> = {}
 	for (const playerId of Object.keys(allUserSkills)) {
 		const level = collectorTotalLevel(allUserSkills[playerId])
-		// This stupid javascript sorts numberic strings by number
-		table[`id${playerId}`] = level
+		values[playerId] = level
 	}
 
-	return sortDictByNumericValue(table, true)
+	return {
+		values,
+		order: sortDictKeysByNumericValues(values, true)
+	}
 }
 
 function entryLine(index: number, info: User | undefined, formattedValue: string): string {
@@ -59,16 +69,15 @@ function entryLine(index: number, info: User | undefined, formattedValue: string
 	return `${rank}. ${formattedValue} *${name}*`
 }
 
-async function generateTable(entries: Dictionary<number>, forPlayerId: number, formatNumberFunc: (num: number) => string): Promise<string> {
+async function generateTable(entries: LeaderboardEntries, forPlayerId: number, formatNumberFunc: (num: number) => string): Promise<string> {
 	const allPlayerInfos = await userInfo.getAll()
-	const entryIds = Object.keys(entries)
 	const playerIdFromEntryIdFunc = (entryId: string): number => Number(entryId.slice(2))
 
 	const lines = await Promise.all(
-		entryIds.map((entryId, i) => {
+		entries.order.map((entryId, i) => {
 			const playerId = playerIdFromEntryIdFunc(entryId)
 			if (i < 10 || playerId === forPlayerId) {
-				return entryLine(i, allPlayerInfos[playerId], formatNumberFunc(entries[entryId]))
+				return entryLine(i, allPlayerInfos[playerId], formatNumberFunc(entries.values[entryId]))
 			}
 
 			return undefined
