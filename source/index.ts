@@ -12,6 +12,7 @@ import {preload} from './lib/wikidata'
 import * as dataShops from './lib/data/shops'
 import * as dataSkills from './lib/data/skills'
 import * as notifications from './lib/session-math/notification'
+import * as userInfo from './lib/data/user-info'
 import * as userSessions from './lib/data/user-sessions'
 import menu from './menu'
 import sessionMathMiddleware from './lib/session-math'
@@ -79,6 +80,7 @@ bot.use(async (ctx, next) => {
 	}
 })
 
+bot.use(userInfo.middleware())
 bot.use(userSessions.middleware())
 bot.use(dataShops.middleware())
 bot.use(dataSkills.middleware())
