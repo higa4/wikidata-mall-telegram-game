@@ -5,6 +5,9 @@ import {Skills, SkillInTraining} from './skills'
 
 /* eslint @typescript-eslint/camelcase: warn */
 
+export type LeaderboardView = 'returnOnInvestment' | 'collector'
+export const LEADERBOARD_VIEWS: LeaderboardView[] = ['returnOnInvestment', 'collector']
+
 // Contains smaller things only relevant to a specific player
 export interface Session {
 	__wikibase_language_code: string;
@@ -13,6 +16,7 @@ export interface Session {
 	applicantTimestamp: number;
 	construction?: Construction;
 	hideExplanationMath: boolean;
+	leaderboardView?: LeaderboardView;
 	money: number;
 	page: number;
 	skillInTraining?: SkillInTraining;

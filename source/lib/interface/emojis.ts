@@ -16,6 +16,7 @@ const basic: Dictionary<string> = {
 	income: '📈',
 	language: '🏳️‍🌈',
 	magnetism: '🧲',
+	leaderboard: '🏆',
 	mall: '🏬',
 	noPerson: '🕳',
 	opening: '🎈',

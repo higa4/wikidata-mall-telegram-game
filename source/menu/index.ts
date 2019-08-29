@@ -10,6 +10,7 @@ import achievements from './achievements'
 import applicants from './applicants'
 import botStats from './bot-stats'
 import employees from './employees'
+import leaderboard from './leaderboard'
 import settings from './settings'
 import shops from './shops'
 import skills from './skills'
@@ -80,6 +81,10 @@ menu.submenu(buttonText(emojis.skill, 'menu.skill'), 'skill', skills, {
 })
 
 menu.submenu(buttonText(emojis.achievement, 'menu.achievement'), 'achievements', achievements, {
+	joinLastRow: true
+})
+
+menu.submenu(buttonText(emojis.leaderboard, 'menu.leaderboard'), 'leaderboard', leaderboard, {
 	joinLastRow: true
 })
 
