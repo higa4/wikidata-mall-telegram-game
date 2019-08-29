@@ -60,7 +60,7 @@ export function shopTotalPurchaseCost(shop: Shop, skills: Skills): number {
 		.reduce((a, b) => a + b, 0)
 }
 
-export function returnOfInvest(shops: readonly Shop[], skills: Skills, purchaseFactor = 1): number {
+export function returnOnInvestment(shops: readonly Shop[], skills: Skills, purchaseFactor = 1): number {
 	const relevantShops = shops.filter(o => o.products.length > 0)
 
 	const cost = relevantShops
@@ -87,6 +87,6 @@ export function magnetEnabled(shops: readonly Shop[], skills: Skills, currentMon
 	const magnetismLevel = currentLevel(skills, 'magnetism')
 	const cost = buyAllCost(shops, skills)
 	const factor = buyAllCostFactor(skills, shops.length)
-	const magnetROI = returnOfInvest(shops, skills, factor)
+	const magnetROI = returnOnInvestment(shops, skills, factor)
 	return magnetismLevel > 0 && cost < currentMoney && cost > 1 && magnetROI > 1
 }

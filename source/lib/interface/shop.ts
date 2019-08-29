@@ -1,7 +1,7 @@
 import {Shop} from '../types/shop'
 import {Skills} from '../types/skills'
 
-import {buyAllCostFactor, returnOfInvest, sellPerMinute} from '../game-math/shop-cost'
+import {buyAllCostFactor, returnOnInvestment, sellPerMinute} from '../game-math/shop-cost'
 import {currentLevel} from '../game-math/skill'
 
 import {emojis} from './emojis'
@@ -11,8 +11,8 @@ import {percentBonusString} from './format-percent'
 export function incomePart(ctx: any, shops: readonly Shop[], skills: Skills, showExplanation: boolean): string {
 	const magnetismLevel = currentLevel(skills, 'magnetism')
 	const factor = buyAllCostFactor(skills, shops.length)
-	const income = returnOfInvest(shops, skills)
-	const magnetIncome = returnOfInvest(shops, skills, factor)
+	const income = returnOnInvestment(shops, skills)
+	const magnetIncome = returnOnInvestment(shops, skills, factor)
 	const sell = shops
 		.map(o => sellPerMinute(o, skills))
 		.reduce((a, b) => a + b, 0)

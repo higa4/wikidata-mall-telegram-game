@@ -13,7 +13,7 @@ import {
 	costForAdditionalShop,
 	magnetEnabled,
 	moneyForShopClosure,
-	returnOfInvest,
+	returnOnInvestment,
 	sellPerMinute,
 	shopTotalPurchaseCost,
 	totalCostOfShopWithProducts
@@ -167,7 +167,7 @@ test('buyAllCost', t => {
 	t.is(Math.round(buyAllCost(shops, skills)), Math.round(expectedCost))
 })
 
-test('returnOfInvest without skills or personal', t => {
+test('returnOnInvestment without skills or personal', t => {
 	const skills: Skills = {}
 	const shop: Shop = {
 		id: 'Q5',
@@ -180,10 +180,10 @@ test('returnOfInvest without skills or personal', t => {
 		}]
 	}
 
-	t.is(returnOfInvest([shop], skills), 1 / PURCHASING_FACTOR)
+	t.is(returnOnInvestment([shop], skills), 1 / PURCHASING_FACTOR)
 })
 
-test('returnOfInvest without skills or personal and magnet', t => {
+test('returnOnInvestment without skills or personal and magnet', t => {
 	const skills: Skills = {}
 	const shop: Shop = {
 		id: 'Q5',
@@ -196,10 +196,10 @@ test('returnOfInvest without skills or personal and magnet', t => {
 		}]
 	}
 
-	t.is(returnOfInvest([shop], skills, 1.5), 1 / (PURCHASING_FACTOR * 1.5))
+	t.is(returnOnInvestment([shop], skills, 1.5), 1 / (PURCHASING_FACTOR * 1.5))
 })
 
-test('returnOfInvest with personal without skills', t => {
+test('returnOnInvestment with personal without skills', t => {
 	const skills: Skills = {}
 	const shop: Shop = {
 		id: 'Q5',
@@ -226,10 +226,10 @@ test('returnOfInvest with personal without skills', t => {
 		}]
 	}
 
-	t.is(returnOfInvest([shop], skills), 1.5 / PURCHASING_FACTOR)
+	t.is(returnOnInvestment([shop], skills), 1.5 / PURCHASING_FACTOR)
 })
 
-test('returnOfInvest without products', t => {
+test('returnOnInvestment without products', t => {
 	const skills: Skills = {}
 	const shop: Shop = {
 		id: 'Q5',
@@ -238,7 +238,7 @@ test('returnOfInvest without products', t => {
 		products: []
 	}
 
-	t.is(returnOfInvest([shop], skills), NaN)
+	t.is(returnOnInvestment([shop], skills), NaN)
 })
 
 function sellPerMinuteMacro(t: ExecutionContext, amounts: number[], expected: number): void {
