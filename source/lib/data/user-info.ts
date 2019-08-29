@@ -21,7 +21,7 @@ export async function getAll(): Promise<Dictionary<User>> {
 export function middleware(): Middleware<ContextMessageUpdate> {
 	return async (ctx, next) => {
 		if (ctx.from) {
-			const old = data.get(String(ctx.from.id))
+			const old = await data.get(String(ctx.from.id))
 			const oldString = stringify(old)
 			const current = stringify(ctx.from)
 			if (oldString !== current) {
