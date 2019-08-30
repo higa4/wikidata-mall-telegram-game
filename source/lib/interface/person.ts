@@ -1,6 +1,6 @@
 import WikidataEntityReader from 'wikidata-entity-reader'
 
-import {Person, TalentName, Name} from '../types/people'
+import {Person, TalentName, Name, TALENTS} from '../types/people'
 import {Session} from '../types'
 import {Shop} from '../types/shop'
 
@@ -69,4 +69,51 @@ export function personInShopLine(shop: Shop, talent: TalentName): string {
 	const bonus = personalBonus(shop, talent)
 
 	return `${percentBonusString(bonus)} ${isHobby ? emojis.hobby + ' ' : ''}${namePart}`
+}
+
+export function shopEmployeeOverview(ctx: any, shop: Shop): string {
+	const employeeEntries = TALENTS
+		.map(t => shopEmployeeEntry(ctx, shop, t))
+
+	let text = ''
+	text += emojis.shop
+	text += '*'
+	text += ctx.wd.r(shop.id).label()
+	text += '*'
+	text += '\n'
+
+	text += employeeEntries
+		.join('\n')
+
+	return text
+}
+
+function shopEmployeeEntry(ctx: any, shop: Shop, talent: TalentName): string {
+	const {__wikibase_language_code: locale} = ctx.session as Session
+	const person = shop.personal[talent]
+
+	let text = ''
+	text += '  '
+	text += emojis[talent]
+
+	if (!person) {
+		text += emojis.noPerson
+		return text
+	}
+
+	text += personInShopLine(shop, talent)
+
+	if (person.hobby !== shop.id) {
+		text += '\n'
+		text += '    '
+		text += emojis.hobby
+		text += ctx.wd.r(person.hobby).label()
+	}
+
+	text += '\n'
+	text += '    '
+	text += emojis.retirement
+	text += humanReadableTimestamp(person.retirementTimestamp, locale)
+
+	return text
 }
