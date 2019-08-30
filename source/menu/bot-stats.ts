@@ -1,6 +1,7 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
 import {Person} from '../lib/types/people'
+import {Session} from '../lib/types'
 
 import * as userSessions from '../lib/data/user-sessions'
 import * as userShops from '../lib/data/shops'
@@ -10,6 +11,7 @@ import * as wdShops from '../lib/wikidata/shops'
 import {buttonText, menuPhoto} from '../lib/interface/menu'
 import {emojis} from '../lib/interface/emojis'
 import {formatInt} from '../lib/interface/format-number'
+import {humanReadableTimestamp} from '../lib/interface/formatted-time'
 import {infoHeader} from '../lib/interface/formatted-strings'
 
 function entryLine(ctx: any, resourceKey: string, value: string): string {
@@ -52,6 +54,17 @@ async function menuText(ctx: any): Promise<string> {
 	text += entryLine(ctx, 'menu.shop', formatInt(allShops.length))
 	text += entryLine(ctx, 'menu.employee', formatInt(allEmployees.length))
 	text += entryLine(ctx, 'product.product', formatInt(allProducts.length))
+
+	const {achievements, stats, __wikibase_language_code: locale} = ctx.session as Session
+
+	text += '\n'
+	text += '*'
+	text += ctx.wd.r('stat.player').label()
+	text += '*'
+	text += '\n'
+
+	text += entryLine(ctx, 'achievement.gameStarted', humanReadableTimestamp(achievements.gameStarted, locale))
+	text += entryLine(ctx, 'person.talents.purchasing', formatInt(stats.productsBought))
 
 	return text
 }

@@ -6,7 +6,6 @@ import {buttonText} from '../lib/interface/menu'
 import {emojis} from '../lib/interface/emojis'
 import {infoHeader, labeledFloat} from '../lib/interface/formatted-strings'
 
-import achievements from './achievements'
 import applicants from './applicants'
 import botStats from './bot-stats'
 import employees from './employees'
@@ -78,10 +77,6 @@ menu.submenu(buttonText(emojis.skill, 'menu.skill'), 'skill', skills, {
 		const persist = ctx.persist as Persist
 		return persist.shops.length === 0
 	}
-})
-
-menu.submenu(buttonText(emojis.achievement, 'menu.achievement'), 'achievements', achievements, {
-	joinLastRow: true
 })
 
 menu.submenu(buttonText(emojis.leaderboard, 'menu.leaderboard'), 'leaderboard', leaderboard, {
