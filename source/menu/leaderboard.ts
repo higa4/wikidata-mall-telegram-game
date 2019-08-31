@@ -39,7 +39,6 @@ async function getROITable(): Promise<LeaderboardEntries> {
 			continue
 		}
 
-		// This stupid javascript sorts numberic strings by number
 		values[playerId] = roi
 	}
 
