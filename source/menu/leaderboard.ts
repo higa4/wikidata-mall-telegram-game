@@ -100,6 +100,9 @@ async function menuText(ctx: any): Promise<string> {
 	text += '\n\n'
 
 	const view = session.leaderboardView || DEFAULT_VIEW
+	text += infoHeader(ctx.wd.r(viewResourceKey(view)))
+	text += '\n\n'
+
 	switch (view) {
 		case 'returnOnInvestment':
 			text += await generateTable(await getROITable(now), ctx.from.id, percentBonusString)
