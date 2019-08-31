@@ -18,6 +18,10 @@ export async function getAll(): Promise<Dictionary<User>> {
 	return data.entries()
 }
 
+export async function remove(userId: number): Promise<void> {
+	return data.delete(String(userId))
+}
+
 export function middleware(): Middleware<ContextMessageUpdate> {
 	return async (ctx, next) => {
 		if (ctx.from) {

@@ -40,6 +40,12 @@ export function getUser(userId: number): any {
 		.value() || {}
 }
 
+export function removeUser(userId: number): void {
+	return localSession.DB
+		.get('sessions')
+		.removeById(String(userId))
+}
+
 export function getRandomUser(filter: (o: SessionRawEntry) => boolean = () => true): SessionRawEntry {
 	const rawArr = getRaw()
 		.filter(filter)

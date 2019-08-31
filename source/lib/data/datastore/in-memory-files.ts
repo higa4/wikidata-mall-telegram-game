@@ -1,4 +1,4 @@
-import {mkdirSync, readdirSync, readFileSync, unlinkSync} from 'fs'
+import {mkdirSync, readdirSync, readFileSync, unlinkSync, existsSync} from 'fs'
 
 import writeJsonFile from 'write-json-file'
 
@@ -39,7 +39,9 @@ export class InMemoryFiles<T> implements Datastore<T> {
 
 	async delete(key: string): Promise<void> {
 		delete this._inMemoryStorage[key]
-		unlinkSync(this._pathOfKey(key))
+		if (existsSync(this._pathOfKey(key))) {
+			unlinkSync(this._pathOfKey(key))
+		}
 	}
 
 	private _pathOfKey(key: string): string {

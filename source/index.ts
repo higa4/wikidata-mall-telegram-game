@@ -9,6 +9,7 @@ import {emojis} from './lib/interface/emojis'
 import {NotificationManager} from './lib/notification/manager'
 import {notificationText} from './lib/interface/notification'
 import {preload} from './lib/wikidata'
+import {removeOld} from './lib/game-logic/remove-old'
 import * as dataShops from './lib/data/shops'
 import * as dataSkills from './lib/data/skills'
 import * as notifications from './lib/session-math/notification'
@@ -79,6 +80,8 @@ bot.use(async (ctx, next) => {
 		await bot.telegram.sendMessage(target, text, Extra.markdown().markup(keyboard))
 	}
 })
+
+removeOld()
 
 bot.use(userInfo.middleware())
 bot.use(userSessions.middleware())

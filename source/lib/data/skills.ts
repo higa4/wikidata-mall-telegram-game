@@ -13,6 +13,10 @@ export async function getAllSkills(): Promise<Dictionary<Skills>> {
 	return data.entries()
 }
 
+export async function remove(userId: number): Promise<void> {
+	return data.delete(String(userId))
+}
+
 export function middleware(): (ctx: any, next: any) => Promise<void> {
 	return generatePersistMiddleware('skills', data)
 }
