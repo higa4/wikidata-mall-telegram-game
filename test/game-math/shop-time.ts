@@ -3,6 +3,7 @@ import test from 'ava'
 import {
 	customerInterval,
 	customerPerMinute,
+	lastTimeActive,
 	shopProductsEmptyTimestamps
 } from '../../source/lib/game-math/shop-time'
 
@@ -26,3 +27,22 @@ test('shopProductsEmptyTimestamps', t => {
 	])
 })
 
+test('lastTimeActive empty', t => {
+	const result = lastTimeActive([])
+	t.is(result, -Infinity)
+})
+
+test('lastTimeActive single shop', t => {
+	const result = lastTimeActive([
+		generateShop([1, 10])
+	])
+	t.is(result, 300)
+})
+
+test('lastTimeActive two shops', t => {
+	const result = lastTimeActive([
+		generateShop([1, 10]),
+		generateShop([5])
+	])
+	t.is(result, 300)
+})

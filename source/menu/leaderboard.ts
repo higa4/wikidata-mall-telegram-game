@@ -6,17 +6,20 @@ import {Dictionary, sortDictKeysByNumericValues} from '../lib/js-helper/dictiona
 import {Skills} from '../lib/types/skills'
 import {Session, LeaderboardView, LEADERBOARD_VIEWS} from '../lib/types'
 
+import {WEEK_IN_SECONDS} from '../lib/math/timestamp-constants'
+
 import * as userInfo from '../lib/data/user-info'
 import * as userShops from '../lib/data/shops'
 import * as userSkills from '../lib/data/skills'
 
+import {collectorTotalLevel} from '../lib/game-math/skill'
+import {lastTimeActive} from '../lib/game-math/shop-time'
 import {returnOnInvestment} from '../lib/game-math/shop-cost'
 
 import {emojis} from '../lib/interface/emojis'
 import {infoHeader} from '../lib/interface/formatted-strings'
 import {menuPhoto, buttonText} from '../lib/interface/menu'
 import {percentBonusString} from '../lib/interface/format-percent'
-import {collectorTotalLevel} from '../lib/game-math/skill'
 
 const DEFAULT_VIEW: LeaderboardView = 'returnOnInvestment'
 
@@ -25,10 +28,11 @@ interface LeaderboardEntries {
 	values: Dictionary<number>;
 }
 
-async function getROITable(): Promise<LeaderboardEntries> {
+async function getROITable(now: number): Promise<LeaderboardEntries> {
 	const allUserShops = await userShops.getAllShops()
 	const allUserSkills = await userSkills.getAllSkills()
 	const playerIds = Object.keys(allUserShops)
+		.filter(o => now - lastTimeActive(allUserShops[o]) < WEEK_IN_SECONDS)
 
 	const values: Dictionary<number> = {}
 	for (const playerId of playerIds) {
@@ -89,6 +93,7 @@ async function generateTable(entries: LeaderboardEntries, forPlayerId: number, f
 
 async function menuText(ctx: any): Promise<string> {
 	const session = ctx.session as Session
+	const now = Date.now() / 1000
 
 	let text = ''
 	text += infoHeader(ctx.wd.r('menu.leaderboard'), {titlePrefix: emojis.leaderboard})
@@ -97,7 +102,7 @@ async function menuText(ctx: any): Promise<string> {
 	const view = session.leaderboardView || DEFAULT_VIEW
 	switch (view) {
 		case 'returnOnInvestment':
-			text += await generateTable(await getROITable(), ctx.from.id, percentBonusString)
+			text += await generateTable(await getROITable(now), ctx.from.id, percentBonusString)
 			break
 
 		case 'collector':
