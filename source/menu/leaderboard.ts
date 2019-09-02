@@ -66,10 +66,16 @@ async function getCollectorTable(): Promise<LeaderboardEntries> {
 	}
 }
 
-function entryLine(index: number, info: User | undefined, formattedValue: string): string {
+function entryLine(index: number, info: User | undefined, formattedValue: string, highlighted: boolean): string {
 	const name = info ? info.first_name.replace(/[*_`[\]()]/g, '') : '??'
 	const rank = index + 1
-	return `${rank}. ${formattedValue} *${name}*`
+
+	const parts: string[] = []
+	parts.push(`${rank}.`)
+	parts.push(`_${formattedValue}_`)
+	parts.push(highlighted ? `*${name}*` : name)
+
+	return parts.join(' ')
 }
 
 async function generateTable(entries: LeaderboardEntries, forPlayerId: number, formatNumberFunc: (num: number) => string): Promise<string> {
@@ -79,7 +85,7 @@ async function generateTable(entries: LeaderboardEntries, forPlayerId: number, f
 	const lines = await Promise.all(
 		entries.order.map((playerId, i) => {
 			if (i < 10 || (i > indexOfPlayer - 5 && i < indexOfPlayer + 5)) {
-				return entryLine(i, allPlayerInfos[playerId], formatNumberFunc(entries.values[playerId]))
+				return entryLine(i, allPlayerInfos[playerId], formatNumberFunc(entries.values[playerId]), i === indexOfPlayer)
 			}
 
 			return undefined
