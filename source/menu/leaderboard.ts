@@ -67,7 +67,7 @@ async function getCollectorTable(): Promise<LeaderboardEntries> {
 }
 
 function entryLine(index: number, info: User | undefined, formattedValue: string): string {
-	const name = info ? info.first_name : '??'
+	const name = info ? info.first_name.replace(/[*_`[\]()]/g, '') : '??'
 	const rank = index + 1
 	return `${rank}. ${formattedValue} *${name}*`
 }
