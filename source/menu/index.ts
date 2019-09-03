@@ -48,7 +48,7 @@ function shopsButtonText(ctx: any): string {
 
 menu.submenu(shopsButtonText, 'shops', shops)
 
-menu.simpleButton(buttonText(emojis.mall + emojis.underConstruction, 'menu.mall'), 'mall', {
+menu.simpleButton(buttonText(emojis.mall + emojis.underConstruction, 'menu.mall'), 'mallJoinHint', {
 	doFunc: async ctx => ctx.answerCbQuery(emojis.underConstruction + 'soon…')
 })
 
