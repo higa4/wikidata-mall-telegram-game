@@ -129,29 +129,10 @@ test('shopTotalPurchaseCost two product empty', shopTotalPurchaseCostMacro, [0, 
 
 test('buyAllCost', t => {
 	const skills: Skills = {magnetism: 0}
-	const shops: Shop[] = [{
-		id: 'Q5',
-		opening: 0,
-		personal: {},
-		products: [{
-			id: 'Q42',
-			itemTimestamp: 0,
-			itemsInStore: 199
-		}]
-	}, {
-		id: 'Q5',
-		opening: 0,
-		personal: {},
-		products: [{
-			id: 'Q42',
-			itemTimestamp: 0,
-			itemsInStore: 199
-		}, {
-			id: 'Q42',
-			itemTimestamp: 0,
-			itemsInStore: 199
-		}]
-	}]
+	const shops: Shop[] = [
+		generateShop([199]),
+		generateShop([199, 199])
+	]
 
 	const expectedItemsToPayFor = 3
 
@@ -169,75 +150,30 @@ test('buyAllCost', t => {
 
 test('returnOnInvestment without skills or personal', t => {
 	const skills: Skills = {}
-	const shop: Shop = {
-		id: 'Q5',
-		opening: 0,
-		personal: {},
-		products: [{
-			id: 'Q42',
-			itemTimestamp: 0,
-			itemsInStore: 0
-		}]
-	}
-
+	const shop = generateShop([0])
 	t.is(returnOnInvestment([shop], skills), 1 / PURCHASING_FACTOR)
 })
 
 test('returnOnInvestment without skills or personal and magnet', t => {
 	const skills: Skills = {}
-	const shop: Shop = {
-		id: 'Q5',
-		opening: 0,
-		personal: {},
-		products: [{
-			id: 'Q42',
-			itemTimestamp: 0,
-			itemsInStore: 0
-		}]
-	}
-
+	const shop = generateShop([0])
 	t.is(returnOnInvestment([shop], skills, 1.5), 1 / (PURCHASING_FACTOR * 1.5))
 })
 
 test('returnOnInvestment with personal without skills', t => {
 	const skills: Skills = {}
-	const shop: Shop = {
-		id: 'Q5',
-		opening: 0,
-		personal: {
-			selling: {
-				hobby: 'Q2',
-				name: {
-					given: '',
-					family: ''
-				},
-				retirementTimestamp: 0,
-				talents: {
-					purchasing: 1,
-					selling: 1.5,
-					storage: 1
-				}
-			}
-		},
-		products: [{
-			id: 'Q42',
-			itemTimestamp: 0,
-			itemsInStore: 0
-		}]
-	}
+	const shop = generateShop([0], {
+		purchasing: 1,
+		selling: 1.5,
+		storage: 1
+	})
 
 	t.is(returnOnInvestment([shop], skills), 1.5 / PURCHASING_FACTOR)
 })
 
 test('returnOnInvestment without products', t => {
 	const skills: Skills = {}
-	const shop: Shop = {
-		id: 'Q5',
-		opening: 0,
-		personal: {},
-		products: []
-	}
-
+	const shop = generateShop([])
 	t.is(returnOnInvestment([shop], skills), NaN)
 })
 
