@@ -1,10 +1,9 @@
 import {Skills, CategorySkill, SimpleSkill, SIMPLE_SKILLS, Skill, CATEGORY_SKILLS} from '../types/skills'
 
+import {HOUR_IN_SECONDS} from '../math/timestamp-constants'
 import * as fibonacci from '../math/fibonacci'
 
 type Dictionary<T> = {[key: string]: T}
-
-const SECONDS_IN_HOUR = 60 * 60
 
 export function isSimpleSkill(skill: Skill): skill is SimpleSkill {
 	return (SIMPLE_SKILLS as string[]).includes(skill)
@@ -51,7 +50,7 @@ export function skillUpgradeTimeNeeded(currentLevel: number): number {
 
 export function skillUpgradeEndTimestamp(currentLevel: number, startTimestamp: number): number {
 	const hoursNeeded = skillUpgradeTimeNeeded(currentLevel)
-	const secondsNeeded = SECONDS_IN_HOUR * hoursNeeded
+	const secondsNeeded = hoursNeeded * HOUR_IN_SECONDS
 	return startTimestamp + secondsNeeded
 }
 
