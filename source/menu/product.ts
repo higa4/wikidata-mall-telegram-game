@@ -6,7 +6,7 @@ import {Shop, Product} from '../lib/types/shop'
 import {Skills} from '../lib/types/skills'
 import {TalentName} from '../lib/types/people'
 
-import {collectorTotalLevel, currentLevel, isSimpleSkill} from '../lib/game-math/skill'
+import {collectorTotalLevel, currentLevel} from '../lib/game-math/skill'
 import {sellingCost, purchasingCost, productBasePrice, productBasePriceCollectorFactor, sellingCostPackagingBonus, purchasingCostScissorsBonus} from '../lib/game-math/product'
 import {storageCapacity} from '../lib/game-math/shop-capacity'
 
@@ -35,8 +35,8 @@ function bonusPerson(shop: Shop, talent: TalentName): string {
 	return '\n  ' + emojis.person + personInShopLine(shop, talent)
 }
 
-function bonusSkill(ctx: any, shop: Shop, skills: Skills, skill: keyof Skills, bonusFunc: (level: number) => number): string {
-	const level = isSimpleSkill(skill) ? currentLevel(skills, skill) : currentLevel(skills, skill, shop.id)
+function bonusSkill(ctx: any, skills: Skills, skill: keyof Skills, bonusFunc: (level: number) => number): string {
+	const level = currentLevel(skills, skill)
 	const bonus = bonusFunc(level)
 	if (bonus === 1) {
 		return ''
@@ -125,7 +125,7 @@ function menuText(ctx: any): string {
 	text += labeledFloat(ctx.wd.r('person.talents.purchasing'), purchaseCostPerItem, emojis.currency)
 	if (!session.hideExplanationMath) {
 		text += bonusPerson(shop, 'purchasing')
-		text += bonusSkill(ctx, shop, persist.skills, 'metalScissors', purchasingCostScissorsBonus)
+		text += bonusSkill(ctx, persist.skills, 'metalScissors', purchasingCostScissorsBonus)
 	}
 
 	text += '\n'
@@ -133,7 +133,7 @@ function menuText(ctx: any): string {
 	text += labeledFloat(ctx.wd.r('person.talents.selling'), sellingCostPerItem, emojis.currency)
 	if (!session.hideExplanationMath) {
 		text += bonusPerson(shop, 'selling')
-		text += bonusSkill(ctx, shop, persist.skills, 'packaging', sellingCostPackagingBonus)
+		text += bonusSkill(ctx, persist.skills, 'packaging', sellingCostPackagingBonus)
 	}
 
 	return text

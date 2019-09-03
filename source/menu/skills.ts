@@ -17,44 +17,12 @@ import skillSelectCategory from './skill-select-category'
 
 type Dictionary<T> = {[key: string]: T}
 
-function simpleSkillInfo(ctx: any, skills: Skills, skill: SimpleSkill): {emoji: string; label: string; level: number} {
+function skillInfo(ctx: any, skills: Skills, skill: SimpleSkill | CategorySkill): {emoji: string; label: string; level: number} {
 	return {
 		emoji: emojis[skill],
 		label: ctx.wd.r(`skill.${skill}`).label(),
 		level: currentLevel(skills, skill)
 	}
-}
-
-function categorySkillPart(ctx: any, skills: Skills, skill: CategorySkill): string {
-	const {__wikibase_language_code: locale} = ctx.session as Session
-	if (!skills[skill]) {
-		return ''
-	}
-
-	const categories = Object.keys(skills[skill]!)
-	if (categories.length === 0) {
-		return ''
-	}
-
-	let text = ''
-	text += emojis[skill] || ''
-	text += ctx.wd.r(`skill.${skill}`).label()
-	text += '\n'
-	text += categories
-		.map(o => categorySkillPartLine(ctx, skills, skill, o))
-		.sort((a, b) => a.localeCompare(b, locale === 'wikidatanish' ? 'en' : locale))
-		.map(o => `  ${o}`)
-		.join('\n')
-
-	return text
-}
-
-function categorySkillPartLine(ctx: any, skills: Skills, skill: CategorySkill, category: string): string {
-	let text = ''
-	text += ctx.wd.r(category).label()
-	text += ': '
-	text += currentLevel(skills, skill, category)
-	return text
 }
 
 function menuText(ctx: any): string {
@@ -67,29 +35,25 @@ function menuText(ctx: any): string {
 	text += '\n\n'
 
 	const simpleSkillParts = SIMPLE_SKILLS
-		.map(o => simpleSkillInfo(ctx, persist.skills, o))
+		.map(o => skillInfo(ctx, persist.skills, o))
 		.sort((a, b) => a.label.localeCompare(b.label, locale === 'wikidatanish' ? 'en' : locale))
 		.map(o => `${o.emoji}${o.label}: ${o.level}`)
 
 	const categorySkillParts = CATEGORY_SKILLS
-		.map(o => categorySkillPart(ctx, persist.skills, o))
-		.filter(o => o)
+		.map(o => skillInfo(ctx, persist.skills, o))
+		.sort((a, b) => a.label.localeCompare(b.label, locale === 'wikidatanish' ? 'en' : locale))
+		.map(o => `${o.emoji}${o.label}: ${o.level}`)
 
 	if (simpleSkillParts.length + categorySkillParts.length > 0) {
 		text += '*'
 		text += ctx.wd.r('skill.level').label()
 		text += '*'
+		text += '\n'
 
-		if (simpleSkillParts.length > 0) {
-			text += '\n'
-			text += simpleSkillParts.join('\n')
-		}
+		text += simpleSkillParts.join('\n')
+		text += '\n\n'
 
-		if (categorySkillParts.length > 0) {
-			text += '\n\n'
-			text += categorySkillParts.join('\n\n')
-		}
-
+		text += categorySkillParts.join('\n')
 		text += '\n\n'
 	}
 

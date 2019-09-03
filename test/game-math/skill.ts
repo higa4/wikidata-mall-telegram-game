@@ -2,7 +2,7 @@ import test from 'ava'
 
 import {Skills} from '../../source/lib/types/skills'
 
-import {currentLevel, collectorTotalLevel, skillUpgradeTimeNeeded, increaseLevelByOne, skillUpgradeEndTimestamp} from '../../source/lib/game-math/skill'
+import {currentLevel, collectorTotalLevel, skillUpgradeTimeNeeded, increaseLevelByOne, skillUpgradeEndTimestamp, categorySkillSpecificLevel} from '../../source/lib/game-math/skill'
 
 const emptySkills: Skills = {}
 const exampleSkills: Skills = {
@@ -18,11 +18,7 @@ test('currentLevel 0 from unset categoryless skill', t => {
 })
 
 test('currentLevel 0 from unset category skill', t => {
-	t.is(currentLevel(emptySkills, 'collector', 'Q42'), 0)
-})
-
-test('currentLevel 0 from category skill when not yet trained', t => {
-	t.is(currentLevel(exampleSkills, 'collector', 'Q42'), 0)
+	t.is(currentLevel(emptySkills, 'collector'), 0)
 })
 
 test('currentLevel correct on categoryless skill', t => {
@@ -30,11 +26,19 @@ test('currentLevel correct on categoryless skill', t => {
 })
 
 test('currentLevel correct on category skill', t => {
-	t.is(currentLevel(exampleSkills, 'collector', 'Q5'), 3)
+	t.is(currentLevel(exampleSkills, 'collector'), 8)
 })
 
-test('currentLevel throws error when required category is not specified', t => {
-	t.throws(() => currentLevel(exampleSkills, 'collector' as any), /category has to be specified/)
+test('categorySkillSpecificLevel 0 from unset skill', t => {
+	t.is(categorySkillSpecificLevel(emptySkills, 'collector', 'Q42'), 0)
+})
+
+test('categorySkillSpecificLevel 0 when not trained yet', t => {
+	t.is(categorySkillSpecificLevel(exampleSkills, 'collector', 'Q42'), 0)
+})
+
+test('categorySkillSpecificLevel correct', t => {
+	t.is(categorySkillSpecificLevel(exampleSkills, 'collector', 'Q5'), 3)
 })
 
 test('collectorTotalLevel no collector yet', t => {

@@ -1,9 +1,9 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
 import {Session, Persist} from '../lib/types'
-import {Skills} from '../lib/types/skills'
+import {Skills, CategorySkill} from '../lib/types/skills'
 
-import {currentLevel, isSimpleSkill} from '../lib/game-math/skill'
+import {categorySkillSpecificLevel} from '../lib/game-math/skill'
 
 import {emojis} from '../lib/interface/emojis'
 import {infoHeader} from '../lib/interface/formatted-strings'
@@ -12,19 +12,18 @@ import {skillInTrainingString} from '../lib/interface/skill'
 
 import skillMenu from './skill'
 
-function fromCtx(ctx: any): {skill: keyof Skills} {
+function fromCtx(ctx: any): {skill: CategorySkill} {
 	const skill = ctx.match[1]
-
 	return {
 		skill
 	}
 }
 
-function categorySkillLine(ctx: any, skills: Skills, skill: keyof Skills, product: string): string {
+function categorySkillLine(ctx: any, skills: Skills, skill: CategorySkill, category: string): string {
 	let text = ''
-	text += ctx.wd.r(product).label()
+	text += ctx.wd.r(category).label()
 	text += ': '
-	text += isSimpleSkill(skill) ? currentLevel(skills, skill) : currentLevel(skills, skill, product)
+	text += categorySkillSpecificLevel(skills, skill, category)
 	return text
 }
 
@@ -44,10 +43,16 @@ function menuText(ctx: any): string {
 	const skillCategories = Object.keys(persist.skills[skill] || {})
 		.filter(o => !shops.includes(o))
 
+	const levelSum = Object.values(persist.skills[skill] || {})
+		.reduce((a, b) => a + b, 0)
+
 	if (shops.length + skillCategories.length > 0) {
 		text += '*'
 		text += ctx.wd.r('skill.level').label()
 		text += '*'
+		text += ' ('
+		text += levelSum
+		text += ')'
 		text += '\n'
 
 		text +=	shops

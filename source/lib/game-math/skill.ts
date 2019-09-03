@@ -14,11 +14,8 @@ export function isCategorySkill(skill: Skill): skill is CategorySkill {
 	return (CATEGORY_SKILLS as string[]).includes(skill)
 }
 
-export function currentLevel(skills: Skills, skill: CategorySkill, category: string): number
-export function currentLevel(skills: Skills, skill: SimpleSkill): number
-export function currentLevel(skills: Skills, skill: SimpleSkill | CategorySkill, category?: string): number {
+export function currentLevel(skills: Skills, skill: SimpleSkill | CategorySkill): number {
 	const content = skills[skill]
-
 	if (!content) {
 		return 0
 	}
@@ -27,21 +24,21 @@ export function currentLevel(skills: Skills, skill: SimpleSkill | CategorySkill,
 		return content
 	}
 
-	if (!category) {
-		throw new TypeError('category has to be specified on category specific skill')
+	return Object.values(content)
+		.reduce((a, b) => a + b, 0)
+}
+
+export function categorySkillSpecificLevel(skills: Skills, skill: CategorySkill, category: string): number {
+	const content = skills[skill]
+	if (!content) {
+		return 0
 	}
 
 	return content[category] || 0
 }
 
 export function collectorTotalLevel(skills: Skills): number {
-	const {collector} = skills
-	if (!collector) {
-		return 0
-	}
-
-	return Object.values(collector)
-		.reduce((a, b) => a + b, 0)
+	return currentLevel(skills, 'collector')
 }
 
 /**

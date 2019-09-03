@@ -3,7 +3,7 @@ import TelegrafInlineMenu from 'telegraf-inline-menu'
 import {Session, Persist} from '../lib/types'
 import {Skill} from '../lib/types/skills'
 
-import {currentLevel, skillUpgradeEndTimestamp, isSimpleSkill} from '../lib/game-math/skill'
+import {currentLevel, skillUpgradeEndTimestamp, isSimpleSkill, categorySkillSpecificLevel} from '../lib/game-math/skill'
 
 import {countdownHourMinute} from '../lib/interface/formatted-time'
 import {emojis} from '../lib/interface/emojis'
@@ -26,7 +26,7 @@ function menuText(ctx: any): string {
 	const persist = ctx.persist as Persist
 	const {skill, category} = fromCtx(ctx)
 
-	const level = isSimpleSkill(skill) ? currentLevel(persist.skills, skill) : currentLevel(persist.skills, skill, category!)
+	const level = isSimpleSkill(skill) ? currentLevel(persist.skills, skill) : categorySkillSpecificLevel(persist.skills, skill, category!)
 
 	let text = ''
 	text += infoHeader(ctx.wd.r(`skill.${skill}`), {
@@ -78,7 +78,7 @@ menu.button(buttonText(emojis.skill, 'action.research'), 'research', {
 
 		const {skill, category} = fromCtx(ctx)
 		const now = Math.floor(Date.now() / 1000)
-		const level = isSimpleSkill(skill) ? currentLevel(persist.skills, skill) : currentLevel(persist.skills, skill, category!)
+		const level = isSimpleSkill(skill) ? currentLevel(persist.skills, skill) : categorySkillSpecificLevel(persist.skills, skill, category!)
 		const endTimestamp = skillUpgradeEndTimestamp(level, now)
 		session.skillInTraining = {
 			skill,
