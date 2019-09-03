@@ -129,7 +129,7 @@ bot.catch((error: any) => {
 preload(wdEntityStore)
 	.then(async () => {
 		await notifications.initialize(notificationManager, wdEntityStore)
-		bot.startPolling()
+		bot.launch()
 		console.log(new Date(), 'Bot started')
 	})
 	.catch(error => {
