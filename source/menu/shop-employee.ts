@@ -77,7 +77,7 @@ function availableApplicants(ctx: any): string[] {
 
 	const applicantBoni: Dictionary<number> = {}
 	for (let i = 0; i < session.applicants.length; i++) {
-		const applicant = session.applicants[i];
+		const applicant = session.applicants[i]
 		applicantBoni[i] = personalBonusWhenEmployed(shop, talent, applicant)
 	}
 
