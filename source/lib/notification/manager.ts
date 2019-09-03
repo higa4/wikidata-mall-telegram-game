@@ -24,13 +24,9 @@ export class NotificationManager {
 			this._currentJobs[chatId] = []
 		}
 
-		const job = scheduleJob(notification.date, async fireDate => {
-			try {
-				await this.sendFunc(chatId, notification, fireDate)
-			} catch (error) {
-				console.error('notification failed to send', chatId, error)
-			}
-		})
+		const job = scheduleJob(notification.date, async fireDate =>
+			this.sendFunc(chatId, notification, fireDate)
+		)
 
 		if (job) {
 			// Created Job in the past does not need to be added

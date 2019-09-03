@@ -108,7 +108,12 @@ const notificationManager = new NotificationManager(
 			const text = notificationText(notification, fireDate)
 			await bot.telegram.sendMessage(chatId, text, Extra.markdown() as any)
 		} catch (error) {
-			console.error('notification failed to send', chatId, error)
+			const {message} = error as Error
+			if (message.includes('chat not found')) {
+				console.error('notification failed to send', chatId, message)
+			} else {
+				console.error('notification failed to send', chatId, error)
+			}
 		}
 	}
 )
