@@ -26,7 +26,7 @@ if (process.env.NODE_ENV !== 'production') {
 	bot.use(async (ctx, next) => {
 		const updateId = ctx.update.update_id.toString(36)
 		const content = (ctx.callbackQuery && ctx.callbackQuery.data) || (ctx.message && ctx.message.text)
-		const identifier = `${updateId} ${ctx.updateType} ${ctx.from!.first_name} ${content && content.length} ${content}`
+		const identifier = `${updateId} ${ctx.updateType} ${(ctx as any).updateSubTypes} ${ctx.from!.first_name} ${content && content.length} ${content}`
 
 		console.time(identifier)
 		if (next) {
