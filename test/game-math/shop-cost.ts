@@ -122,10 +122,10 @@ function shopTotalPurchaseCostMacro(t: ExecutionContext, amounts: number[], expe
 }
 
 test('shopTotalPurchaseCost no products', shopTotalPurchaseCostMacro, [], 0)
-test('shopTotalPurchaseCost single product full', shopTotalPurchaseCostMacro, [100], 0)
-test('shopTotalPurchaseCost single product one missing', shopTotalPurchaseCostMacro, [99], 1)
-test('shopTotalPurchaseCost two product each one missing', shopTotalPurchaseCostMacro, [99, 99], 2)
-test('shopTotalPurchaseCost two product empty', shopTotalPurchaseCostMacro, [0, 0], 200)
+test('shopTotalPurchaseCost single product full', shopTotalPurchaseCostMacro, [200], 0)
+test('shopTotalPurchaseCost single product one missing', shopTotalPurchaseCostMacro, [199], 1)
+test('shopTotalPurchaseCost two product each one missing', shopTotalPurchaseCostMacro, [199, 199], 2)
+test('shopTotalPurchaseCost two product empty', shopTotalPurchaseCostMacro, [0, 0], 400)
 
 test('buyAllCost', t => {
 	const skills: Skills = {magnetism: 0}
@@ -136,7 +136,7 @@ test('buyAllCost', t => {
 		products: [{
 			id: 'Q42',
 			itemTimestamp: 0,
-			itemsInStore: 99
+			itemsInStore: 199
 		}]
 	}, {
 		id: 'Q5',
@@ -145,11 +145,11 @@ test('buyAllCost', t => {
 		products: [{
 			id: 'Q42',
 			itemTimestamp: 0,
-			itemsInStore: 99
+			itemsInStore: 199
 		}, {
 			id: 'Q42',
 			itemTimestamp: 0,
-			itemsInStore: 99
+			itemsInStore: 199
 		}]
 	}]
 
@@ -294,8 +294,8 @@ test('magnetEnabled nothing to buy', t => {
 	const skills: Skills = {magnetism: 1}
 	const money = 1000000
 	const shops = [
-		generateShop([300], {purchasing: 3, selling: 3, storage: 3}),
-		generateShop([300], {purchasing: 3, selling: 3, storage: 3})
+		generateShop([600], {purchasing: 3, selling: 3, storage: 3}),
+		generateShop([600], {purchasing: 3, selling: 3, storage: 3})
 	]
 
 	t.false(magnetEnabled(shops, skills, money))

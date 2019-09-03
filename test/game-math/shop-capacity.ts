@@ -17,11 +17,11 @@ function storageFilledPercentageMacro(t: ExecutionContext, amounts: number[], ex
 
 test('storageFilledPercentage without products', storageFilledPercentageMacro, [], 0)
 test('storageFilledPercentage one product empty', storageFilledPercentageMacro, [0], 0)
-test('storageFilledPercentage one product full', storageFilledPercentageMacro, [100], 1)
+test('storageFilledPercentage one product full', storageFilledPercentageMacro, [200], 1)
 test('storageFilledPercentage two product empty', storageFilledPercentageMacro, [0, 0], 0)
-test('storageFilledPercentage two product full', storageFilledPercentageMacro, [100, 100], 1)
-test('storageFilledPercentage two product empty and full', storageFilledPercentageMacro, [0, 100], 0.5)
-test('storageFilledPercentage two product half full', storageFilledPercentageMacro, [50, 50], 0.5)
+test('storageFilledPercentage two product full', storageFilledPercentageMacro, [200, 200], 1)
+test('storageFilledPercentage two product empty and full', storageFilledPercentageMacro, [0, 200], 0.5)
+test('storageFilledPercentage two product half full', storageFilledPercentageMacro, [100, 100], 0.5)
 
 function shopProductsPossibleMacro(t: ExecutionContext, level: number, expected: number): void {
 	t.is(shopProductsPossible(level), expected)
