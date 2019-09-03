@@ -14,7 +14,7 @@ export function personalBonusWhenEmployed(shop: Shop, talent: TalentName, person
 	const talentFactor = person.talents[talent]
 
 	const isHobby = shop.id === person.hobby
-	const hobbyFactor = isHobby ? 2.5 : 1
+	const hobbyFactor = isHobby ? 2 : 1
 
 	return talentFactor * hobbyFactor
 }
