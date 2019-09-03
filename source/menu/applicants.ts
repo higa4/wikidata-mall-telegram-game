@@ -1,16 +1,37 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
 import {Session, Persist} from '../lib/types'
+import {Person} from '../lib/types/people'
 
 import {currentLevel} from '../lib/game-math/skill'
 import {secondsBetweenApplicants, maxDaysUntilRetirement} from '../lib/game-math/applicant'
 
 import {emojis} from '../lib/interface/emojis'
 import {formatInt} from '../lib/interface/format-number'
+import {humanReadableTimestamp} from '../lib/interface/formatted-time'
 import {infoHeader} from '../lib/interface/formatted-strings'
 import {menuPhoto, buttonText} from '../lib/interface/menu'
+import {personAllTalentsLine, nameMarkdown} from '../lib/interface/person'
 
 import applicantMenu from './applicant'
+
+function applicantEntry(ctx: any, applicant: Person, isHobbyFitting: boolean): string {
+	const {__wikibase_language_code: locale} = ctx.session as Session
+
+	let text = ''
+	if (isHobbyFitting) {
+		text += emojis.hobby
+	}
+
+	text += nameMarkdown(applicant.name)
+	text += '\n  '
+	text += emojis.retirement
+	text += humanReadableTimestamp(applicant.retirementTimestamp, locale)
+	text += '\n  '
+	text += personAllTalentsLine(applicant.talents)
+
+	return text
+}
 
 function menuText(ctx: any): string {
 	const session = ctx.session as Session
@@ -66,7 +87,12 @@ function menuText(ctx: any): string {
 	text += ' / '
 	text += persist.shops.length
 	text += emojis.seat
-	text += '\n'
+	text += '\n\n'
+
+	const shopIds = persist.shops.map(o => o.id)
+	text += session.applicants
+		.map(o => applicantEntry(ctx, o, shopIds.includes(o.hobby)))
+		.join('\n')
 
 	return text
 }
