@@ -7,7 +7,7 @@ import {currentLevel} from '../lib/game-math/skill'
 import {secondsBetweenApplicants, maxDaysUntilRetirement} from '../lib/game-math/applicant'
 
 import {emojis} from '../lib/interface/emojis'
-import {formatInt} from '../lib/interface/format-number'
+import {formatInt, formatFloat} from '../lib/interface/format-number'
 import {humanReadableTimestamp} from '../lib/interface/formatted-time'
 import {infoHeader} from '../lib/interface/formatted-strings'
 import {menuPhoto, buttonText} from '../lib/interface/menu'
@@ -36,12 +36,15 @@ function applicantEntry(ctx: any, applicant: Person, isHobbyFitting: boolean): s
 function menuText(ctx: any): string {
 	const session = ctx.session as Session
 	const persist = ctx.persist as Persist
+	const now = Date.now() / 1000
 
 	const applicantSpeedLevel = currentLevel(persist.skills, 'applicantSpeed')
 	const interval = secondsBetweenApplicants(persist.skills)
 
 	const healthCareLevel = currentLevel(persist.skills, 'healthCare')
 	const retirementDays = maxDaysUntilRetirement(persist.skills)
+
+	const maxSeats = persist.shops.length
 
 	let text = ''
 	text += infoHeader(ctx.wd.r('menu.applicant'))
@@ -85,14 +88,27 @@ function menuText(ctx: any): string {
 	text += ' '
 	text += session.applicants.length
 	text += ' / '
-	text += persist.shops.length
+	text += maxSeats
 	text += emojis.seat
 	text += '\n\n'
 
-	const shopIds = persist.shops.map(o => o.id)
-	text += session.applicants
-		.map(o => applicantEntry(ctx, o, shopIds.includes(o.hobby)))
-		.join('\n')
+	if (session.applicants.length > 0) {
+		const shopIds = persist.shops.map(o => o.id)
+		text += session.applicants
+			.map(o => applicantEntry(ctx, o, shopIds.includes(o.hobby)))
+			.join('\n')
+		text += '\n\n'
+	}
+
+	if (session.applicants.length < maxSeats) {
+		const secondsUntilNext = (session.applicantTimestamp + interval) - now
+		text += ctx.wd.r('other.countdown').label()
+		text += ': '
+		text += formatFloat(secondsUntilNext)
+		text += ' '
+		text += ctx.wd.r('unit.second').label()
+		text += '\n\n'
+	}
 
 	return text
 }
