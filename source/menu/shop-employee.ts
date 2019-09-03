@@ -1,5 +1,7 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
+import {Dictionary} from '../lib/js-helper/dictionary'
+
 import {Session, Persist} from '../lib/types'
 import {Shop} from '../lib/types/shop'
 import {TalentName, Person} from '../lib/types/people'
@@ -70,11 +72,21 @@ menu.button(buttonText(emojis.seat, 'action.demotion'), 'toApplicants', {
 
 function availableApplicants(ctx: any): string[] {
 	const session = ctx.session as Session
-	if (fromCtx(ctx).employee) {
-		return []
+	const {employee, shop, talent} = fromCtx(ctx)
+	const currentBonus = personalBonusWhenEmployed(shop, talent, employee)
+
+	const applicantBoni: Dictionary<number> = {}
+	for (let i = 0; i < session.applicants.length; i++) {
+		const applicant = session.applicants[i];
+		applicantBoni[i] = personalBonusWhenEmployed(shop, talent, applicant)
 	}
 
-	return Object.keys(session.applicants)
+	const indiciesOfInterest = session.applicants
+		.map((_, i) => i)
+		.filter(i => applicantBoni[i] > currentBonus)
+		.sort((a, b) => applicantBoni[b] - applicantBoni[a])
+
+	return indiciesOfInterest.map(o => String(o))
 }
 
 menu.selectSubmenu('a', availableApplicants, confirmEmployee, {
