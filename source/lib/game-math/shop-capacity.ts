@@ -8,7 +8,7 @@ export function storageCapacity(shop: Shop, skills: Skills): number {
 	const personal = personalBonus(shop, 'storage')
 	const pressLevel = currentLevel(skills, 'machinePress')
 	const press = storageCapactiyPressBonus(pressLevel)
-	return Math.round(100 * personal * press)
+	return Math.round(200 * personal * press)
 }
 
 export function storageCapactiyPressBonus(pressLevel: number): number {
