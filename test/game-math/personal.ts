@@ -42,9 +42,9 @@ test('personalBonusWhenEmployed with hobby', t => {
 		hobby: 'Q5'
 	}
 
-	t.is(personalBonusWhenEmployed(exampleShop, 'purchasing', p), 1.25)
-	t.is(personalBonusWhenEmployed(exampleShop, 'selling', p), 2.5)
-	t.is(personalBonusWhenEmployed(exampleShop, 'storage', p), 5)
+	t.is(personalBonusWhenEmployed(exampleShop, 'purchasing', p), 1)
+	t.is(personalBonusWhenEmployed(exampleShop, 'selling', p), 2)
+	t.is(personalBonusWhenEmployed(exampleShop, 'storage', p), 4)
 })
 
 test('personalBonus when spot empty', t => {
