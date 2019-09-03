@@ -2,6 +2,8 @@ import TelegrafInlineMenu from 'telegraf-inline-menu'
 
 import {Session, Persist} from '../lib/types'
 
+import * as userMalls from '../lib/data/malls'
+
 import {buttonText} from '../lib/interface/menu'
 import {emojis} from '../lib/interface/emojis'
 import {infoHeader, labeledFloat} from '../lib/interface/formatted-strings'
@@ -10,6 +12,7 @@ import applicants from './applicants'
 import botStats from './bot-stats'
 import employees from './employees'
 import leaderboard from './leaderboard'
+import mall from './mall'
 import settings from './settings'
 import shops from './shops'
 import skills from './skills'
@@ -51,8 +54,19 @@ function shopsButtonText(ctx: any): string {
 
 menu.submenu(shopsButtonText, 'shops', shops)
 
-menu.simpleButton(buttonText(emojis.mall + emojis.underConstruction, 'menu.mall'), 'mallJoinHint', {
-	doFunc: async ctx => ctx.answerCbQuery(emojis.underConstruction + 'soon…')
+menu.simpleButton(buttonText(emojis.mall, 'menu.mall'), 'mallJoinHint', {
+	hide: async ctx => {
+		const mallId = await userMalls.getMallIdOfUser(ctx.from!.id)
+		return Boolean(mallId)
+	},
+	doFunc: async ctx => ctx.answerCbQuery('🤖 -> 👥')
+})
+
+menu.submenu(buttonText(emojis.mall, 'menu.mall'), 'mall', mall, {
+	hide: async ctx => {
+		const mallId = await userMalls.getMallIdOfUser(ctx.from!.id)
+		return !mallId
+	}
 })
 
 function applicantEmoji(ctx: any): string {
