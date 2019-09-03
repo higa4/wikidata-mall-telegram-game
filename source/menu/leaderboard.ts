@@ -1,3 +1,4 @@
+import {markdown as format} from 'telegram-format'
 import {User} from 'telegram-typings'
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
@@ -67,13 +68,13 @@ async function getCollectorTable(): Promise<LeaderboardEntries> {
 }
 
 function entryLine(index: number, info: User | undefined, formattedValue: string, highlighted: boolean): string {
-	const name = info ? info.first_name.replace(/[*_`[\]()]/g, '') : '??'
+	const name = info ? info.first_name : '??'
 	const rank = index + 1
 
 	const parts: string[] = []
 	parts.push(`${rank}.`)
-	parts.push(`_${formattedValue}_`)
-	parts.push(highlighted ? `*${name}*` : name)
+	parts.push(format.italic(formattedValue))
+	parts.push(highlighted ? format.bold(name) : format.escape(name))
 
 	return parts.join(' ')
 }
