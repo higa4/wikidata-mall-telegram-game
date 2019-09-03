@@ -72,7 +72,12 @@ menu.submenu(buttonText(emojis.person, 'menu.employee'), 'employees', employees,
 	}
 })
 
-menu.submenu(buttonText(emojis.skill, 'menu.skill'), 'skill', skills, {
+function skillEmoji(ctx: any): string {
+	const session = ctx.session as Session
+	return (session.skillInTraining ? '' : emojis.shopProductsEmpty) + emojis.skill
+}
+
+menu.submenu(buttonText(skillEmoji, 'menu.skill'), 'skill', skills, {
 	hide: (ctx: any) => {
 		const persist = ctx.persist as Persist
 		return persist.shops.length === 0
