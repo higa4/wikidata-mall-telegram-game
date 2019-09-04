@@ -13,7 +13,7 @@ import * as userInfo from '../lib/data/user-info'
 import * as userShops from '../lib/data/shops'
 import * as userSkills from '../lib/data/skills'
 
-import {collectorTotalLevel} from '../lib/game-math/skill'
+import {currentLevel} from '../lib/game-math/skill'
 import {lastTimeActive} from '../lib/game-math/shop-time'
 import {returnOnInvestment} from '../lib/game-math/shop-cost'
 
@@ -57,7 +57,7 @@ async function getCollectorTable(): Promise<LeaderboardEntries> {
 	const allUserSkills = await userSkills.getAllSkills()
 	const values: Dictionary<number> = {}
 	for (const playerId of Object.keys(allUserSkills)) {
-		const level = collectorTotalLevel(allUserSkills[playerId])
+		const level = currentLevel(allUserSkills[playerId], 'collector')
 		values[playerId] = level
 	}
 

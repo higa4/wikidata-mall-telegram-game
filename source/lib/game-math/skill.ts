@@ -36,10 +36,6 @@ export function categorySkillSpecificLevel(skills: Skills, skill: CategorySkill,
 	return content[category] || 0
 }
 
-export function collectorTotalLevel(skills: Skills): number {
-	return currentLevel(skills, 'collector')
-}
-
 /**
  * Calculates the time needed to upgrade a skill with this current level. Time is in hours
  * @returns time in hours

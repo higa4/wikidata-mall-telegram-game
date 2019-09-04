@@ -2,7 +2,7 @@ import test from 'ava'
 
 import {Skills} from '../../source/lib/types/skills'
 
-import {currentLevel, collectorTotalLevel, skillUpgradeTimeNeeded, increaseLevelByOne, skillUpgradeEndTimestamp, categorySkillSpecificLevel} from '../../source/lib/game-math/skill'
+import {currentLevel, skillUpgradeTimeNeeded, increaseLevelByOne, skillUpgradeEndTimestamp, categorySkillSpecificLevel} from '../../source/lib/game-math/skill'
 
 const emptySkills: Skills = {}
 const exampleSkills: Skills = {
@@ -39,14 +39,6 @@ test('categorySkillSpecificLevel 0 when not trained yet', t => {
 
 test('categorySkillSpecificLevel correct', t => {
 	t.is(categorySkillSpecificLevel(exampleSkills, 'collector', 'Q5'), 3)
-})
-
-test('collectorTotalLevel no collector yet', t => {
-	t.is(collectorTotalLevel(emptySkills), 0)
-})
-
-test('collectorTotalLevel example', t => {
-	t.is(collectorTotalLevel(exampleSkills), 8)
 })
 
 test('skillUpgradeTimeNeeded examples', t => {

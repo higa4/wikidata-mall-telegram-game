@@ -6,7 +6,7 @@ import {Shop, Product} from '../lib/types/shop'
 import {Skills} from '../lib/types/skills'
 import {TalentName} from '../lib/types/people'
 
-import {collectorTotalLevel, currentLevel} from '../lib/game-math/skill'
+import {currentLevel} from '../lib/game-math/skill'
 import {sellingCost, purchasingCost, productBasePrice, productBasePriceCollectorFactor, sellingCostPackagingBonus, purchasingCostScissorsBonus} from '../lib/game-math/product'
 import {storageCapacity} from '../lib/game-math/shop-capacity'
 
@@ -84,7 +84,7 @@ function menuText(ctx: any): string {
 	const purchaseCostPerItem = purchasingCost(shop, product, persist.skills)
 	const sellingCostPerItem = sellingCost(shop, product, persist.skills)
 
-	const collectorLevel = collectorTotalLevel(persist.skills)
+	const collectorLevel = currentLevel(persist.skills, 'collector')
 
 	let text = ''
 	text += infoHeader(reader)
