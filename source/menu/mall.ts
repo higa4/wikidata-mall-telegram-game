@@ -14,6 +14,8 @@ import {buttonText, menuPhoto} from '../lib/interface/menu'
 import {emojis} from '../lib/interface/emojis'
 import {infoHeader, labeledFloat} from '../lib/interface/formatted-strings'
 
+const DONATION_AMOUNT = 1000000
+
 async function menuText(ctx: any): Promise<string> {
 	const {__wikibase_language_code: locale} = ctx.session as Session
 	const mall = await userMalls.getMallOfUser(ctx.from.id)
@@ -69,6 +71,34 @@ async function menuText(ctx: any): Promise<string> {
 
 const menu = new TelegrafInlineMenu(menuText, {
 	photo: menuPhoto('menu.mall')
+})
+
+menu.button(buttonText(emojis.currency, 'mall.donation'), 'donate', {
+	hide: async (ctx: any) => {
+		const session = ctx.session as Session
+		if (session.money < DONATION_AMOUNT * 2) {
+			return true
+		}
+
+		const mall = await userMalls.getMallOfUser(ctx.from.id)
+		return Boolean(mall && mall.money > DONATION_AMOUNT * 10)
+	},
+	doFunc: async (ctx: any) => {
+		const session = ctx.session as Session
+		if (session.money < DONATION_AMOUNT * 2) {
+			return
+		}
+
+		const mallId = await userMalls.getMallIdOfUser(ctx.from.id)
+		if (!mallId) {
+			throw new Error('user not part of a mall')
+		}
+
+		const mall = (await userMalls.get(mallId))!
+		mall.money += DONATION_AMOUNT
+		session.money -= DONATION_AMOUNT
+		await userMalls.set(mallId, mall)
+	}
 })
 
 menu.urlButton(
