@@ -58,7 +58,8 @@ bot.use(async (ctx, next) => {
 		}
 
 		if (error.message.includes('MEDIA_EMPTY') || error.message.includes('WEBPAGE_CURL_FAILED')) {
-			console.warn('Probably Wikimedia Commons fail', ctx.from!.id, ctx.callbackQuery && ctx.callbackQuery.data, error.message)
+			const payload = error && error.on && error.on.payload
+			console.warn('Probably Wikimedia Commons fail', ctx.from!.id, ctx.callbackQuery && ctx.callbackQuery.data, error.message, (payload && payload.media && payload.media.media) || payload)
 		} else {
 			console.error('try to send error to user', ctx.update, error, error && error.on && error.on.payload)
 		}
