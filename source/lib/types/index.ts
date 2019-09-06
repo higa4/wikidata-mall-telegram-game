@@ -19,7 +19,9 @@ export interface Session {
 	leaderboardView?: LeaderboardView;
 	money: number;
 	page: number;
+	// TODO: remove (migration in progress)
 	skillInTraining?: SkillInTraining;
+	skillQueue?: SkillInTraining[];
 	stats: Stats;
 }
 

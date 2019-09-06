@@ -3,34 +3,39 @@ import {increaseLevelByOne, isSimpleSkill} from '../game-math/skill'
 
 export default function applySkills(session: Session, persist: Persist, now: number): void {
 	if (session.skillInTraining) {
+		session.skillQueue = [
+			session.skillInTraining
+		]
+		delete session.skillInTraining
+	}
+
+	if (session.skillQueue) {
 		ensureCurrentlyTrainedSkillForShopHasItsShop(session, persist)
 		applySkillWhenFinished(session, persist, now)
 	}
 }
 
 function ensureCurrentlyTrainedSkillForShopHasItsShop(session: Session, persist: Persist): void {
-	const {category} = session.skillInTraining!
-	if (!category) {
-		return
-	}
+	const existingShops = persist.shops.map(o => o.id)
 
-	const shopExists = persist.shops.some(o => o.id === category)
-	if (!shopExists) {
-		delete session.skillInTraining
-	}
+	session.skillQueue = session.skillQueue!
+		.filter(o => !o.category || existingShops.includes(o.category))
 }
 
 function applySkillWhenFinished(session: Session, persist: Persist, now: number): void {
-	const {skill, category, endTimestamp} = session.skillInTraining!
+	for (const skillInTraining of session.skillQueue!) {
+		const {skill, category, endTimestamp} = skillInTraining
+		if (endTimestamp > now) {
+			break
+		}
 
-	// SkillInTraining had startTimestamp and no endTimestamp -> undefined -> just skill it now as part of migration
-	if (now > (endTimestamp || 0)) {
 		if (isSimpleSkill(skill)) {
 			increaseLevelByOne(persist.skills, skill)
 		} else {
 			increaseLevelByOne(persist.skills, skill, category!)
 		}
-
-		delete session.skillInTraining
 	}
+
+	session.skillQueue = session.skillQueue!
+		.filter(o => o.endTimestamp > now)
 }

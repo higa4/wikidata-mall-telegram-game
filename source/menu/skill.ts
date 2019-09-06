@@ -5,6 +5,8 @@ import {Skill} from '../lib/types/skills'
 
 import {currentLevel, skillUpgradeEndTimestamp, isSimpleSkill, categorySkillSpecificLevel} from '../lib/game-math/skill'
 
+import {addSkillToQueue} from '../lib/game-logic/skills'
+
 import {countdownHourMinute} from '../lib/interface/formatted-time'
 import {emojis} from '../lib/interface/emojis'
 import {infoHeader} from '../lib/interface/formatted-strings'
@@ -51,9 +53,10 @@ function menuText(ctx: any): string {
 	text += ctx.wd.r('unit.hour').label()
 	text += '\n'
 
-	if (session.skillInTraining) {
+	const {skillQueue} = session
+	if (skillQueue && skillQueue.length > 0) {
 		text += '\n'
-		text += skillInTrainingString(ctx, session.skillInTraining)
+		text += skillInTrainingString(ctx, skillQueue[0])
 		text += '\n\n'
 	}
 
@@ -66,25 +69,24 @@ const menu = new TelegrafInlineMenu(menuText, {
 
 menu.button(buttonText(emojis.skill, 'action.research'), 'research', {
 	hide: (ctx: any) => {
-		const session = ctx.session as Session
-		return Boolean(session.skillInTraining)
+		const {skillQueue} = ctx.session as Session
+		return Boolean(skillQueue && skillQueue.length > 0)
 	},
 	doFunc: (ctx: any) => {
 		const session = ctx.session as Session
 		const persist = ctx.persist as Persist
-		if (session.skillInTraining) {
+
+		if (!session.skillQueue) {
+			session.skillQueue = []
+		}
+
+		if (session.skillQueue.length > 0) {
 			return
 		}
 
 		const {skill, category} = fromCtx(ctx)
 		const now = Math.floor(Date.now() / 1000)
-		const level = isSimpleSkill(skill) ? currentLevel(persist.skills, skill) : categorySkillSpecificLevel(persist.skills, skill, category!)
-		const endTimestamp = skillUpgradeEndTimestamp(level, now)
-		session.skillInTraining = {
-			skill,
-			category,
-			endTimestamp
-		}
+		addSkillToQueue(session.skillQueue, persist.skills, skill, category, now)
 	}
 })
 

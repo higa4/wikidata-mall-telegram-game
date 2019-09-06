@@ -69,8 +69,9 @@ function menuText(ctx: any): string {
 		}
 	}
 
-	if (session.skillInTraining) {
-		text += skillInTrainingString(ctx, session.skillInTraining)
+	const {skillQueue} = session
+	if (skillQueue && skillQueue.length > 0) {
+		text += skillInTrainingString(ctx, skillQueue[0])
 		text += '\n\n'
 	}
 

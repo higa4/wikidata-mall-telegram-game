@@ -62,16 +62,17 @@ function generateShopPersonalRetirement(session: Session, shop: Shop, entityStor
 }
 
 function generateSkill(session: Session, entityStore: WikidataEntityStore): readonly Notification[] {
-	const result: Notification[] = []
-	const {skillInTraining, __wikibase_language_code: locale} = session
-
-	if (skillInTraining) {
-		result.push({
-			type: 'skillFinished',
-			date: new Date(skillInTraining.endTimestamp * 1000),
-			text: skillFinishedNotificationString(skillInTraining, entityStore, locale)
-		})
+	const {skillQueue, __wikibase_language_code: locale} = session
+	if (!skillQueue) {
+		return []
 	}
+
+	const result: Notification[] = skillQueue
+		.map((o): Notification => ({
+			type: 'skillFinished',
+			date: new Date(o.endTimestamp * 1000),
+			text: skillFinishedNotificationString(o, entityStore, locale)
+		}))
 
 	return result
 }
