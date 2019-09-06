@@ -2,7 +2,18 @@ import test, {ExecutionContext} from 'ava'
 
 import {Skills} from '../../source/lib/types/skills'
 
-import {secondsBetweenApplicants, maxDaysUntilRetirement} from '../../source/lib/game-math/applicant'
+import {applicantSeats, secondsBetweenApplicants, maxDaysUntilRetirement} from '../../source/lib/game-math/applicant'
+
+function applicantSeatsMacro(t: ExecutionContext, applicantSeatsLevel: number, expected: number): void {
+	const skills: Skills = {applicantSeats: applicantSeatsLevel}
+	t.is(applicantSeats(skills), expected)
+}
+
+test('applicantSeats level 0', applicantSeatsMacro, 0, 2)
+test('applicantSeats level 5', applicantSeatsMacro, 5, 7)
+test('applicantSeats level 10', applicantSeatsMacro, 10, 12)
+test('applicantSeats level 15', applicantSeatsMacro, 15, 17)
+test('applicantSeats level 25', applicantSeatsMacro, 25, 27)
 
 function secondsBetweenApplicantsMacro(t: ExecutionContext, applicantSpeedLevel: number, expected: number): void {
 	const skills: Skills = {applicantSpeed: applicantSpeedLevel}

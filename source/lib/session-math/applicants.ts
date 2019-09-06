@@ -2,7 +2,7 @@ import {Session, Persist} from '../types'
 
 import * as wdShops from '../wikidata/shops'
 
-import {secondsBetweenApplicants} from '../game-math/applicant'
+import {secondsBetweenApplicants, applicantSeats} from '../game-math/applicant'
 
 import {createApplicant} from '../game-logic/applicant'
 
@@ -36,7 +36,7 @@ function addWaitingApplicants(session: Session, persist: Persist, now: number): 
 		return
 	}
 
-	const freeApplicantSeats = Object.keys(persist.shops).length - applicants.length
+	const freeApplicantSeats = applicantSeats(persist.skills) - applicants.length
 	const creatableApplicants = Math.min(possibleApplicants, freeApplicantSeats)
 
 	// Ensure timer is still running when there are free seats.

@@ -40,6 +40,7 @@ const basic: Dictionary<string> = {
 
 export const emojis: Dictionary<string> = {
 	...basic,
+	applicantSeats: basic.seat,
 	applicantSpeed: basic.applicantsAvailable,
 	healthCare: basic.retirement,
 	logistics: basic.shop,

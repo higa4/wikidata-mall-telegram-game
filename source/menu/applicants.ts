@@ -4,7 +4,7 @@ import {Session, Persist} from '../lib/types'
 import {Person} from '../lib/types/people'
 
 import {currentLevel} from '../lib/game-math/skill'
-import {secondsBetweenApplicants, maxDaysUntilRetirement} from '../lib/game-math/applicant'
+import {secondsBetweenApplicants, maxDaysUntilRetirement, applicantSeats} from '../lib/game-math/applicant'
 
 import {emojis} from '../lib/interface/emojis'
 import {formatInt, formatFloat} from '../lib/interface/format-number'
@@ -38,17 +38,35 @@ function menuText(ctx: any): string {
 	const persist = ctx.persist as Persist
 	const now = Date.now() / 1000
 
+	const applicantSeatsLevel = currentLevel(persist.skills, 'applicantSeats')
+	const maxSeats = applicantSeats(persist.skills)
+
 	const applicantSpeedLevel = currentLevel(persist.skills, 'applicantSpeed')
 	const interval = secondsBetweenApplicants(persist.skills)
 
 	const healthCareLevel = currentLevel(persist.skills, 'healthCare')
 	const retirementDays = maxDaysUntilRetirement(persist.skills)
 
-	const maxSeats = persist.shops.length
-
 	let text = ''
 	text += infoHeader(ctx.wd.r('menu.applicant'))
 	text += '\n\n'
+
+	text += emojis.seat
+	text += ctx.wd.r('other.seat').label()
+	text += ': '
+	text += session.applicants.length
+	text += ' / '
+	text += maxSeats
+	text += emojis.seat
+	text += '\n'
+	if (!session.hideExplanationMath && applicantSeatsLevel > 0) {
+		text += '  '
+		text += emojis.skill
+		text += ctx.wd.r('skill.applicantSeats').label()
+		text += ': '
+		text += applicantSeatsLevel
+		text += '\n'
+	}
 
 	text += '+1'
 	text += emojis.person
@@ -84,14 +102,6 @@ function menuText(ctx: any): string {
 	}
 
 	text += '\n'
-	text += ctx.wd.r('other.seat').label()
-	text += ' '
-	text += session.applicants.length
-	text += ' / '
-	text += maxSeats
-	text += emojis.seat
-	text += '\n\n'
-
 	if (session.applicants.length > 0) {
 		const shopIds = persist.shops.map(o => o.id)
 		text += session.applicants

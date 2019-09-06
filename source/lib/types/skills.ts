@@ -6,7 +6,12 @@ type SkillCategorySet = Dictionary<number>
  */
 export interface SimpleSkills {
 	/**
-	 * Speed increase of
+	 * Increase number of applicant seats available
+	 */
+	applicantSeats?: number;
+
+	/**
+	 * Speed increase of incoming applicants
 	 */
 	applicantSpeed?: number;
 
@@ -62,6 +67,7 @@ export type CategorySkill = keyof CategorySkills
 export type Skill = SimpleSkill | CategorySkill
 
 export const SIMPLE_SKILLS: SimpleSkill[] = [
+	'applicantSeats',
 	'applicantSpeed',
 	'healthCare',
 	'logistics',
