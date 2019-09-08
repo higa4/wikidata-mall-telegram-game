@@ -6,9 +6,11 @@ import {SkillInTraining} from '../types/skills'
 import {countdownHourMinute} from './formatted-time'
 import {emojis} from './emojis'
 
-export function skillInTrainingString(ctx: any, skillInTraining: SkillInTraining): string {
-	const {skill, category, endTimestamp} = skillInTraining
+export function skillQueueString(ctx: any, skillQueue: readonly SkillInTraining[]): string {
 	const now = Date.now() / 1000
+	if (skillQueue.length === 0) {
+		return ''
+	}
 
 	let text = ''
 	text += '*'
@@ -16,6 +18,17 @@ export function skillInTrainingString(ctx: any, skillInTraining: SkillInTraining
 	text += '*'
 	text += '\n'
 
+	text += skillQueue
+		.map(o => skillQueueEntryString(ctx, o, now))
+		.join('\n')
+
+	text += '\n\n'
+	return text
+}
+
+function skillQueueEntryString(ctx: any, skillInTraining: SkillInTraining, now: number): string {
+	const {skill, category, endTimestamp} = skillInTraining
+	let text = ''
 	text += emojis[skill] || ''
 	text += ctx.wd.r(`skill.${skill}`).label()
 
@@ -27,6 +40,7 @@ export function skillInTrainingString(ctx: any, skillInTraining: SkillInTraining
 	}
 
 	text += '\n'
+	text += '  '
 	text += emojis.countdown
 	text += countdownHourMinute(endTimestamp - now)
 	text += ' '

@@ -8,7 +8,7 @@ import {categorySkillSpecificLevel} from '../lib/game-math/skill'
 import {emojis} from '../lib/interface/emojis'
 import {infoHeader} from '../lib/interface/formatted-strings'
 import {menuPhoto, buttonText} from '../lib/interface/menu'
-import {skillInTrainingString} from '../lib/interface/skill'
+import {skillQueueString} from '../lib/interface/skill'
 
 import skillMenu from './skill'
 
@@ -69,11 +69,7 @@ function menuText(ctx: any): string {
 		}
 	}
 
-	const {skillQueue} = session
-	if (skillQueue && skillQueue.length > 0) {
-		text += skillInTrainingString(ctx, skillQueue[0])
-		text += '\n\n'
-	}
+	text += skillQueueString(ctx, session.skillQueue || [])
 
 	return text
 }
