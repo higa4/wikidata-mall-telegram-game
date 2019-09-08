@@ -10,7 +10,7 @@ import * as inUseItems from './preload-in-use-items'
 export async function preload(store: WikidataEntityStore): Promise<void> {
 	console.time('wikidata preload')
 
-	await preloadSpecific('middleware', async () => store.addResourceKeyYaml(
+	await preloadSpecific('resourceKeys', async () => store.addResourceKeyYaml(
 		readFileSync('wikidata-items.yaml', 'utf8')
 	))
 	await preloadSpecific('name', async () => name.preload())
