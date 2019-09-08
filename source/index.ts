@@ -5,18 +5,24 @@ import TelegrafI18n from 'telegraf-i18n'
 import TelegrafWikibase from 'telegraf-wikibase'
 import WikidataEntityStore from 'wikidata-entity-store'
 
-import {emojis} from './lib/interface/emojis'
-import {NotificationManager} from './lib/notification/manager'
-import {notificationText} from './lib/interface/notification'
 import {preload} from './lib/wikidata'
-import {removeOld} from './lib/game-logic/remove-old'
+
 import * as dataShops from './lib/data/shops'
 import * as dataSkills from './lib/data/skills'
-import * as notifications from './lib/session-math/notification'
 import * as userInfo from './lib/data/user-info'
 import * as userSessions from './lib/data/user-sessions'
-import menu from './menu'
+
+import {removeOld} from './lib/game-logic/remove-old'
+
+import * as notifications from './lib/session-math/notification'
 import sessionMathMiddleware from './lib/session-math'
+
+import {emojis} from './lib/interface/emojis'
+import {notificationText} from './lib/interface/notification'
+
+import {NotificationManager} from './lib/notification/manager'
+
+import menu from './menu'
 
 const tokenFilePath = existsSync('/run/secrets') ? '/run/secrets/bot-token.txt' : 'bot-token.txt'
 const token = readFileSync(tokenFilePath, 'utf8').trim()
