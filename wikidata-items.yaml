@@ -42,6 +42,7 @@ achievement:
   gameStarted: Q529711
 skill:
   level: Q20825944
+  queue: Q220543
   training: Q918385
   applicantSeats: Q179415
   applicantSpeed: Q656850

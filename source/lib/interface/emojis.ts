@@ -5,6 +5,7 @@ const basic: Dictionary<string> = {
 	applicantsAvailable: '📬',
 	applicantsEmpty: '📭',
 	chat: '💭',
+	clearSkillQueue: '❌',
 	close: '🛑',
 	collector: '🧳',
 	construction: '🏗',

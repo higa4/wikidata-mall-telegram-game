@@ -66,6 +66,22 @@ const menu = new TelegrafInlineMenu(menuText, {
 	photo: menuPhoto('menu.skill')
 })
 
+menu.button(buttonText(emojis.clearSkillQueue, 'skill.queue'), 'clearQueue', {
+	hide: (ctx: any) => {
+		const {skillQueue} = ctx.session as Session
+		return !skillQueue || skillQueue.length <= 1
+	},
+	doFunc: (ctx: any) => {
+		const session = ctx.session as Session
+		if (!session.skillQueue || session.skillQueue.length <= 1) {
+			return
+		}
+
+		session.skillQueue = session.skillQueue
+			.filter((_, i) => i === 0)
+	}
+})
+
 function skillOptions(ctx: any, skills: Skill[]): Dictionary<string> {
 	const {__wikibase_language_code: locale} = ctx.session as Session
 	const labels: Dictionary<string> = {}
