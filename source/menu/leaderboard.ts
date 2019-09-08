@@ -120,7 +120,7 @@ async function menuText(ctx: any): Promise<string> {
 			break
 
 		default:
-			throw new Error('unknown leaderboard view')
+			throw new Error(`unknown leaderboard view: ${view}`)
 	}
 
 	return text
@@ -137,7 +137,7 @@ function viewResourceKey(view: LeaderboardView): string {
 		case 'collector':
 			return 'skill.collector'
 		default:
-			throw new Error('unknown leaderboard view')
+			throw new Error(`unknown leaderboard view: ${view}`)
 	}
 }
 
