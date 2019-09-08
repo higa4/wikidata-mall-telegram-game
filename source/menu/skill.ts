@@ -49,6 +49,7 @@ function menuText(ctx: any): string {
 	if (inQueue > 0) {
 		text += ` + ${inQueue}`
 	}
+
 	text += '\n'
 
 	text += ctx.wd.r('action.research').label()
