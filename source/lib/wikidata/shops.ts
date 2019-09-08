@@ -9,7 +9,6 @@ type Dictionary<T> = {[key: string]: T}
 const toplevelShopCategories: string[] = [
 	'Q11410', // Game
 	'Q11460', // Clothing
-	'Q1207302', // Jar
 	'Q13629441', // Electric vehicle
 	'Q2095', // Food
 	'Q210729', // Electrical element
@@ -27,7 +26,7 @@ const shopsWithProducts: Dictionary<string[]> = {}
 function shopTypesQuery(topmost: string): string {
 	return `SELECT ?class WHERE {
 ?class wdt:P279+ wd:${topmost}.
-?item wdt:P31 ?class.
+?item wdt:P279 ?class.
 FILTER(EXISTS { ?class wdt:P18 ?image. })
 FILTER(EXISTS { ?item wdt:P18 ?image. })
 ?item rdfs:label ?label.
@@ -39,7 +38,7 @@ HAVING ((COUNT(?item)) >= 5 )`
 
 function productsQuery(shopType: string): string {
 	return `SELECT ?item WHERE {
-?item wdt:P31 wd:${shopType}.
+?item wdt:P279 wd:${shopType}.
 FILTER(EXISTS { ?item wdt:P18 ?image. })
 ?item rdfs:label ?label.
 FILTER(LANG(?label) = "en")
