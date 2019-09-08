@@ -38,8 +38,9 @@ export async function update(store: WikidataEntityStore): Promise<void> {
 
 async function preloadSpecific(title: string, loadFunc: () => Promise<void>): Promise<void> {
 	try {
+		console.timeLog('wikidata preload', 'start', title)
 		await loadFunc()
-		console.timeLog('wikidata preload', title)
+		console.timeLog('wikidata preload', 'finish', title)
 	} catch (error) {
 		console.error('wikidata preloadSpecific', title, 'failed:', error)
 		throw new Error(`wikidata preload ${title} failed`)
