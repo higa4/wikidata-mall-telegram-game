@@ -1,5 +1,8 @@
 import {Session, Persist} from '../types'
-import {increaseLevelByOne, isSimpleSkill} from '../game-math/skill'
+
+import {isSimpleSkill} from '../game-math/skill'
+
+import {increaseLevelByOne} from '../game-logic/skills'
 
 export default function applySkills(session: Session, persist: Persist, now: number): void {
 	if (session.skillInTraining) {

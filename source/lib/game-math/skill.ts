@@ -3,8 +3,6 @@ import {Skills, CategorySkill, SimpleSkill, SIMPLE_SKILLS, Skill, CATEGORY_SKILL
 import {HOUR_IN_SECONDS} from '../math/timestamp-constants'
 import * as fibonacci from '../math/fibonacci'
 
-type Dictionary<T> = {[key: string]: T}
-
 export function isSimpleSkill(skill: Skill): skill is SimpleSkill {
 	return (SIMPLE_SKILLS as string[]).includes(skill)
 }
@@ -60,35 +58,4 @@ export function skillUpgradeEndTimestamp(currentLevel: number, startTimestamp: n
 	const hoursNeeded = skillUpgradeTimeNeeded(currentLevel)
 	const secondsNeeded = hoursNeeded * HOUR_IN_SECONDS
 	return startTimestamp + secondsNeeded
-}
-
-/**
- * Increases the given skills level in `skills`.
- */
-export function increaseLevelByOne(skills: Skills, skill: SimpleSkill): void
-export function increaseLevelByOne(skills: Skills, skill: CategorySkill, category: string): void
-export function increaseLevelByOne(skills: Skills, skill: SimpleSkill | CategorySkill, category?: string): void {
-	if (!skills[skill]) {
-		if (isCategorySkill(skill)) {
-			const initialContent: Dictionary<number> = {}
-			initialContent[category!] = 0
-			skills[skill] = initialContent as any
-		} else {
-			const initialContent = 0
-			skills[skill] = initialContent as any
-		}
-	}
-
-	if (isSimpleSkill(skill)) {
-		skills[skill]! += 1
-		return
-	}
-
-	const content = skills[skill]!
-
-	if (!content[category!]) {
-		content[category!] = 0
-	}
-
-	content[category!]++
 }

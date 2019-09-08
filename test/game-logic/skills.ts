@@ -2,7 +2,16 @@ import test from 'ava'
 
 import {Skills, SkillInTraining} from '../../source/lib/types/skills'
 
-import {addSkillToQueue} from '../../source/lib/game-logic/skills'
+import {addSkillToQueue, increaseLevelByOne} from '../../source/lib/game-logic/skills'
+
+const emptySkills: Skills = {}
+const exampleSkills: Skills = {
+	applicantSpeed: 2,
+	collector: {
+		Q2: 5,
+		Q5: 3
+	}
+}
 
 test('addSkillToQueue simple into empty', t => {
 	const skills: Skills = {}
@@ -69,4 +78,36 @@ test('addSkillToQueue with same skill before', t => {
 			endTimestamp: 400 + 7200
 		}
 	])
+})
+
+test('increaseLevelByOne categoryless not yet trained', t => {
+	const skills: Skills = JSON.parse(JSON.stringify(emptySkills))
+	increaseLevelByOne(skills, 'applicantSpeed')
+	t.is(skills.applicantSpeed, 1)
+})
+
+test('increaseLevelByOne categoryless trained', t => {
+	const skills: Skills = JSON.parse(JSON.stringify(exampleSkills))
+	increaseLevelByOne(skills, 'applicantSpeed')
+	t.is(skills.applicantSpeed, 3)
+})
+
+test('increaseLevelByOne with category never trained', t => {
+	const skills: Skills = JSON.parse(JSON.stringify(emptySkills))
+	increaseLevelByOne(skills, 'collector', 'Q5')
+	t.deepEqual(skills.collector, {
+		Q5: 1
+	})
+})
+
+test('increaseLevelByOne with category not yet trained', t => {
+	const skills: Skills = JSON.parse(JSON.stringify(exampleSkills))
+	increaseLevelByOne(skills, 'collector', 'Q42')
+	t.is(skills.collector!.Q42, 1)
+})
+
+test('increaseLevelByOne with category trained', t => {
+	const skills: Skills = JSON.parse(JSON.stringify(exampleSkills))
+	increaseLevelByOne(skills, 'collector', 'Q5')
+	t.is(skills.collector!.Q5, 4)
 })

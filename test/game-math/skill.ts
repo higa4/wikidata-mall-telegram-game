@@ -2,7 +2,7 @@ import test, {ExecutionContext} from 'ava'
 
 import {Skills, Skill, SkillInTraining} from '../../source/lib/types/skills'
 
-import {currentLevel, skillUpgradeTimeNeeded, increaseLevelByOne, skillUpgradeEndTimestamp, categorySkillSpecificLevel, entriesInSkillQueue, levelAfterSkillQueue} from '../../source/lib/game-math/skill'
+import {currentLevel, skillUpgradeTimeNeeded, skillUpgradeEndTimestamp, categorySkillSpecificLevel, entriesInSkillQueue, levelAfterSkillQueue} from '../../source/lib/game-math/skill'
 
 const emptySkills: Skills = {}
 const exampleSkills: Skills = {
@@ -53,38 +53,6 @@ test('skill', t => {
 	t.is(skillUpgradeEndTimestamp(0, 10000000), 10000000 + (60 * 60 * 1))
 	t.is(skillUpgradeEndTimestamp(1, 10000000), 10000000 + (60 * 60 * 2))
 	t.is(skillUpgradeEndTimestamp(2, 10000000), 10000000 + (60 * 60 * 3))
-})
-
-test('increaseLevelByOne categoryless not yet trained', t => {
-	const skills: Skills = JSON.parse(JSON.stringify(emptySkills))
-	increaseLevelByOne(skills, 'applicantSpeed')
-	t.is(skills.applicantSpeed, 1)
-})
-
-test('increaseLevelByOne categoryless trained', t => {
-	const skills: Skills = JSON.parse(JSON.stringify(exampleSkills))
-	increaseLevelByOne(skills, 'applicantSpeed')
-	t.is(skills.applicantSpeed, 3)
-})
-
-test('increaseLevelByOne with category never trained', t => {
-	const skills: Skills = JSON.parse(JSON.stringify(emptySkills))
-	increaseLevelByOne(skills, 'collector', 'Q5')
-	t.deepEqual(skills.collector, {
-		Q5: 1
-	})
-})
-
-test('increaseLevelByOne with category not yet trained', t => {
-	const skills: Skills = JSON.parse(JSON.stringify(exampleSkills))
-	increaseLevelByOne(skills, 'collector', 'Q42')
-	t.is(skills.collector!.Q42, 1)
-})
-
-test('increaseLevelByOne with category trained', t => {
-	const skills: Skills = JSON.parse(JSON.stringify(exampleSkills))
-	increaseLevelByOne(skills, 'collector', 'Q5')
-	t.is(skills.collector!.Q5, 4)
 })
 
 function entriesInSkillQueueMacro(t: ExecutionContext, skill: Skill, category: string | undefined, expected: number): void {
