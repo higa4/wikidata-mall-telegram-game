@@ -23,6 +23,19 @@ export async function preload(store: WikidataEntityStore): Promise<void> {
 	console.timeEnd('wikidata preload')
 }
 
+export async function update(store: WikidataEntityStore): Promise<void> {
+	console.time('wikidata preload')
+
+	try {
+		await preloadSpecific('sets', async () => sets.preload(store))
+		await preloadSpecific('shops', async () => shops.preload(store))
+	} catch (_) {
+		// Ignore update error. It is logged anyway and the game can run without the update working
+	}
+
+	console.timeEnd('wikidata preload')
+}
+
 async function preloadSpecific(title: string, loadFunc: () => Promise<void>): Promise<void> {
 	try {
 		await loadFunc()
