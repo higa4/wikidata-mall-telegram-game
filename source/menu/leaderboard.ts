@@ -142,6 +142,7 @@ function viewResourceKey(view: LeaderboardView): string {
 }
 
 menu.select('view', LEADERBOARD_VIEWS, {
+	columns: 2,
 	isSetFunc: (ctx: any, key) => {
 		const session = ctx.session as Session
 		return session.leaderboardView === key || (key === DEFAULT_VIEW && !session.leaderboardView)
