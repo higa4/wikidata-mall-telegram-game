@@ -73,7 +73,7 @@ menu.button(buttonText(emojis.clearSkillQueue, 'skill.queue'), 'clearQueue', {
 	},
 	doFunc: (ctx: any) => {
 		const session = ctx.session as Session
-		if (!session.skillQueue || session.skillQueue.length <= 1) {
+		if (!session.skillQueue || session.skillQueue.length <= 1) {
 			return
 		}
 
