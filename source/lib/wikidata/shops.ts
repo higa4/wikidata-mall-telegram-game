@@ -70,6 +70,9 @@ export async function preload(store: WikidataEntityStore): Promise<void> {
 		...shopTypes,
 		...products
 	])
+
+	// DEBUG
+	// console.log('shopTypes', shopTypes.length, shopTypes.map(o => store.entity(o).labels!.en).sort((a, b) => a.localeCompare(b, 'en')))
 	console.timeEnd('wikidata-shops')
 }
 
