@@ -1,31 +1,10 @@
-import test, {ExecutionContext} from 'ava'
+import test from 'ava'
 
-import {Skills, SkillInTraining, Skill} from '../../source/lib/types/skills'
+import {Skills, SkillInTraining} from '../../source/lib/types/skills'
 
-import {addSkillToQueue, isSkillInQueue} from '../../source/lib/game-logic/skills'
+import {addSkillToQueue} from '../../source/lib/game-logic/skills'
 
-function isSkillInQueueMacro(t: ExecutionContext, skill: Skill, category: string | undefined, expected: boolean): void {
-	const queue: SkillInTraining[] = [
-		{
-			skill: 'logistics',
-			endTimestamp: 400
-		},
-		{
-			skill: 'collector',
-			category: 'Q42',
-			endTimestamp: 600
-		}
-	]
-
-	t.is(isSkillInQueue(queue, skill, category), expected)
-}
-
-test('isSkillInQueue simple skill true', isSkillInQueueMacro, 'logistics', undefined, true)
-test('isSkillInQueue complex skill true', isSkillInQueueMacro, 'collector', 'Q42', true)
-test('isSkillInQueue simple skill false', isSkillInQueueMacro, 'applicantSpeed', undefined, false)
-test('isSkillInQueue complex skill false', isSkillInQueueMacro, 'collector', 'Q5', false)
-
-test('addSkillToQueue empty', t => {
+test('addSkillToQueue simple into empty', t => {
 	const skills: Skills = {}
 	const queue: SkillInTraining[] = []
 	addSkillToQueue(queue, skills, 'healthCare', undefined, 0)
@@ -71,15 +50,23 @@ test('addSkillToQueue with different skill before', t => {
 	])
 })
 
-test('addSkillToQueue with same skill before fails', t => {
+test('addSkillToQueue with same skill before', t => {
 	const skills: Skills = {}
 	const queue: SkillInTraining[] = [{
 		skill: 'healthCare',
 		endTimestamp: 400
 	}]
+	addSkillToQueue(queue, skills, 'healthCare', undefined, 666)
 
-	t.throws(
-		() => addSkillToQueue(queue, skills, 'healthCare', undefined, 666),
-		/already in queue/
-	)
+	t.deepEqual(queue, [
+		{
+			skill: 'healthCare',
+			endTimestamp: 400
+		},
+		{
+			skill: 'healthCare',
+			category: undefined,
+			endTimestamp: 400 + 7200
+		}
+	])
 })

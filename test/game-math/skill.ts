@@ -1,8 +1,8 @@
-import test from 'ava'
+import test, {ExecutionContext} from 'ava'
 
-import {Skills} from '../../source/lib/types/skills'
+import {Skills, Skill, SkillInTraining} from '../../source/lib/types/skills'
 
-import {currentLevel, skillUpgradeTimeNeeded, increaseLevelByOne, skillUpgradeEndTimestamp, categorySkillSpecificLevel} from '../../source/lib/game-math/skill'
+import {currentLevel, skillUpgradeTimeNeeded, increaseLevelByOne, skillUpgradeEndTimestamp, categorySkillSpecificLevel, entriesInSkillQueue, levelAfterSkillQueue} from '../../source/lib/game-math/skill'
 
 const emptySkills: Skills = {}
 const exampleSkills: Skills = {
@@ -86,3 +86,65 @@ test('increaseLevelByOne with category trained', t => {
 	increaseLevelByOne(skills, 'collector', 'Q5')
 	t.is(skills.collector!.Q5, 4)
 })
+
+function entriesInSkillQueueMacro(t: ExecutionContext, skill: Skill, category: string | undefined, expected: number): void {
+	const queue: SkillInTraining[] = [
+		{
+			skill: 'logistics',
+			endTimestamp: 400
+		},
+		{
+			skill: 'collector',
+			category: 'Q42',
+			endTimestamp: 600
+		},
+		{
+			skill: 'logistics',
+			endTimestamp: 800
+		}
+	]
+
+	t.is(entriesInSkillQueue(queue, skill, category), expected)
+}
+
+test('entriesInSkillQueue simple skill true', entriesInSkillQueueMacro, 'logistics', undefined, 2)
+test('entriesInSkillQueue complex skill true', entriesInSkillQueueMacro, 'collector', 'Q42', 1)
+test('entriesInSkillQueue simple skill false', entriesInSkillQueueMacro, 'applicantSpeed', undefined, 0)
+test('entriesInSkillQueue complex skill false', entriesInSkillQueueMacro, 'collector', 'Q5', 0)
+
+function levelAfterSkillQueueMacro(t: ExecutionContext, skill: Skill, category: string | undefined, expected: number): void {
+	const queue: SkillInTraining[] = [
+		{
+			skill: 'logistics',
+			endTimestamp: 400
+		},
+		{
+			skill: 'collector',
+			category: 'Q42',
+			endTimestamp: 600
+		},
+		{
+			skill: 'logistics',
+			endTimestamp: 800
+		},
+		{
+			skill: 'healthCare',
+			endTimestamp: 900
+		}
+	]
+
+	const skills: Skills = {
+		logistics: 2,
+		collector: {
+			Q5: 3,
+			Q42: 1
+		}
+	}
+
+	t.is(levelAfterSkillQueue(skills, queue, skill, category), expected)
+}
+
+test('levelAfterSkillQueue simple', levelAfterSkillQueueMacro, 'logistics', undefined, 4)
+test('levelAfterSkillQueue complex', levelAfterSkillQueueMacro, 'collector', 'Q42', 2)
+test('levelAfterSkillQueue not in queue', levelAfterSkillQueueMacro, 'collector', 'Q5', 3)
+test('levelAfterSkillQueue not in skills', levelAfterSkillQueueMacro, 'healthCare', undefined, 1)

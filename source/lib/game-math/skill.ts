@@ -1,4 +1,4 @@
-import {Skills, CategorySkill, SimpleSkill, SIMPLE_SKILLS, Skill, CATEGORY_SKILLS} from '../types/skills'
+import {Skills, CategorySkill, SimpleSkill, SIMPLE_SKILLS, Skill, CATEGORY_SKILLS, SkillInTraining} from '../types/skills'
 
 import {HOUR_IN_SECONDS} from '../math/timestamp-constants'
 import * as fibonacci from '../math/fibonacci'
@@ -34,6 +34,18 @@ export function categorySkillSpecificLevel(skills: Skills, skill: CategorySkill,
 	}
 
 	return content[category] || 0
+}
+
+export function entriesInSkillQueue(queue: readonly SkillInTraining[], skill: Skill, category: string | undefined): number {
+	return queue
+		.filter(o => o.skill === skill && o.category === category)
+		.length
+}
+
+export function levelAfterSkillQueue(skills: Skills, queue: readonly SkillInTraining[], skill: Skill, category: string | undefined): number {
+	const levelBefore = isSimpleSkill(skill) ? currentLevel(skills, skill) : categorySkillSpecificLevel(skills, skill, category!)
+	const entries = entriesInSkillQueue(queue, skill, category)
+	return levelBefore + entries
 }
 
 /**
