@@ -59,3 +59,8 @@ export function skillUpgradeEndTimestamp(currentLevel: number, startTimestamp: n
 	const secondsNeeded = hoursNeeded * HOUR_IN_SECONDS
 	return startTimestamp + secondsNeeded
 }
+
+export function canAddToSkillQueue(queue: readonly SkillInTraining[], now: number): boolean {
+	const hasToBeBefore = now + (HOUR_IN_SECONDS * 12)
+	return queue.every(o => o.endTimestamp < hasToBeBefore)
+}

@@ -3,7 +3,7 @@ import TelegrafInlineMenu from 'telegraf-inline-menu'
 import {Session, Persist} from '../lib/types'
 import {Skill} from '../lib/types/skills'
 
-import {currentLevel, skillUpgradeEndTimestamp, isSimpleSkill, categorySkillSpecificLevel} from '../lib/game-math/skill'
+import {currentLevel, skillUpgradeEndTimestamp, isSimpleSkill, categorySkillSpecificLevel, canAddToSkillQueue, entriesInSkillQueue, levelAfterSkillQueue} from '../lib/game-math/skill'
 
 import {addSkillToQueue} from '../lib/game-logic/skills'
 
@@ -29,6 +29,8 @@ function menuText(ctx: any): string {
 	const {skill, category} = fromCtx(ctx)
 
 	const level = isSimpleSkill(skill) ? currentLevel(persist.skills, skill) : categorySkillSpecificLevel(persist.skills, skill, category!)
+	const inQueue = entriesInSkillQueue(session.skillQueue || [], skill, category)
+	const afterQueueLevel = levelAfterSkillQueue(persist.skills, session.skillQueue || [], skill, category)
 
 	let text = ''
 	text += infoHeader(ctx.wd.r(`skill.${skill}`), {
@@ -44,11 +46,14 @@ function menuText(ctx: any): string {
 	text += ctx.wd.r('skill.level').label()
 	text += ': '
 	text += level
+	if (inQueue > 0) {
+		text += ` + ${inQueue}`
+	}
 	text += '\n'
 
 	text += ctx.wd.r('action.research').label()
 	text += ': '
-	text += countdownHourMinute(skillUpgradeEndTimestamp(level, 0))
+	text += countdownHourMinute(skillUpgradeEndTimestamp(afterQueueLevel, 0))
 	text += ' '
 	text += ctx.wd.r('unit.hour').label()
 	text += '\n'
@@ -66,22 +71,23 @@ const menu = new TelegrafInlineMenu(menuText, {
 menu.button(buttonText(emojis.skill, 'action.research'), 'research', {
 	hide: (ctx: any) => {
 		const {skillQueue} = ctx.session as Session
-		return Boolean(skillQueue && skillQueue.length > 0)
+		const now = Date.now() / 1000
+		return !canAddToSkillQueue(skillQueue || [], now)
 	},
 	doFunc: (ctx: any) => {
 		const session = ctx.session as Session
 		const persist = ctx.persist as Persist
+		const now = Math.floor(Date.now() / 1000)
 
 		if (!session.skillQueue) {
 			session.skillQueue = []
 		}
 
-		if (session.skillQueue.length > 0) {
+		if (!canAddToSkillQueue(session.skillQueue, now)) {
 			return
 		}
 
 		const {skill, category} = fromCtx(ctx)
-		const now = Math.floor(Date.now() / 1000)
 		addSkillToQueue(session.skillQueue, persist.skills, skill, category, now)
 	}
 })

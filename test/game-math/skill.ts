@@ -2,7 +2,7 @@ import test, {ExecutionContext} from 'ava'
 
 import {Skills, Skill, SkillInTraining} from '../../source/lib/types/skills'
 
-import {currentLevel, skillUpgradeTimeNeeded, skillUpgradeEndTimestamp, categorySkillSpecificLevel, entriesInSkillQueue, levelAfterSkillQueue} from '../../source/lib/game-math/skill'
+import {currentLevel, skillUpgradeTimeNeeded, skillUpgradeEndTimestamp, categorySkillSpecificLevel, entriesInSkillQueue, levelAfterSkillQueue, canAddToSkillQueue} from '../../source/lib/game-math/skill'
 
 const emptySkills: Skills = {}
 const exampleSkills: Skills = {
@@ -116,3 +116,41 @@ test('levelAfterSkillQueue simple', levelAfterSkillQueueMacro, 'logistics', unde
 test('levelAfterSkillQueue complex', levelAfterSkillQueueMacro, 'collector', 'Q42', 2)
 test('levelAfterSkillQueue not in queue', levelAfterSkillQueueMacro, 'collector', 'Q5', 3)
 test('levelAfterSkillQueue not in skills', levelAfterSkillQueueMacro, 'healthCare', undefined, 1)
+
+test('canAddToSkillQueue empty', t => {
+	t.true(canAddToSkillQueue([], 0))
+})
+
+test('canAddToSkillQueue multiple before', t => {
+	t.true(canAddToSkillQueue([
+		{
+			skill: 'applicantSpeed',
+			endTimestamp: 3
+		},
+		{
+			skill: 'applicantSpeed',
+			endTimestamp: 4
+		},
+		{
+			skill: 'applicantSpeed',
+			endTimestamp: 5
+		}
+	], 0))
+})
+
+test('canAddToSkillQueue multiple one too long', t => {
+	t.false(canAddToSkillQueue([
+		{
+			skill: 'applicantSpeed',
+			endTimestamp: 3
+		},
+		{
+			skill: 'applicantSpeed',
+			endTimestamp: 4
+		},
+		{
+			skill: 'applicantSpeed',
+			endTimestamp: 99999999
+		}
+	], 0))
+})
