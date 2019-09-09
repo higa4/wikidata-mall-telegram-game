@@ -3,11 +3,11 @@ import TelegrafInlineMenu from 'telegraf-inline-menu'
 import {Session, Persist} from '../lib/types'
 import {Person} from '../lib/types/people'
 
-import {currentLevel} from '../lib/game-math/skill'
-import {secondsBetweenApplicants, maxDaysUntilRetirement, applicantSeats} from '../lib/game-math/applicant'
+import {secondsBetweenApplicants, applicantSeats} from '../lib/game-math/applicant'
 
+import {applicantInfluencesPart} from '../lib/interface/applicants'
 import {emojis} from '../lib/interface/emojis'
-import {formatInt, formatFloat} from '../lib/interface/format-number'
+import {formatFloat} from '../lib/interface/format-number'
 import {humanReadableTimestamp} from '../lib/interface/formatted-time'
 import {infoHeader} from '../lib/interface/formatted-strings'
 import {menuPhoto, buttonText} from '../lib/interface/menu'
@@ -39,68 +39,14 @@ function menuText(ctx: any): string {
 	const persist = ctx.persist as Persist
 	const now = Date.now() / 1000
 
-	const applicantSeatsLevel = currentLevel(persist.skills, 'applicantSeats')
 	const maxSeats = applicantSeats(persist.skills)
-
-	const applicantSpeedLevel = currentLevel(persist.skills, 'applicantSpeed')
 	const interval = secondsBetweenApplicants(persist.skills)
-
-	const healthCareLevel = currentLevel(persist.skills, 'healthCare')
-	const retirementDays = maxDaysUntilRetirement(persist.skills)
 
 	let text = ''
 	text += infoHeader(ctx.wd.r('menu.applicant'))
 	text += '\n\n'
 
-	text += emojis.seat
-	text += ctx.wd.r('other.seat').label()
-	text += ': '
-	text += session.applicants.length
-	text += ' / '
-	text += maxSeats
-	text += emojis.seat
-	text += '\n'
-	if (!session.hideExplanationMath && applicantSeatsLevel > 0) {
-		text += '  '
-		text += emojis.skill
-		text += ctx.wd.r('skill.applicantSeats').label()
-		text += ': '
-		text += applicantSeatsLevel
-		text += '\n'
-	}
-
-	text += '+1'
-	text += emojis.person
-	text += ' / '
-	text += formatInt(interval)
-	text += ' '
-	text += ctx.wd.r('unit.second').label()
-	text += '\n'
-	if (!session.hideExplanationMath && applicantSpeedLevel > 0) {
-		text += '  '
-		text += emojis.skill
-		text += ctx.wd.r('skill.applicantSpeed').label()
-		text += ': '
-		text += applicantSpeedLevel
-		text += '\n'
-	}
-
-	text += emojis.retirement
-	text += ctx.wd.r('person.retirement').label()
-	text += ': '
-	text += '≤'
-	text += formatInt(retirementDays)
-	text += ' '
-	text += ctx.wd.r('unit.day').label()
-	text += '\n'
-	if (!session.hideExplanationMath && healthCareLevel > 0) {
-		text += '  '
-		text += emojis.skill
-		text += ctx.wd.r('skill.healthCare').label()
-		text += ': '
-		text += healthCareLevel
-		text += '\n'
-	}
+	text += applicantInfluencesPart(ctx, persist.skills, session.applicants.length, session.hideExplanationMath)
 
 	text += '\n'
 	if (session.applicants.length > 0) {
