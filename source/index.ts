@@ -22,6 +22,7 @@ import sessionMathMiddleware from './lib/session-math'
 import {emojis} from './lib/interface/emojis'
 import {notificationText} from './lib/interface/notification'
 
+import {ErrorMiddleware} from './lib/error-middleware'
 import {NotificationManager} from './lib/notification/manager'
 
 import menu from './menu'
@@ -45,55 +46,12 @@ if (process.env.NODE_ENV !== 'production') {
 	})
 }
 
-bot.use(async (ctx, next) => {
-	try {
-		if (next) {
-			await next()
-		}
-	} catch (error) {
-		if (error.message.includes('Too Many Requests')) {
-			console.warn('Telegraf Too Many Requests error. Skip.', error)
-			return
-		}
-
-		if (
-			error.message.includes('cancelled by new editMessageMedia request') ||
-			error.message.includes('message to edit not found') ||
-			error.message.includes('query is too old')
-		) {
-			console.warn('ERROR', ctx.from!.id, ctx.callbackQuery && ctx.callbackQuery.data, error.message)
-			return
-		}
-
-		if (error.message.includes('400: Bad Request: ') && (
-				error.message.includes('MEDIA_EMPTY') ||
-				error.message.includes('WEBPAGE_CURL_FAILED') ||
-				error.message.includes('wrong file identifier/HTTP URL specified')
-		)) {
-			const payload = error && error.on && error.on.payload
-			const url = !payload || payload.photo || (payload.media && payload.media.media) || payload
-			console.warn('some url fail', ctx.from!.id, ctx.callbackQuery && ctx.callbackQuery.data, error.message, url)
-		} else {
-			console.error('try to send error to user', ctx.update, error, error && error.on && error.on.payload)
-		}
-
-		let text = '🔥 Something went wrong here!'
-		text += '\n'
-		text += 'You should join the Chat Group and report this error. Let us make this bot even better together. ☺️'
-
-		text += '\n\n'
-		text += 'Error: `'
-		text += error.message
-			.replace(token, '')
-		text += '`'
-
-		const target = (ctx.chat || ctx.from!).id
-		const keyboard = Markup.inlineKeyboard([
-			Markup.urlButton(emojis.chat + 'Join Chat', 'https://t.me/WikidataMallChat')
-		], {columns: 1})
-		await bot.telegram.sendMessage(target, text, Extra.markdown().markup(keyboard))
-	}
-})
+bot.use(new ErrorMiddleware({
+	text: 'You should join the Chat Group and report this error. Let us make this bot even better together. ☺️',
+	inlineKeyboardMarkup: Markup.inlineKeyboard([
+		Markup.urlButton(emojis.chat + 'Join Chat', 'https://t.me/WikidataMallChat')
+	], {columns: 1})
+}).middleware())
 
 removeOld()
 
