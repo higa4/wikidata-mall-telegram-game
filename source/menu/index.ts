@@ -103,4 +103,6 @@ menu.urlButton(buttonText(emojis.github, 'other.github'), 'https://github.com/Ed
 	joinLastRow: true
 })
 
+menu.urlButton(buttonText(emojis.github, 'other.changelog'), 'https://github.com/EdJoPaTo/wikidata-mall-telegram-game/releases')
+
 export default menu
