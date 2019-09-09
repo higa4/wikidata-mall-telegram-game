@@ -12,6 +12,7 @@ const basic: Dictionary<string> = {
 	countdown: '⏲',
 	currency: '📎',
 	employmentTermination: '🔫',
+	github: '🦑',
 	hobby: '💚',
 	income: '📈',
 	language: '🏳️‍🌈',

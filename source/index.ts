@@ -49,7 +49,8 @@ if (process.env.NODE_ENV !== 'production') {
 bot.use(new ErrorMiddleware({
 	text: 'You should join the Chat Group and report this error. Let us make this bot even better together. ☺️',
 	inlineKeyboardMarkup: Markup.inlineKeyboard([
-		Markup.urlButton(emojis.chat + 'Join Chat', 'https://t.me/WikidataMallChat')
+		Markup.urlButton(emojis.chat + 'Join Chat', 'https://t.me/WikidataMallChat'),
+		Markup.urlButton(emojis.github + 'GitHub Issues', 'https://github.com/EdJoPaTo/wikidata-mall-telegram-game/issues')
 	], {columns: 1})
 }).middleware())
 

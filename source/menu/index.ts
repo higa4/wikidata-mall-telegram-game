@@ -96,7 +96,7 @@ menu.submenu(buttonText(emojis.stats, 'stat.stats'), 'botStats', botStats, {
 
 menu.urlButton(buttonText(emojis.chat, 'menu.chat'), 'https://t.me/WikidataMallChat')
 
-menu.urlButton(buttonText('🦑', 'other.github'), 'https://github.com/EdJoPaTo/wikidata-mall-telegram-game', {
+menu.urlButton(buttonText(emojis.github, 'other.github'), 'https://github.com/EdJoPaTo/wikidata-mall-telegram-game', {
 	joinLastRow: true
 })
 
