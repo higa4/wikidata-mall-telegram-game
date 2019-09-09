@@ -21,11 +21,9 @@ function retireWaitingApplicants(session: Session, now: number): void {
 }
 
 function addWaitingApplicants(session: Session, persist: Persist, now: number): void {
-	const {applicantTimestamp, applicants} = session
-
 	const interval = secondsBetweenApplicants(persist.skills)
 
-	const secondsSinceLastApplicant = now - applicantTimestamp
+	const secondsSinceLastApplicant = now - session.applicantTimestamp
 	const possibleApplicants = Math.floor(secondsSinceLastApplicant / interval)
 	if (possibleApplicants <= 0) {
 		return
@@ -36,17 +34,18 @@ function addWaitingApplicants(session: Session, persist: Persist, now: number): 
 		return
 	}
 
-	const freeApplicantSeats = applicantSeats(persist.skills) - applicants.length
+	const maxSeats = applicantSeats(persist.skills)
+	const freeApplicantSeats = maxSeats - session.applicants.length
 	const creatableApplicants = Math.min(possibleApplicants, freeApplicantSeats)
-
-	// Ensure timer is still running when there are free seats.
-	// If not reset the timer to now
-	const newTimestamp = applicantTimestamp + (creatableApplicants * interval)
-	session.applicantTimestamp = Math.floor(freeApplicantSeats > 0 ? newTimestamp : now)
+	const newTimestamp = session.applicantTimestamp + (creatableApplicants * interval)
 
 	for (let i = 0; i < creatableApplicants; i++) {
 		session.applicants.push(
 			createApplicant(persist.skills, now)
 		)
 	}
+
+	// Ensure timer is still running when there are free seats.
+	// If not reset the timer to now
+	session.applicantTimestamp = Math.floor(maxSeats - session.applicants.length > 0 ? newTimestamp : now)
 }
