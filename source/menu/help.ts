@@ -5,7 +5,6 @@ import {infoHeader} from '../lib/interface/formatted-strings'
 import {buttonText} from '../lib/interface/menu'
 
 export function createHelpMenu(i18nKey: string): TelegrafInlineMenu {
-	console.log('Create help menu', i18nKey)
 	const menu = new TelegrafInlineMenu(menuText(i18nKey))
 
 	menu.urlButton(
