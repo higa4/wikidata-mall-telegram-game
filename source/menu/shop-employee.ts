@@ -14,6 +14,7 @@ import {infoHeader} from '../lib/interface/formatted-strings'
 import {percentBonusString} from '../lib/interface/format-percent'
 import {personMarkdown} from '../lib/interface/person'
 
+import {createHelpMenu, helpButtonText} from './help'
 import confirmEmployee from './shop-employee-confirm-applicant'
 
 function fromCtx(ctx: any): {shop: Shop; talent: TalentName; employee?: Person} {
@@ -112,5 +113,7 @@ menu.urlButton(
 	buttonText(emojis.wikidataItem, 'menu.wikidataItem'),
 	(ctx: any) => ctx.wd.r(`person.talents.${fromCtx(ctx).talent}`).url()
 )
+
+menu.submenu(helpButtonText(), 'help', createHelpMenu('help.shop-employees'))
 
 export default menu

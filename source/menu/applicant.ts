@@ -7,6 +7,8 @@ import {buttonText, menuPhoto} from '../lib/interface/menu'
 import {emojis} from '../lib/interface/emojis'
 import {personMarkdown} from '../lib/interface/person'
 
+import {createHelpMenu, helpButtonText} from './help'
+
 function fromCtx(ctx: any): {applicantId: number; applicant: Person} {
 	const applicantId = Number(ctx.match[1])
 	const session = ctx.session as Session
@@ -40,5 +42,7 @@ menu.button(buttonText(emojis.employmentTermination, 'action.employmentTerminati
 		session.applicants.splice(applicantId, 1)
 	}
 })
+
+menu.submenu(helpButtonText(), 'help', createHelpMenu('help.applicants'))
 
 export default menu

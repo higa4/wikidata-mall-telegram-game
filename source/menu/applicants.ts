@@ -13,6 +13,7 @@ import {infoHeader} from '../lib/interface/formatted-strings'
 import {menuPhoto, buttonText} from '../lib/interface/menu'
 import {personAllTalentsLine, nameMarkdown} from '../lib/interface/person'
 
+import {createHelpMenu, helpButtonText} from './help'
 import applicantMenu from './applicant'
 
 function applicantEntry(ctx: any, applicant: Person, isHobbyFitting: boolean): string {
@@ -148,5 +149,7 @@ menu.urlButton(
 	buttonText(emojis.wikidataItem, 'menu.wikidataItem'),
 	(ctx: any) => ctx.wd.r('menu.applicant').url()
 )
+
+menu.submenu(helpButtonText(), 'help', createHelpMenu('help.applicants'))
 
 export default menu

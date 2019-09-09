@@ -9,3 +9,103 @@ menu:
 
     When you improve items on Wikidata you can improve this game and other projects. 😎
   back: back
+help:
+  improveHelp: >
+    You can improve this help text!
+
+    When we all work together we can describe everything as best as we can to help others out.
+
+
+    Improve this text and send it to the group or create a Pull Request on GitHub.
+
+    The key `${key}` in language `${language}` identifies this text so others will know which text you wanna improve.
+  applicants: >
+    People come to you that want to work for you.
+
+    They take a seat and wait for you to hire them.
+
+
+    People retire after some time so you will need to find new ones from time to time.
+  bot-stats: >
+    Here you can see statistics about this bot.
+
+
+    First there are the amounts of data used from wikidata.
+
+    In the second category are the amounts used in the game (all players together have n shops).
+
+    And third there are stats about _you_. 😘
+  employees: >
+    In this screen you can see all the employees you have currently working in their position of your shops.
+
+    Arn't they awesome? 🥰
+  leaderboard: >
+    You are the best. 🤩
+
+    At least soon. 😏
+
+
+    You can view all the players based on their return on interest or their total collector skill level.
+  product: >
+    This is a product you can sell.
+
+    When you restock items will get sold over time.
+    Make sure there are always items in stock.
+    This way you can get income all the time.
+
+
+    Hire employees to improve purchasing and selling prices or skill something.
+    In order to improve the throughput per item skill the collector skill.
+  settings: >
+    Change the language and enable / disable helpful explations where numbers come from
+  shop-closure: >
+    You can close a shop in order to have space for a new shop.
+    Getting rid of a shop will gain you some money.
+
+
+    You should sell all the items currently in stock before closing your shop as they will be lost on closing the shop.
+
+    Also people currently working in the shop will leave with it.
+    (You can take them from the shop before closing it.)
+
+
+    Make sure to skill the collector skill first as you will keep the benefit even after closing the shop.
+  shop-employees: >
+    You can select employees for your shop.
+
+    When you have an employee with a fitting hobby (the same as the shop they are working in) they will be much better suited for their job. 💚
+  shop: >
+    This is a shop of yours.
+    You can add products to sell or hire employees.
+
+
+    Closing a shop is also possible.
+    You will get some money for closing it.
+  shops-construction: >
+    You can select one of these randomly selected shops as your next shop.
+    With it you can do all the things you like.
+    Choose wisely and get rich 🙃
+  shops: >
+    Here are all your shiny shops. ✨
+  skills: >
+    All the skills you can learn.
+    And you will only need time for that.
+    Nothing else.
+
+
+    Skills will improve a certain thing.
+    You can guess what a skill might do as its emoji is fitting to their field of improvement.
+
+
+    Keep in mind we are using 📎 as our currency.
+    Some skills and tools might come in handy when handling these. 🙃
+
+
+    One special skill is the collector.
+    In contrast to the other skills you can skill it per shop you own.
+    The total level will influence your throughput per item.
+    This includes the levels for shops you don't even own anymore.
+
+
+    The skill queue will allow you to add skills which starts within 12 hours.
+    You can also reset your skill queue (but not the one currently in training).

@@ -7,6 +7,8 @@ import {infoHeader} from '../lib/interface/formatted-strings'
 import {menuPhoto, buttonText} from '../lib/interface/menu'
 import {shopEmployeeOverview} from '../lib/interface/person'
 
+import {createHelpMenu, helpButtonText} from './help'
+
 function menuText(ctx: any): string {
 	const persist = ctx.persist as Persist
 
@@ -29,5 +31,7 @@ menu.urlButton(
 	buttonText(emojis.wikidataItem, 'menu.wikidataItem'),
 	(ctx: any) => ctx.wd.r('menu.employee').url()
 )
+
+menu.submenu(helpButtonText(), 'help', createHelpMenu('help.employees'))
 
 export default menu

@@ -10,6 +10,7 @@ import {infoHeader} from '../lib/interface/formatted-strings'
 import {menuPhoto, buttonText} from '../lib/interface/menu'
 import {skillQueueString} from '../lib/interface/skill'
 
+import {createHelpMenu, helpButtonText} from './help'
 import skillMenu from './skill'
 
 function fromCtx(ctx: any): {skill: CategorySkill} {
@@ -92,5 +93,7 @@ menu.urlButton(
 	buttonText(emojis.wikidataItem, 'menu.wikidataItem'),
 	(ctx: any) => ctx.wd.r(`skill.${fromCtx(ctx).skill}`).url()
 )
+
+menu.submenu(helpButtonText(), 'help', createHelpMenu('help.skills'))
 
 export default menu

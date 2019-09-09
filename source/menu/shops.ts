@@ -13,6 +13,7 @@ import {incomePart} from '../lib/interface/shop'
 import {infoHeader, labeledFloat} from '../lib/interface/formatted-strings'
 import {percentBonusString, percentString} from '../lib/interface/format-percent'
 
+import {createHelpMenu, helpButtonText} from './help'
 import constructionMenu from './shops-construction'
 import shopMenu from './shop'
 
@@ -126,6 +127,8 @@ menu.urlButton(
 	buttonText(emojis.wikidataItem, 'menu.wikidataItem'),
 	(ctx: any) => ctx.wd.r('menu.shop').url()
 )
+
+menu.submenu(helpButtonText(), 'help', createHelpMenu('help.shops'))
 
 export default menu
 

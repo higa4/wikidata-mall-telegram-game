@@ -13,6 +13,7 @@ import {emojis} from '../lib/interface/emojis'
 import {formatFloat, formatInt} from '../lib/interface/format-number'
 import {infoHeader, labeledFloat} from '../lib/interface/formatted-strings'
 
+import {createHelpMenu, helpButtonText} from './help'
 import {replyMenu} from './shops'
 
 function fromCtx(ctx: any): {shop: Shop; indexOfShop: number} {
@@ -96,5 +97,7 @@ menu.urlButton(
 	buttonText(emojis.wikidataItem, 'menu.wikidataItem'),
 	(ctx: any) => ctx.wd.r('action.close').url()
 )
+
+menu.submenu(helpButtonText(), 'help', createHelpMenu('help.shop-closure'))
 
 export default menu

@@ -6,6 +6,7 @@ import {buttonText, menuPhoto} from '../lib/interface/menu'
 import {emojis} from '../lib/interface/emojis'
 import {infoHeader} from '../lib/interface/formatted-strings'
 
+import {createHelpMenu, helpButtonText} from './help'
 import languageMenu from './languages'
 
 function menuText(ctx: any): string {
@@ -36,5 +37,7 @@ menu.urlButton(
 	buttonText(emojis.wikidataItem, 'menu.wikidataItem'),
 	(ctx: any) => ctx.wd.r('menu.settings').url()
 )
+
+menu.submenu(helpButtonText(), 'help', createHelpMenu('help.settings'))
 
 export default menu

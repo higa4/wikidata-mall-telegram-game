@@ -12,6 +12,7 @@ import {infoHeader} from '../lib/interface/formatted-strings'
 import {menuPhoto, buttonText} from '../lib/interface/menu'
 import {skillQueueString} from '../lib/interface/skill'
 
+import {createHelpMenu, helpButtonText} from './help'
 import skillMenu from './skill'
 import skillSelectCategory from './skill-select-category'
 
@@ -107,5 +108,7 @@ menu.urlButton(
 	buttonText(emojis.wikidataItem, 'menu.wikidataItem'),
 	(ctx: any) => ctx.wd.r('menu.skill').url()
 )
+
+menu.submenu(helpButtonText(), 'help', createHelpMenu('help.skills'))
 
 export default menu

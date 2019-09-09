@@ -22,6 +22,8 @@ import {infoHeader} from '../lib/interface/formatted-strings'
 import {menuPhoto, buttonText} from '../lib/interface/menu'
 import {percentBonusString} from '../lib/interface/format-percent'
 
+import {createHelpMenu, helpButtonText} from './help'
+
 const DEFAULT_VIEW: LeaderboardView = 'returnOnInvestment'
 
 interface LeaderboardEntries {
@@ -160,5 +162,7 @@ menu.urlButton(
 	buttonText(emojis.wikidataItem, 'menu.wikidataItem'),
 	(ctx: any) => ctx.wd.r('menu.leaderboard').url()
 )
+
+menu.submenu(helpButtonText(), 'help', createHelpMenu('help.leaderboard'))
 
 export default menu

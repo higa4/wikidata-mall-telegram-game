@@ -14,6 +14,8 @@ import {formatInt} from '../lib/interface/format-number'
 import {humanReadableTimestamp} from '../lib/interface/formatted-time'
 import {infoHeader} from '../lib/interface/formatted-strings'
 
+import {createHelpMenu, helpButtonText} from './help'
+
 function entryLine(ctx: any, resourceKey: string, value: string): string {
 	let text = ''
 	text += ctx.wd.r(resourceKey).label()
@@ -77,5 +79,7 @@ menu.urlButton(
 	buttonText(emojis.wikidataItem, 'menu.wikidataItem'),
 	(ctx: any) => ctx.wd.r('stat.stats').url()
 )
+
+menu.submenu(helpButtonText(), 'help', createHelpMenu('help.bot-stats'))
 
 export default menu

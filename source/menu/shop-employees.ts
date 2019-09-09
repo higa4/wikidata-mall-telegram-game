@@ -9,6 +9,7 @@ import {emojis} from '../lib/interface/emojis'
 import {infoHeader} from '../lib/interface/formatted-strings'
 import {personInShopLine} from '../lib/interface/person'
 
+import {createHelpMenu, helpButtonText} from './help'
 import employee from './shop-employee'
 
 function fromCtx(ctx: any): {shop: Shop} {
@@ -63,5 +64,7 @@ menu.urlButton(
 	buttonText(emojis.wikidataItem, 'menu.wikidataItem'),
 	(ctx: any) => ctx.wd.r('menu.employee').url()
 )
+
+menu.submenu(helpButtonText(), 'help', createHelpMenu('help.shop-employees'))
 
 export default menu

@@ -17,6 +17,8 @@ import {menuPhoto, buttonText} from '../lib/interface/menu'
 import {percentBonusString} from '../lib/interface/format-percent'
 import {personInShopLine} from '../lib/interface/person'
 
+import {createHelpMenu, helpButtonText} from './help'
+
 function fromCtx(ctx: any): {shop: Shop; product: Product} {
 	const shopType = ctx.match[1]
 	const productId = ctx.match[2]
@@ -183,5 +185,7 @@ menu.urlButton(
 	(ctx: any) => `${emojis.wikidataItem} ${ctx.wd.r('menu.wikidataItem').label()}`,
 	(ctx: any) => ctx.wd.r(fromCtx(ctx).product.id).url()
 )
+
+menu.submenu(helpButtonText(), 'help', createHelpMenu('help.product'))
 
 export default menu

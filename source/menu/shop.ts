@@ -23,6 +23,7 @@ import {infoHeader, labeledFloat, labeledInt} from '../lib/interface/formatted-s
 import {percentBonusString} from '../lib/interface/format-percent'
 import {personInShopLine} from '../lib/interface/person'
 
+import {createHelpMenu, helpButtonText} from './help'
 import closureConfirmMenu from './shop-closure-confirm'
 import employeeMenu from './shop-employees'
 import productMenu from './product'
@@ -311,5 +312,7 @@ menu.urlButton(
 	buttonText(emojis.wikidataItem, 'menu.wikidataItem'),
 	(ctx: any) => ctx.wd.r(fromCtx(ctx).shop.id).url()
 )
+
+menu.submenu(helpButtonText(), 'help', createHelpMenu('help.shop'))
 
 export default menu

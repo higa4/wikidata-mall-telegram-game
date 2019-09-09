@@ -14,6 +14,8 @@ import {buttonText, menuPhoto} from '../lib/interface/menu'
 import {emojis} from '../lib/interface/emojis'
 import {infoHeader, labeledFloat} from '../lib/interface/formatted-strings'
 
+import {createHelpMenu, helpButtonText} from './help'
+
 function getConstruction(ctx: any): Construction {
 	const session = ctx.session as Session
 	const persist = ctx.persist as Persist
@@ -112,5 +114,7 @@ menu.urlButton(
 	buttonText(emojis.wikidataItem, 'menu.wikidataItem'),
 	(ctx: any) => ctx.wd.r('action.construction').url()
 )
+
+menu.submenu(helpButtonText(), 'help', createHelpMenu('help.shops-construction'))
 
 export default menu
