@@ -65,9 +65,14 @@ bot.use(async (ctx, next) => {
 			return
 		}
 
-		if (error.message.includes('MEDIA_EMPTY') || error.message.includes('WEBPAGE_CURL_FAILED')) {
+		if (error.message.includes('400: Bad Request: ') && (
+				error.message.includes('MEDIA_EMPTY') ||
+				error.message.includes('WEBPAGE_CURL_FAILED') ||
+				error.message.includes('wrong file identifier/HTTP URL specified')
+		)) {
 			const payload = error && error.on && error.on.payload
-			console.warn('Probably Wikimedia Commons fail', ctx.from!.id, ctx.callbackQuery && ctx.callbackQuery.data, error.message, (payload && payload.media && payload.media.media) || payload)
+			const url = !payload || payload.photo || (payload.media && payload.media.media) || payload
+			console.warn('some url fail', ctx.from!.id, ctx.callbackQuery && ctx.callbackQuery.data, error.message, url)
 		} else {
 			console.error('try to send error to user', ctx.update, error, error && error.on && error.on.payload)
 		}
