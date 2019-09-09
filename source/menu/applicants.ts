@@ -1,99 +1,120 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
-import {Session, Persist} from '../lib/types'
 import {Person} from '../lib/types/people'
+import {Session, Persist} from '../lib/types'
 
-import {secondsBetweenApplicants, applicantSeats} from '../lib/game-math/applicant'
+import {secondsBetweenApplicants} from '../lib/game-math/applicant'
 
 import {applicantInfluencesPart} from '../lib/interface/applicants'
+import {buttonText, menuPhoto} from '../lib/interface/menu'
 import {emojis} from '../lib/interface/emojis'
 import {formatFloat} from '../lib/interface/format-number'
-import {humanReadableTimestamp} from '../lib/interface/formatted-time'
 import {infoHeader} from '../lib/interface/formatted-strings'
-import {menuPhoto, buttonText} from '../lib/interface/menu'
-import {personAllTalentsLine, nameMarkdown} from '../lib/interface/person'
+import {personMarkdown} from '../lib/interface/person'
 
 import {createHelpMenu, helpButtonText} from './help'
-import applicantMenu from './applicant'
 
-function applicantEntry(ctx: any, applicant: Person, isHobbyFitting: boolean): string {
-	const {__wikibase_language_code: locale} = ctx.session as Session
-
-	let text = ''
-	if (isHobbyFitting) {
-		text += emojis.hobby
+function fromCtx(ctx: any): {applicantId: number; applicant: Person} | undefined {
+	const session = ctx.session as Session
+	const availableApplicants = session.applicants.length
+	if (availableApplicants === 0) {
+		return undefined
 	}
 
-	text += nameMarkdown(applicant.name)
-	text += '\n  '
-	text += emojis.retirement
-	text += humanReadableTimestamp(applicant.retirementTimestamp, locale)
-	text += '\n  '
-	text += personAllTalentsLine(applicant.talents)
+	const applicantId = Math.max(1, Math.min(availableApplicants, session.page)) - 1
+	const applicant: Person = session.applicants[applicantId]
+	return {applicantId, applicant}
+}
 
-	return text
+function fromCtxButThrowing(ctx: any): {applicantId: number; applicant: Person} {
+	const info = fromCtx(ctx)
+	if (!info) {
+		throw new Error('These aren\'t the applicants you are looking for')
+	}
+
+	return info
 }
 
 function menuText(ctx: any): string {
 	const session = ctx.session as Session
 	const persist = ctx.persist as Persist
+	const info = fromCtx(ctx)
 	const now = Date.now() / 1000
-
-	const maxSeats = applicantSeats(persist.skills)
-	const interval = secondsBetweenApplicants(persist.skills)
 
 	let text = ''
 	text += infoHeader(ctx.wd.r('menu.applicant'))
 	text += '\n\n'
 
 	text += applicantInfluencesPart(ctx, persist.skills, session.applicants.length, session.hideExplanationMath)
-
 	text += '\n'
-	if (session.applicants.length > 0) {
-		const shopIds = persist.shops.map(o => o.id)
-		text += session.applicants
-			.map(o => applicantEntry(ctx, o, shopIds.includes(o.hobby)))
-			.join('\n')
-		text += '\n\n'
-	}
 
-	if (session.applicants.length < maxSeats) {
+	if (info) {
+		text += personMarkdown(ctx, info.applicant)
+	} else {
+		const interval = secondsBetweenApplicants(persist.skills)
 		const secondsUntilNext = (session.applicantTimestamp + interval) - now
 		text += ctx.wd.r('other.countdown').label()
 		text += ': '
 		text += formatFloat(secondsUntilNext)
 		text += ' '
 		text += ctx.wd.r('unit.second').label()
-		text += '\n\n'
 	}
 
 	return text
 }
 
 const menu = new TelegrafInlineMenu(menuText, {
-	photo: menuPhoto('menu.applicant')
+	photo: menuPhoto(ctx => {
+		const info = fromCtx(ctx)
+		return info && info.applicant.hobby
+	})
 })
 
-function availableApplicants(ctx: any): string[] {
-	const session = ctx.session as Session
-	return Object.keys(session.applicants)
-}
-
-menu.selectSubmenu('a', availableApplicants, applicantMenu, {
-	columns: 2,
-	textFunc: (ctx: any, key) => {
+menu.pagination('page', {
+	getTotalPages: (ctx: any) => {
 		const session = ctx.session as Session
-		const persist = ctx.persist as Persist
-		const {name, hobby} = session.applicants[Number(key)]
-		const hasShopOfHobby = persist.shops.some(o => o.id === hobby)
-		const hasShopOfHobbyString = hasShopOfHobby ? emojis.hobby : ''
-		return `${hasShopOfHobbyString}${name.given} ${name.family}`
+		return session.applicants.length
+	},
+	getCurrentPage: (ctx: any) => {
+		const session = ctx.session as Session
+		return session.page
+	},
+	setPage: (ctx: any, page) => {
+		const session = ctx.session as Session
+		session.page = page
+	}
+})
+
+menu.button(buttonText(emojis.employmentTermination, 'action.employmentTermination'), 'remove', {
+	hide: (ctx: any) => {
+		const session = ctx.session as Session
+		return session.applicants.length === 0
+	},
+	doFunc: (ctx: any) => {
+		const info = fromCtx(ctx)
+		if (!info) {
+			return
+		}
+
+		const session = ctx.session as Session
+		session.applicants.splice(info.applicantId, 1)
 	}
 })
 
 menu.urlButton(
-	buttonText(emojis.wikidataItem, 'menu.wikidataItem'),
+	buttonText(emojis.wikidataItem, 'menu.applicant'),
 	(ctx: any) => ctx.wd.r('menu.applicant').url()
+)
+
+menu.urlButton(
+	(ctx: any) => `${emojis.wikidataItem}${emojis.hobby} ${ctx.wd.r('person.hobby').label()} ${ctx.wd.r(fromCtxButThrowing(ctx).applicant.hobby).label()}`,
+	(ctx: any) => ctx.wd.r(fromCtxButThrowing(ctx).applicant.hobby).url(), {
+		joinLastRow: true,
+		hide: (ctx: any) => {
+			const session = ctx.session as Session
+			return session.applicants.length === 0
+		}
+	}
 )
 
 menu.submenu(helpButtonText(), 'help', createHelpMenu('help.applicants'))

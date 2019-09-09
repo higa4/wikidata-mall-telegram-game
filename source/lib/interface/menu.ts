@@ -14,9 +14,13 @@ export function buttonText(emoji: ConstOrContextFunc<string>, resourceKey: Const
 	}
 }
 
-export function menuPhoto(qNumberOrResourceKey: ConstOrContextFunc<string>): (ctx: any) => Promise<string> {
+export function menuPhoto(qNumberOrResourceKey: ConstOrContextFunc<string | undefined>): (ctx: any) => Promise<string> {
 	return async (ctx: any) => {
 		const asString = typeof qNumberOrResourceKey === 'function' ? await qNumberOrResourceKey(ctx) : qNumberOrResourceKey
+		if (!asString) {
+			return ''
+		}
+
 		const reader = ctx.wd.r(asString) as WikidataEntityReader
 		return reader.images(800)[0]
 	}
