@@ -14,19 +14,23 @@ import {personMarkdown} from '../lib/interface/person'
 
 import {createHelpMenu, helpButtonText} from './help'
 
-function fromCtx(ctx: any): {applicantId: number; applicant: Person} | undefined {
+function fromCtx(ctx: any): {applicantId: number; applicant: Person; hobbyIsFitting: boolean} | undefined {
 	const session = ctx.session as Session
+	const persist = ctx.persist as Persist
 	const availableApplicants = session.applicants.length
 	if (availableApplicants === 0) {
 		return undefined
 	}
 
+	const shopIds = persist.shops.map(o => o.id)
 	const applicantId = Math.max(1, Math.min(availableApplicants, session.page)) - 1
 	const applicant: Person = session.applicants[applicantId]
-	return {applicantId, applicant}
+	const hobbyIsFitting = shopIds.some(o => o === applicant.hobby)
+
+	return {applicantId, applicant, hobbyIsFitting}
 }
 
-function fromCtxButThrowing(ctx: any): {applicantId: number; applicant: Person} {
+function fromCtxButThrowing(ctx: any): {applicantId: number; applicant: Person; hobbyIsFitting: boolean} {
 	const info = fromCtx(ctx)
 	if (!info) {
 		throw new Error('These aren\'t the applicants you are looking for')
@@ -49,7 +53,7 @@ function menuText(ctx: any): string {
 	text += '\n'
 
 	if (info) {
-		text += personMarkdown(ctx, info.applicant)
+		text += personMarkdown(ctx, info.applicant, info.hobbyIsFitting)
 	} else {
 		const interval = secondsBetweenApplicants(persist.skills)
 		const secondsUntilNext = (session.applicantTimestamp + interval) - now
@@ -107,7 +111,11 @@ menu.urlButton(
 )
 
 menu.urlButton(
-	(ctx: any) => `${emojis.wikidataItem}${emojis.hobby} ${ctx.wd.r('person.hobby').label()} ${ctx.wd.r(fromCtxButThrowing(ctx).applicant.hobby).label()}`,
+	(ctx: any) => {
+		const info = fromCtxButThrowing(ctx)
+		const hobby = info.hobbyIsFitting ? emojis.hobbyMatch : emojis.hobbyDifferent
+		return `${emojis.wikidataItem}${hobby} ${ctx.wd.r('person.hobby').label()} ${ctx.wd.r(info.applicant.hobby).label()}`
+	},
 	(ctx: any) => ctx.wd.r(fromCtxButThrowing(ctx).applicant.hobby).url(), {
 		joinLastRow: true,
 		hide: (ctx: any) => {

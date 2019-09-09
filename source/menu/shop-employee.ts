@@ -29,14 +29,14 @@ function fromCtx(ctx: any): {shop: Shop; talent: TalentName; employee?: Person} 
 }
 
 function menuText(ctx: any): string {
-	const {talent, employee} = fromCtx(ctx)
+	const {shop, talent, employee} = fromCtx(ctx)
 
 	let text = ''
 	text += infoHeader(ctx.wd.r(`person.talents.${talent}`), {titlePrefix: emojis[talent]})
 	text += '\n\n'
 
 	if (employee) {
-		text += personMarkdown(ctx, employee)
+		text += personMarkdown(ctx, employee, shop.id === employee.hobby)
 	} else {
 		text += emojis.noPerson
 	}
@@ -103,7 +103,7 @@ menu.selectSubmenu('a', availableApplicants, confirmEmployee, {
 		const bonusString = percentBonusString(bonus)
 
 		const isHobby = applicant.hobby === shop.id
-		const hobbyString = isHobby ? emojis.hobby + ' ' : ''
+		const hobbyString = isHobby ? emojis.hobbyMatch + ' ' : ''
 
 		return `${name.given} ${name.family} (${hobbyString}${bonusString})`
 	}

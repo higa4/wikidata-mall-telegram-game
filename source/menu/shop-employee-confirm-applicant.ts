@@ -38,7 +38,7 @@ function menuText(ctx: any): string {
 	text += infoHeader(ctx.wd.r(`person.talents.${talent}`), {titlePrefix: emojis[talent]})
 	text += '\n\n'
 
-	text += personMarkdown(ctx, applicant)
+	text += personMarkdown(ctx, applicant, shop.id === applicant.hobby)
 	text += '\n\n'
 
 	if (bonusWhenEmployed < 1) {

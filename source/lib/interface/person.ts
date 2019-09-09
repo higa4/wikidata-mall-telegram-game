@@ -10,7 +10,7 @@ import {emojis} from './emojis'
 import {humanReadableTimestamp} from './formatted-time'
 import {percentBonusString} from './format-percent'
 
-export function personMarkdown(ctx: any, person: Person): string {
+export function personMarkdown(ctx: any, person: Person, isFitting: boolean): string {
 	const {__wikibase_language_code: locale} = ctx.session as Session
 	const {name, hobby, retirementTimestamp, talents} = person
 
@@ -18,7 +18,7 @@ export function personMarkdown(ctx: any, person: Person): string {
 	text += nameMarkdown(name)
 	text += '\n\n'
 
-	text += emojis.hobby
+	text += isFitting ? emojis.hobbyMatch : emojis.hobbyDifferent
 	text += '*'
 	text += ctx.wd.r('person.hobby').label()
 	text += '*'
@@ -74,7 +74,7 @@ export function personInShopLine(shop: Shop, talent: TalentName): string {
 	const isHobby = hobby === shop.id
 	const bonus = personalBonus(shop, talent)
 
-	return `${percentBonusString(bonus)} ${isHobby ? emojis.hobby + ' ' : ''}${namePart}`
+	return `${percentBonusString(bonus)} ${isHobby ? emojis.hobbyMatch + ' ' : ''}${namePart}`
 }
 
 export function shopEmployeeOverview(ctx: any, shop: Shop): string {
@@ -112,7 +112,7 @@ function shopEmployeeEntry(ctx: any, shop: Shop, talent: TalentName): string {
 	if (person.hobby !== shop.id) {
 		text += '\n'
 		text += '    '
-		text += emojis.hobby
+		text += emojis.hobbyDifferent
 		text += ctx.wd.r(person.hobby).label()
 	}
 
