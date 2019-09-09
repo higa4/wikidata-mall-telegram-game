@@ -18,7 +18,7 @@ export interface Session {
 	hideExplanationMath: boolean;
 	leaderboardView?: LeaderboardView;
 	money: number;
-	page: number;
+	page?: number;
 	// TODO: remove (migration in progress)
 	skillInTraining?: SkillInTraining;
 	skillQueue?: SkillInTraining[];

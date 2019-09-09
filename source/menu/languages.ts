@@ -1,5 +1,7 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
+import {Session} from '../lib/types'
+
 import {emojis} from '../lib/interface/emojis'
 import {infoHeader} from '../lib/interface/formatted-strings'
 
@@ -44,9 +46,13 @@ menu.select('lang', (ctx: any) => ctx.wd.availableLocales(0.05), {
 		ctx.i18n.locale(key)
 		ctx.wd.locale(key)
 	},
-	getCurrentPage: (ctx: any) => ctx.session.page,
+	getCurrentPage: (ctx: any) => {
+		const session = ctx.session as Session
+		return session.page
+	},
 	setPage: (ctx: any, page) => {
-		ctx.session.page = page
+		const session = ctx.session as Session
+		session.page = page
 	}
 })
 
