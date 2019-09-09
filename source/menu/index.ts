@@ -24,6 +24,9 @@ function menuText(ctx: any): string {
 	text += labeledFloat(ctx.wd.r('other.money'), session.money, emojis.currency)
 	text += '\n\n'
 
+	text += ctx.i18n.t('menu.welcome')
+
+	text += '\n'
 	text += '⚠️*BETA*\n'
 	text += 'complete data reset may happen any time\n'
 	text += 'please join the [chat](https://t.me/WikidataMallChat) to discuss features and bugs :)\n'

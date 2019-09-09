@@ -1,2 +1,11 @@
 menu:
+  welcome: >
+    In this game you can buy shops which sell products.
+    To improve your income you can learn skills and hire employees.
+
+
+    The game is based on Wikidata.
+    Everything you see here is from there: Every name, description, button label, picture, …
+
+    When you improve items on Wikidata you can improve this game and other projects. 😎
   back: back

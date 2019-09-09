@@ -1,2 +1,11 @@
 menu:
+  welcome: >
+    In diesem Spiel kannst du Läden kaufen um Produkte zu verkaufen.
+    Um deinen Gewinn zu steigern kannst du Fähigkeiten erlernen und Arbeitnehmer einstellen.
+
+
+    Dieses Spiel basiert auf Wikidata.
+    Alles was du siehst: Jeder Name, Beschreibung, Button Beschriftung, Bild, …
+
+    Wenn du die Elemente auf Wikidata verbesserst kannst du dieses Spiel und anderen Projekte unterstützen. 😎
   back: zurück
