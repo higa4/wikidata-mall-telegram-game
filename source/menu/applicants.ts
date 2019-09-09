@@ -25,6 +25,13 @@ function fromCtx(ctx: any): {applicantId: number; applicant: Person; hobbyIsFitt
 	const shopIds = persist.shops.map(o => o.id)
 	const applicantId = Math.max(1, Math.min(availableApplicants, session.page)) - 1
 	const applicant: Person = session.applicants[applicantId]
+	if (!applicant) {
+		// TODO: remove debug
+		// For whatever reason this created errors as applicant is undefined (multiple users, multiple times. how?)
+		console.log('what?!', session.applicants.length, availableApplicants, session.page, applicantId)
+		throw new Error('this is strange…')
+	}
+
 	const hobbyIsFitting = shopIds.some(o => o === applicant.hobby)
 
 	return {applicantId, applicant, hobbyIsFitting}
