@@ -26,23 +26,23 @@ const toplevelShopCategories: string[] = [
 const shopsWithProducts: Dictionary<string[]> = {}
 
 function shopTypesQuery(topmost: string): string {
-	return `SELECT ?class WHERE {
-?class wdt:P279+ wd:${topmost}.
-?item wdt:P279 ?class.
-FILTER(EXISTS { ?class wdt:P18 ?image. })
-FILTER(EXISTS { ?item wdt:P18 ?image. })
-?item rdfs:label ?label.
+	return `SELECT ?shop WHERE {
+?shop wdt:P279+ wd:${topmost}.
+?product wdt:P279 ?shop.
+FILTER(EXISTS { ?shop wdt:P18 ?image. })
+FILTER(EXISTS { ?product wdt:P18 ?image. })
+?product rdfs:label ?label.
 FILTER(LANG(?label) = "en")
 }
-GROUP BY ?class
-HAVING ((COUNT(?item)) >= 5 )`
+GROUP BY ?shop
+HAVING ((COUNT(?product)) >= 5 )`
 }
 
 function productsQuery(shopType: string): string {
-	return `SELECT ?item WHERE {
-?item wdt:P279 wd:${shopType}.
-FILTER(EXISTS { ?item wdt:P18 ?image. })
-?item rdfs:label ?label.
+	return `SELECT ?product WHERE {
+?product wdt:P279 wd:${shopType}.
+FILTER(EXISTS { ?product wdt:P18 ?image. })
+?product rdfs:label ?label.
 FILTER(LANG(?label) = "en")
 }`
 }
