@@ -4,7 +4,7 @@ import {currentLevel} from './skill'
 
 export function applicantSeats(skills: Skills): number {
 	const level = currentLevel(skills, 'applicantSeats')
-	return 2 + level
+	return 1 + level
 }
 
 export function secondsBetweenApplicants(skills: Skills): number {

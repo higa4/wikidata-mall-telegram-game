@@ -9,11 +9,11 @@ function applicantSeatsMacro(t: ExecutionContext, applicantSeatsLevel: number, e
 	t.is(applicantSeats(skills), expected)
 }
 
-test('applicantSeats level 0', applicantSeatsMacro, 0, 2)
-test('applicantSeats level 5', applicantSeatsMacro, 5, 7)
-test('applicantSeats level 10', applicantSeatsMacro, 10, 12)
-test('applicantSeats level 15', applicantSeatsMacro, 15, 17)
-test('applicantSeats level 25', applicantSeatsMacro, 25, 27)
+test('applicantSeats level 0', applicantSeatsMacro, 0, 1)
+test('applicantSeats level 5', applicantSeatsMacro, 5, 6)
+test('applicantSeats level 10', applicantSeatsMacro, 10, 11)
+test('applicantSeats level 15', applicantSeatsMacro, 15, 16)
+test('applicantSeats level 25', applicantSeatsMacro, 25, 26)
 
 function secondsBetweenApplicantsMacro(t: ExecutionContext, applicantSpeedLevel: number, expected: number): void {
 	const skills: Skills = {applicantSpeed: applicantSpeedLevel}
