@@ -26,6 +26,7 @@ const basic: Dictionary<string> = {
 	noPerson: '🕳',
 	opening: '🎈',
 	person: '👤',
+	production: '🛠',
 	purchasing: '🛒',
 	recruitment: '👏',
 	retirement: '👻',
