@@ -1,9 +1,10 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
-import {Session, Persist} from '../lib/types'
 import {Person} from '../lib/types/people'
+import {Session, Persist} from '../lib/types'
+import {Shop} from '../lib/types/shop'
 
-import {secondsBetweenApplicants, applicantSeats} from '../lib/game-math/applicant'
+import {secondsBetweenApplicants} from '../lib/game-math/applicant'
 
 import {applicantInfluencesPart} from '../lib/interface/applicants'
 import {emojis} from '../lib/interface/emojis'
@@ -15,6 +16,7 @@ import {personAllTalentsLine, nameMarkdown} from '../lib/interface/person'
 
 import {createHelpMenu, helpButtonText} from './help'
 import applicantMenu from './applicant'
+import applicantWaitingMenu from './applicant-waiting'
 
 function applicantEntry(ctx: any, applicant: Person, isHobbyFitting: boolean): string {
 	const {__wikibase_language_code: locale} = ctx.session as Session
@@ -38,8 +40,8 @@ function menuText(ctx: any): string {
 	const persist = ctx.persist as Persist
 	const now = Date.now() / 1000
 
-	const maxSeats = applicantSeats(persist.skills)
 	const interval = secondsBetweenApplicants(persist.skills)
+	const shopIds = persist.shops.map(o => o.id)
 
 	let text = ''
 	text += infoHeader(ctx.wd.r('menu.applicant'))
@@ -49,14 +51,17 @@ function menuText(ctx: any): string {
 
 	text += '\n'
 	if (session.applicants.length > 0) {
-		const shopIds = persist.shops.map(o => o.id)
 		text += session.applicants
 			.map(o => applicantEntry(ctx, o, shopIds.includes(o.hobby)))
 			.join('\n')
 		text += '\n\n'
 	}
 
-	if (session.applicants.length < maxSeats) {
+	text += emojis.applicantNew
+	if (session.applicantWaiting) {
+		text += applicantEntry(ctx, session.applicantWaiting, shopIds.includes(session.applicantWaiting.hobby))
+		text += '\n\n'
+	} else {
 		const secondsUntilNext = (session.applicantTimestamp + interval) - now
 		text += ctx.wd.r('other.countdown').label()
 		text += ': '
@@ -78,15 +83,33 @@ function availableApplicants(ctx: any): string[] {
 	return Object.keys(session.applicants)
 }
 
+function applicantButtonText(applicant: Person, shops: readonly Shop[]): string {
+	const {name, hobby} = applicant
+	const hasShopOfHobby = shops.some(o => o.id === hobby)
+	const hasShopOfHobbyString = hasShopOfHobby ? emojis.hobbyMatch : ''
+	return `${hasShopOfHobbyString}${name.given} ${name.family}`
+}
+
 menu.selectSubmenu('a', availableApplicants, applicantMenu, {
 	columns: 2,
 	textFunc: (ctx: any, key) => {
 		const session = ctx.session as Session
 		const persist = ctx.persist as Persist
-		const {name, hobby} = session.applicants[Number(key)]
-		const hasShopOfHobby = persist.shops.some(o => o.id === hobby)
-		const hasShopOfHobbyString = hasShopOfHobby ? emojis.hobbyMatch : ''
-		return `${hasShopOfHobbyString}${name.given} ${name.family}`
+		const applicant = session.applicants[Number(key)]
+		return applicantButtonText(applicant, persist.shops)
+	}
+})
+
+function applicantWaitingButtonText(ctx: any): string {
+	const session = ctx.session as Session
+	const persist = ctx.persist as Persist
+	return emojis.applicantNew + applicantButtonText(session.applicantWaiting!, persist.shops)
+}
+
+menu.submenu(applicantWaitingButtonText, 'new', applicantWaitingMenu, {
+	hide: (ctx: any) => {
+		const session = ctx.session as Session
+		return !session.applicantWaiting
 	}
 })
 

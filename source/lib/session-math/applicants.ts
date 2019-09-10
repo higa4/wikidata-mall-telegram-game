@@ -1,6 +1,6 @@
 import {Session, Persist} from '../types'
 
-import {secondsBetweenApplicants, applicantSeats} from '../game-math/applicant'
+import {secondsBetweenApplicants} from '../game-math/applicant'
 
 import {createApplicant} from '../game-logic/applicant'
 
@@ -16,6 +16,10 @@ export default function calcApplicants(session: Session, persist: Persist, now: 
 
 function retireWaitingApplicants(session: Session, now: number): void {
 	session.applicants = session.applicants.filter(person => person.retirementTimestamp > now)
+
+	if (session.applicantWaiting && session.applicantWaiting.retirementTimestamp < now) {
+		delete session.applicantWaiting
+	}
 }
 
 function addWaitingApplicants(session: Session, persist: Persist, now: number): void {
@@ -26,18 +30,10 @@ function addWaitingApplicants(session: Session, persist: Persist, now: number): 
 		return
 	}
 
-	const maxSeats = applicantSeats(persist.skills)
-	const freeApplicantSeats = maxSeats - session.applicants.length
-	const creatableApplicants = Math.min(possibleApplicants, freeApplicantSeats)
-	const newTimestamp = session.applicantTimestamp + (creatableApplicants * interval)
-
-	for (let i = 0; i < creatableApplicants; i++) {
-		session.applicants.push(
-			createApplicant(persist.skills, now)
-		)
+	if (session.applicantWaiting) {
+		return
 	}
 
-	// Ensure timer is still running when there are free seats.
-	// If not reset the timer to now
-	session.applicantTimestamp = Math.floor(maxSeats - session.applicants.length > 0 ? newTimestamp : now)
+	session.applicantWaiting = createApplicant(persist.skills, now)
+	session.applicantTimestamp = now
 }
