@@ -1,7 +1,5 @@
 import {Session, Persist} from '../types'
 
-import * as wdShops from '../wikidata/shops'
-
 import {secondsBetweenApplicants, applicantSeats} from '../game-math/applicant'
 
 import {createApplicant} from '../game-logic/applicant'
@@ -22,15 +20,9 @@ function retireWaitingApplicants(session: Session, now: number): void {
 
 function addWaitingApplicants(session: Session, persist: Persist, now: number): void {
 	const interval = secondsBetweenApplicants(persist.skills)
-
 	const secondsSinceLastApplicant = now - session.applicantTimestamp
 	const possibleApplicants = Math.floor(secondsSinceLastApplicant / interval)
 	if (possibleApplicants <= 0) {
-		return
-	}
-
-	if (wdShops.allShops().length === 0) {
-		// Wait for init
 		return
 	}
 
