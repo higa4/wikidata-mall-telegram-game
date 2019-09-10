@@ -32,6 +32,15 @@ const menu = new TelegrafInlineMenu(menuText, {
 	photo: menuPhoto(ctx => fromCtx(ctx).applicant.hobby)
 })
 
+menu.button(buttonText(emojis.door, 'other.door'), 'remove', {
+	setParentMenuAfter: true,
+	doFunc: (ctx: any) => {
+		const {applicantId} = fromCtx(ctx)
+		const session = ctx.session as Session
+		session.applicants.splice(applicantId, 1)
+	}
+})
+
 menu.urlButton(
 	(ctx: any) => {
 		const {applicant, hobbyIsFitting} = fromCtx(ctx)
@@ -40,15 +49,6 @@ menu.urlButton(
 	},
 	(ctx: any) => ctx.wd.r(fromCtx(ctx).applicant.hobby).url()
 )
-
-menu.button(buttonText(emojis.employmentTermination, 'action.employmentTermination'), 'remove', {
-	setParentMenuAfter: true,
-	doFunc: (ctx: any) => {
-		const {applicantId} = fromCtx(ctx)
-		const session = ctx.session as Session
-		session.applicants.splice(applicantId, 1)
-	}
-})
 
 menu.submenu(helpButtonText(), 'help', createHelpMenu('help.applicants'))
 
