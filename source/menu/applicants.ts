@@ -20,11 +20,10 @@ function applicantEntry(ctx: any, applicant: Person, isHobbyFitting: boolean): s
 	const {__wikibase_language_code: locale} = ctx.session as Session
 
 	let text = ''
-	if (isHobbyFitting) {
-		text += emojis.hobbyMatch
-	}
-
 	text += nameMarkdown(applicant.name)
+	text += '\n  '
+	text += isHobbyFitting ? emojis.hobbyMatch : emojis.hobbyDifferent
+	text += ctx.wd.r(applicant.hobby).label()
 	text += '\n  '
 	text += emojis.retirement
 	text += humanReadableTimestamp(applicant.retirementTimestamp, locale)
