@@ -9,7 +9,7 @@ menu:
 help:
   improveHelp: >
     あなたはこのヘルプテキストを改善できます!
-    When we all work together we can describe everything as best as we can to help others out.
+    みんなで取り掛かると可能な限り他の人が作業しやすいように記述することができます。
     このテキストを改善してグループに送るかGithubでプルリクエストを上げてください。
     言語 `${language}` 内にあるキー `${key}` はこのテキストを識別してあなたが改善したいテキストがどれなのかを他の人が知ることができます。
   applicants: >
