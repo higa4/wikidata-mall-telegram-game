@@ -34,22 +34,22 @@ help:
     項目を再ストックすると、時間とともに売れます。
     ストックされている項目があることを確認してください。
     このようにしてあなたはいつでも収入を得られます。
-    Hire employees to improve purchasing and selling prices or skill something.
-    In order to improve the throughput per item skill the collector skill.
+    社員を雇って購買の価格や技術などを改善してください。
+    項目ごとのスループットを改善するために、コレクターのスキルに習熟してください。
   settings: >
-    Change the language and enable / disable helpful explations where numbers come from
+    言語を切り替えて数字の由来についての分かりやすい説明を有効化/無効化してください
   shop-closure: >
-    You can close a shop in order to have space for a new shop.
-    Getting rid of a shop will gain you some money.
-    You should sell all the items currently in stock before closing your shop as they will be lost on closing the shop.
-    Also people currently working in the shop will leave with it.
-    (You can take them from the shop before closing it.)
-    Make sure to skill the collector skill first as you will keep the benefit even after closing the shop.
+    お店を閉じて、新しいお店用のスペースを作ることができます。
+    閉店するとお金をいくらか得られます。
+    閉店するとストックされている項目は無くなってしまうので、現在のストックは閉店前に全て販売しておくべきです。
+    現在お店で働いている人たちもいなくなります。
+    (閉店前にそのお店から連れて行くことができます。)
+    閉店後も便益を保持できるので、まずコレクターのスキルに習熟してください。
   shop-employees: >
-    You can select employees for your shop.
-    When you have an employee with a fitting hobby (the same as the shop they are working in) they will be much better suited for their job. 💚
+    あなたのお店の被雇用者を選ぶことができます。
+    適した趣味（働いているお店と同じもの）を持つ被雇用者がいれば、その仕事により適しているでしょう。 💚
   shop: >
-    This is a shop of yours.
+    これはあなたのお店です。
     You can add products to sell or hire employees.
     Closing a shop is also possible.
     You will get some money for closing it.
