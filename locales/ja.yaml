@@ -5,7 +5,7 @@ menu:
     このゲームはウィキデータに基づいています。
     ここで目にするものは全てウィキデータにあるものです: あらゆる名前、説明、ボタンのラベル、画像、 …
     ウィキデータ上の項目を改善することは、このゲームや他のプロジェクトの改善につながります。 😎
-  back: back
+  back: 戻る
 help:
   improveHelp: >
     あなたはこのヘルプテキストを改善できます!
@@ -50,26 +50,26 @@ help:
     適した趣味（働いているお店と同じもの）を持つ被雇用者がいれば、その仕事により適しているでしょう。 💚
   shop: >
     これはあなたのお店です。
-    You can add products to sell or hire employees.
-    Closing a shop is also possible.
-    You will get some money for closing it.
+    製品を追加して販売したり社員を雇用したりすることができます。
+    お店を閉じることもできます。
+    閉店時にはお金がいくらか手に入ります。
   shops-construction: >
-    You can select one of these randomly selected shops as your next shop.
-    With it you can do all the things you like.
-    Choose wisely and get rich 🙃
+    これらのランダムに選ばれたお店からひとつあなたの次のお店として選ぶことができます。
+    そのお店では何でも好きなことができます。
+    賢く選んで裕福になってください 🙃
   shops: >
-    Here are all your shiny shops. ✨
+    こちらがあなたの素敵なお店です。 ✨
   skills: >
-    All the skills you can learn.
-    And you will only need time for that.
-    Nothing else.
-    Skills will improve a certain thing.
-    You can guess what a skill might do as its emoji is fitting to their field of improvement.
-    Keep in mind we are using 📎 as our currency.
-    Some skills and tools might come in handy when handling these. 🙃
-    One special skill is the collector.
-    In contrast to the other skills you can skill it per shop you own.
-    The total level will influence your throughput per item.
-    This includes the levels for shops you don't even own anymore.
-    The skill queue will allow you to add skills which starts within 12 hours.
-    You can also reset your skill queue (but not the one currently in training).
+    あなたが学べる全てのスキル。
+    そのためには時間だけが必要です。
+    他には何も要りません。
+    スキルは何らかの物事を改善します。
+    絵文字は改善できる分野に合わせてあるので、そのスキルでどんなことができるのかを推測できます。
+    通貨として 📎 が使われていることを心に留めておいてください。
+    これらを扱う際には何らかのスキルや道具が役に立つでしょう。 🙃
+    特別なスキルのひとつがコレクターです。
+    他のスキルとは異なり、これはあなたのお店ごとに習熟できます。
+    その合計レベルはあなたの項目ごとのスループットに影響します。
+    これは既に所有していないお店用のレベルについても含まれます。
+    スキルのキューでは12時間以内に始まるスキルを追加することができます。
+    あなたのスキルキュー（しかし現在訓練中のものではありません）はリセットすることもできます。
